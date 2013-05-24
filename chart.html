@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="src/libs/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" href="src/libs/jquery-timepicker/jquery.timepicker.css">
+	<link rel="stylesheet" href="dist/css/styles.css">
+</head>
+<body>
+<header id="header">
+	<div class="ctn">
+		<div class="logoCtn">
+			<a class="logo" href="#"><img src="dist/img/logo.png" width="173" height="21" border="0" alt="Subledger Logo"></a>
+		</div>
+		<nav>
+			<ul>
+				<li class="welcome">
+					<a href="#"> <span class="profile" style="background-image:url('dist/img/tmp/profile.jpg')"></span>
+						<span class="light">Welcome,</span> Dan Murphy </a>
+				</li>
+				<li><a href="#" class="icon settings">Settings</a></li>
+				<li><a href="#" class="icon logout">Logout</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+<aside id="sidebar">
+	<div class="ctn">
+		<div class="searchbox">
+			<form action="#">
+				<label for="search"></label> <input id="search" name="search" type="search" class="icon search">
+			</form>
+		</div>
+		<ul>
+			<li>
+				<a href="index.html" class="icon journal">New Journal Entry<span class="arrow"><span class="inner"></span></span></a>
+			</li>
+			<li>
+				<a href="drafts.html" class="icon drafts">Draft Journal Entry
+					<span class="amount">34</span>
+					<span class="arrow"><span class="inner"></span></span>
+				</a>
+			</li>
+			<li class="active border-bottom">
+				<a href="accounts.html" class="icon money">Accounts<span class="arrow"><span class="inner"></span></span></a>
+			</li>
+		</ul>
+	</div>
+</aside>
+<section id="content">
+	<div class="ctn">
+		<article>
+			<form action="#" class="model2">
+				<header class="header clearfix">
+					<div class="left padding-top-half">
+					COGS 1586
+					</div>
+					<div class="right">
+						<a href="account.html" class="icon account margin-right"><span class="caption">Chart page</span></a>
+						<a href="chart.html" class="icon chart"><span class="caption">Chart page</span></a>
+
+					</div>
+				</header>
+				<section class="body">
+
+					[graph here]
+				</section>
+			</form>
+		</article>
+	</div>
+</section>
+<div class="content-shadow"></div>
+<footer id="footer">
+	<div class="ctn">
+		<nav>
+			<ul>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Blog</a></li>
+				<li><a href="#">Jobs</a></li>
+				<li><a href="#"> Terms of service</a></li>
+			</ul>
+		</nav>
+		<div class="copyright">&copy; Subledger 2013</div>
+	</div>
+</footer>
+<script type="text/javascript" src="dist/js/global.min.js"></script>
+<script type="text/javascript" src="dist/js/custom.min.js"></script>
+</body>
+</html>
