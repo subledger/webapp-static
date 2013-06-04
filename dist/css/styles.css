@@ -689,6 +689,61 @@ strong {
   background-image: linear-gradient(0deg, #cccfd3 0%, #efefef 100%);
   border: 1px solid #a4a6a9;
 }
+.radio {
+  padding-right: 30px;
+  line-height: 20px;
+}
+.radio:before {
+  content: "";
+  width: 15px;
+  height: 15px;
+  background: orange;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  top: 3px;
+  margin-right: 5px;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.2);
+  -moz-box-shadow: 0 1px 0 rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.2);
+  box-shadow: 0 1px 0 rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.2);
+  background-color: #e7e5e5;
+  border: 1px solid #a7a7a7;
+  /*&:hover,
+		&:focus{
+			background-color: lighten(#e7e5e5, 10%);
+		}*/
+
+  -webkit-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.radio input {
+  position: absolute;
+  top: 0;
+  left: -7777px;
+}
+.radio:hover:before,
+.radio:focus:before {
+  background: #1e7b95;
+  background-color: #1e7b95;
+  border: 1px solid #165c72;
+}
+.radio.active:before {
+  background: #1e7b95;
+  background-color: #1e7b95;
+  border: 1px solid #165c72;
+  /*color: #fff;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, .51);
+			&:hover,
+			&:focus{
+				background-color:  lighten(#1e7b95, 10%);
+			}     */
+
+}
 /**
 	 * Icons
 	 */
@@ -1091,6 +1146,12 @@ body {
   width: 15%;
   float: right;
   text-align: right;
+}
+#content article .model1.small,
+#content .article .model1.small {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
 }
 #content article .model2,
 #content .article .model2 {

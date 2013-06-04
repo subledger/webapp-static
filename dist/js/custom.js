@@ -51,5 +51,14 @@ $(function () {
 			$('.model1', parent).slideDown();
 			$('.model2', parent).slideUp();
 		}
-	})
+	});
+
+
+	// Radio button
+	$('.radio').on('click', function(e){
+		var myElm = $(this),
+			parent = myElm.parents('form');
+		parent.find('.radio').removeClass('active');
+		myElm.addClass('active');
+	});
 });
