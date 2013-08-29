@@ -5,34 +5,28 @@
 	<title></title>
 	<link rel="stylesheet" href="src/libs/jquery-ui/jquery-ui.min.css">
 	<link rel="stylesheet" href="src/libs/jquery-timepicker/jquery.timepicker.css">
-	<link rel="stylesheet" href="dist/css/styles.css">
+	<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <header id="header">
 	<div class="ctn">
 		<div class="logoCtn">
-			<a class="logo" href="#"><img src="dist/img/logo.png" width="173" height="21" border="0" alt="Subledger Logo"></a>
+			<a class="logo" href="#"><img src="img/logo.png" width="173" height="21" border="0" alt="Subledger Logo"></a>
 		</div>
 		<nav>
 			<ul>
-				<li class="welcome">
-					<a href="#"> <span class="profile" style="background-image:url('dist/img/tmp/profile.jpg')"></span>
-						<span class="light">Welcome,</span> Dan Murphy </a>
-				</li>
-				<li><a href="#" class="icon settings">Settings</a></li>
-				<li><a href="#" class="icon logout">Logout</a></li>
+				<li><a href="settings.html" class="icon settings">Settings</a></li>
 			</ul>
 		</nav>
 	</div>
 </header>
 <aside id="sidebar">
 	<div class="ctn">
-		<div class="searchbox">
-			<form action="#">
-				<label for="search"></label> <input id="search" name="search" type="search" class="icon search">
-			</form>
-		</div>
 		<ul>
+			<li>
+				<a href="books.html" class="icon journal">Books
+					<span class="arrow"><span class="inner"></span></span></a>
+			</li>
 			<li>
 				<a href="index.html" class="icon journal">New Journal Entry<span class="arrow"><span class="inner"></span></span></a>
 			</li>
@@ -69,9 +63,6 @@
 							<span>04 : 52 PM</span>
 							<input type="text" id="inputID2" style="display: none">
 						</button>
-						<div class="right">
-							<button class="btn btn3 margin-right action" data-action="close">x</button>
-						</div>
 					</header>
 					<section class="body">
 						<div class="block1">
@@ -118,20 +109,15 @@
 							<div class="col col3">00.00</div>
 
 						</div>
-						<!--<div class="block5">
-							<span class="padding-right">Add a new line</span>
-							<button class="btn btn4">
-								<span class="caption">. Click here to add a new line.</span><span class="icon plus">+</span>
-							</button>
-						</div>-->
 					</section>
-					<footer class="footer clearfix">
+					<footer class="footer">
 						<div class="left">
-							<button class="btn btn3 trash action" data-action="delete">Trash</button>
+							<button class="btn btn3 trash action" data-action="delete">Archive</button>
+						</div>
+						<div class="middle"><button class="btn btn3 post margin-right action" data-action="send">Post</button>
 						</div>
 						<div class="right">
-							<button class="btn btn3 margin-right action" data-action="close">Don't save for now</button>
-							<button class="btn btn3 post margin-right action" data-action="send">Post</button>
+							<button class="btn btn3 margin-right action" data-action="close">Cancel</button>
 							<button class="btn btn3 save action" data-action="save">Save & New</button>
 						</div>
 					</footer>
@@ -157,9 +143,6 @@
 							<span>04 : 52 PM</span>
 							<input type="text" id="inputID2" style="display: none">
 						</button>
-						<div class="right">
-							<button class="btn btn3 margin-right action" data-action="close">x</button>
-						</div>
 					</header>
 					<section class="body">
 						<div class="block1">
@@ -206,20 +189,16 @@
 							<div class="col col3">00.00</div>
 
 						</div>
-						<!--<div class="block5">
-							<span class="padding-right">Add a new line</span>
-							<button class="btn btn4">
-								<span class="caption">. Click here to add a new line.</span><span class="icon plus">+</span>
-							</button>
-						</div> -->
 					</section>
-					<footer class="footer clearfix">
+					<footer class="footer">
 						<div class="left">
 							<button class="btn btn3 trash" data-action="delete">Trash</button>
 						</div>
+						<div class="middle">
+							<button class="btn btn3 post margin-right" data-action="send">Post</button>
+						</div>
 						<div class="right">
 							<button class="btn btn3 margin-right action" data-action="close">Don't save for now</button>
-							<button class="btn btn3 post margin-right" data-action="send">Post</button>
 							<button class="btn btn3 save" data-action="save">Save & New</button>
 						</div>
 					</footer>
@@ -244,9 +223,10 @@
 	</div>
 </footer>
 
-<script type="text/javascript" src="dist/js/global.min.js"></script>
-<script type="text/javascript" src="dist/js/custom.min.js"></script>
-
-
+<script src="bower_components/jquery/jquery.min.js"></script>
+<script src="bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+<script src="libs/selectyze.jquery.min.js"></script>
+<script src="bower_components/jquery-timepicker-jt/jquery.timepicker.min.js"></script>
+<script src="js/custom.js"></script>
 </body>
 </html>

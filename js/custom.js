@@ -8,10 +8,11 @@ $(function () {
 		'scrollDefaultNow': true //Set the scroll position to local time if no value selected.
 	});
 	$('.btn.clock').on('click', function () {
+		//console.log('asdf');
 		//$('#inputID2').timepicker('show');
 	});
 
-	$('.ui-timepicker-wrapper li').live('click', function(){
+	$('.ui-timepicker-wrapper li').on('click', function(){
 		$('.btn.clock span').text($(this).text());
 	});
 
@@ -51,14 +52,5 @@ $(function () {
 			$('.model1', parent).slideDown();
 			$('.model2', parent).slideUp();
 		}
-	});
-
-
-	// Radio button
-	$('.radio').on('click', function(e){
-		var myElm = $(this),
-			parent = myElm.parents('form');
-		parent.find('.radio').removeClass('active');
-		myElm.addClass('active');
-	});
+	})
 });

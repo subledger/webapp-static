@@ -14,13 +14,13 @@ module.exports = function(grunt) {
 			my_target: {
 				files: {
 					'dist/js/global.min.js': [
-						'src/libs/jquery/jquery.min.js',
-						'src/libs/selectyze.jquery.min.js',
-						'src/libs/jquery-ui/jquery-ui.min.js',
-						'src/libs/jquery-timepicker/jquery.timepicker.js'
+						'bower_components/jquery/jquery.min.js',
+						'bower_components/jquery-ui/ui/minified/jquery-ui.min.js',
+						'libs/selectyze.jquery.min.js',
+						'bower_components/jquery-timepicker-jt/jquery.timepicker.min.js'
 					],
 					'dist/js/custom.min.js': [
-						'dist/js/custom.js'
+						's/custom.js'
 					]
 				}
 			}
