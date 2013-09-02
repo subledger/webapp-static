@@ -133,17 +133,17 @@
 				</form>
 			</div>
 		</article>
-		<article class="close">
-			<div class="model1 action hover" data-action="expand">
+		<article>
+			<div class="model1 action hover action" data-action="expand">
 				<ul>
 					<li class="col1"><strong>COGS 59243</strong></li>
 					<li class="col2">02 June 2013</li>
-					<li class="col3">6&nbsp;:&nbsp;50&nbsp;AM</li>
+					<li class="col3">06&nbsp;:&nbsp;50&nbsp;AM</li>
 					<li class="col4">dr 1485.52</li>
 					<li class="col5">cr 1485.52</li>
 				</ul>
 			</div>
-			<div class="model2 close" style="display:none;">
+			<div class="model2" style="display: none">
 				<form action="#">
 					<header class="header">
 						<input type="hidden" id="inputID">
@@ -201,19 +201,28 @@
 					</section>
 					<footer class="footer">
 						<div class="left">
-							<button class="btn btn3 trash" data-action="delete">Trash</button>
+							<button class="btn btn3 trash action" data-action="delete">Archive</button>
 						</div>
 						<div class="middle">
-							<button class="btn btn3 post margin-right" data-action="send">Post</button>
+
+							<button class="btn btn3 post margin-right submit" data-action="send" type="button">
+								<span class="action">Post</span>
+								<span class="confirmation">
+									<span class="question">Are you sure?</span>
+									<span class="answer yes">Yes</span>
+									<span class="answer no">No</span>
+								</span>
+							</button>
 						</div>
 						<div class="right">
-							<button class="btn btn3 margin-right action" data-action="close">Don't save for now</button>
-							<button class="btn btn3 save" data-action="save">Save & New</button>
+							<button class="btn btn3 margin-right action" data-action="close">Cancel</button>
+							<button class="btn btn3 save action" data-action="save">Save & New</button>
 						</div>
 					</footer>
 				</form>
 			</div>
 		</article>
+
 
 	</div>
 </section>
