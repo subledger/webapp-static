@@ -52,5 +52,17 @@ $(function () {
 			$('.model1', parent).slideDown();
 			$('.model2', parent).slideUp();
 		}
-	})
+	});
+
+	// Post button with confirmation Yes/No
+	var submitButton = $('.post');
+	submitButton.find('.action').on('click', function(e){
+		e.preventDefault();
+		submitButton.addClass('active');
+	});
+	submitButton.find('.answer.yes').on('click', function(e){
+	});
+	submitButton.find('.answer.no').on('click', function(e){
+		submitButton.removeClass('active');
+	});
 });

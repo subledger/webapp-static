@@ -97,16 +97,23 @@
 						<div class="col col1 text-align-right">Total</div>
 						<div class="col col2">00.00</div>
 						<div class="col col3">00.00</div>
-
 					</div>
 				</section>
 				<footer class="footer">
 					<div class="left">
 						<button class="btn btn3 trash action" data-action="delete">Archive</button>
 					</div>
-					<div class="middle"><button class="btn btn3 post margin-right action" data-action="send">Post</button></div>
+					<div class="middle">
+						<button class="btn btn3 post margin-right submit" data-action="send" type="button">
+							<span class="action">Post</span>
+							<span class="confirmation">
+								<span class="question">Are you sure?</span>
+						  		<span class="answer yes">Yes</span>
+						  		<span class="answer no">No</span>
+							</span>
+						</button>
+					</div>
 					<div class="right">
-						<button class="btn btn3 margin-right action" data-action="close">Cancel</button>
 						<button class="btn btn3 save action" data-action="save">Save & New</button>
 					</div>
 				</footer>
@@ -128,7 +135,27 @@
 	</div>
 </footer>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Modal title</h4>
+			</div>
+			<div class="modal-body">
+				...
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script src="bower_components/jquery/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
 <script src="libs/selectyze.jquery.min.js"></script>
 <script src="bower_components/jquery-timepicker-jt/jquery.timepicker.min.js"></script>

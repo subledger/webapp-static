@@ -6329,9 +6329,52 @@ strong {
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.51);
   color: #fff;
 }
+.btn.btn3.post.submit {
+  padding: 0;
+}
 .btn.btn3.post:hover,
 .btn.btn3.post:focus {
   background-color: #b9cf6c;
+}
+.btn.btn3.post span {
+  display: inline-block;
+}
+.btn.btn3.post span.action {
+  cursor: pointer;
+  padding: 7px 15px;
+}
+.btn.btn3.post span.confirmation {
+  display: none;
+}
+.btn.btn3.post span.question {
+  padding: 7px 15px;
+}
+.btn.btn3.post span.answer {
+  cursor: pointer;
+  transition: background 0.4s;
+  font-size: 12px;
+  border-radius: 3px;
+  background-clip: padding-box;
+  padding: 3px 8px;
+  font-weight: 400;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background-color: #E7E5E5;
+  border: 1px solid #A7A7A7;
+  color: #727272;
+  text-shadow: 0 1px 0 #F3F3F3;
+  top: -2px;
+  position: relative;
+  margin-right: 5px;
+}
+.btn.btn3.post span.answer:hover,
+.btn.btn3.post span.answer:focus {
+  background-color: #ffffff;
+}
+.btn.btn3.post.active .action {
+  display: none;
+}
+.btn.btn3.post.active .confirmation {
+  display: block;
 }
 .btn.btn3.trash {
   border: 1px solid #861610 !important;
