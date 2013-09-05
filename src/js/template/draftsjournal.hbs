@@ -1,0 +1,24 @@
+{{#if journalEntries}}
+    {{#each journalEntries}}
+
+    <article class="action" data-id="{{id}}" data-action="journal" >
+        <div class="model1 action hover"  style="display: block;">
+            <ul>
+               <li class="col1"><strong>{{desc}}</strong></li>
+               <li class="col2">{{date}}</li>
+               <li class="col3">{{time}}</li>
+               <li class="col4">dr {{balance.debit_value.amount}}</li>
+               <li class="col5">cr {{balance.credit_value.amount}}</li>
+           </ul>
+        </div>
+    </article>
+
+
+    {{/each}}
+
+{{else}}
+    No Journal Entry!
+{{/if}}
+
+
+

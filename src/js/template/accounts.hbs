@@ -1,0 +1,51 @@
+<article>
+    <div class="model1 transparent clearfix">
+        <button class="btn btn3 post action right" data-action="expand" type="button">Create new account</button>
+    </div>
+    <div class="model2" style="display: none">
+    <form action="#">
+        <header class="header">
+            New Account
+        </header>
+        <section class="body">
+            <div class="block1">
+                <label for="description" class="caption">Description</label>
+                <input type="text" id="description" name="description" placeholder="Description" class="input input1 full-width margin-bottom">
+                <label for="ref" class="caption">ref</label>
+                <input type="text" id="ref" name="ref" placeholder="Reference" class="input input1 full-width">
+            </div>
+
+        </section>
+        <footer class="footer clearfix">
+            <div class="left">
+                <select name="" id="" class="select select1" style="display: none;">
+                    <option value="">Select normal balance</option>
+                    <option value="">Debit</option>
+                    <option value="">Credit</option>
+                </select><div class="DivSelectyze css3" style="z-index: 9999;"><a href="#" rel="" class="selectyzeValue">Select normal balance</a><ul class="UlSelectize"><li><a rel="" href="#">Select normal balance</a></li><li><a rel="" href="#">Debit</a></li><li><a rel="" href="#">Credit</a></li></ul></div>
+            </div>
+            <div class="right">
+                <button class="btn btn3 margin-left action action" data-action="close">Cancel</button>
+                <button class="btn btn3 post margin-left action" data-action="create-account">Create Account</button>
+            </div>
+        </footer>
+    </form>
+    </div>
+</article>
+
+{{#if accounts}}
+
+    {{#each accounts}}
+		<article>
+			<a href="#" class="hover model1 small action" data-action="account" data-id="{{id}}">
+				<ul>
+					<li class="col1"><strong>{{desc}}</strong></li>
+					<li class="col5">{{balance.value.amount}}</li>
+				</ul>
+			</a>
+		</article>
+    {{/each}}
+
+{{else}}
+    No Account!
+{{/if}}

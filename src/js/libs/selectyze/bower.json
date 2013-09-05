@@ -1,0 +1,9 @@
+{
+  "name": "selectyze",
+  "version": "0.0.0",
+  "commit": "84294a3fe45ee915cb604706b124389d3176fbb7",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alpixel/Selectyze"
+  }
+}

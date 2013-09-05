@@ -1,0 +1,17 @@
+{
+  "name": "subledger",
+  "version": "0.0.0",
+  "dependencies": {
+    "backbone": "~1.0.0",
+    "underscore": "~1.4.4",
+    "jquery": "~1.9.1",
+    "requirejs": "~2.1.5",
+    "async": "~0.1.23",
+    "handlebars.js": "1.0.0",
+    "bootstrap": "~3.0.0",
+    "hbs": "git://github.com/SlexAxton/require-handlebars-plugin",
+    "supermodel": "git://github.com/pathable/supermodel/",
+    "selectyze": "git://github.com/alpixel/Selectyze",
+    "jt.timepicker": "git://github.com/jonthornton/jquery-timepicker"
+  }
+}

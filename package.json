@@ -1,0 +1,24 @@
+{
+  "name": "Subledger-App",
+  "version": "0.0.1",
+  "description": "Subledger Backbone App",
+  "main": "src/js/app.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-usemin": "~0.1.12",
+    "js-beautify": "~1.3.4",
+    "grunt-html-build": "~0.2.0",
+    "grunt-contrib-less": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "Etienne Dion <dionetienne@gmail.com>",
+  "license": "BSD"
+}

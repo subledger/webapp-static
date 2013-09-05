@@ -1,0 +1,15 @@
+{{#if books}}
+
+    {{#each books}}
+		<article>
+			<a href="#" class="hover model1 small action" data-action="booklayout" data-id="{{id}}">
+				<ul>
+					<li class="col1"><strong>{{desc}}</strong></li>
+				</ul>
+			</a>
+		</article>
+    {{/each}}
+
+{{else}}
+    No Books!
+{{/if}}
