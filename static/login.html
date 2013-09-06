@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="bower_components/jquery-ui/themes/base/minified/jquery-ui.min.css">
+	<link rel="stylesheet" href="bower_components/jquery-timepicker-jt/lib/base.css">
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login">
+<style type="text/css">
+	#header{
+		height: 30%;
+		position: relative;
+		text-align: center;
+	}
+	#header .logoCtn{width: 100%;
+		background: none;float:none;padding-left:0;}
+	#content{
+		position: relative;
+		left: 0;
+		right: 0;
+		width: 400px;
+		margin: 0 auto;
+	}
+	#content button{width:100%;margin-top:15px;}
+	#footer .ctn {
+		padding: 30px 0 0 0;
+		width: 400px;
+		margin: 0 auto;
+	}
+</style>
+<header id="header">
+	<div class="ctn">
+		<div class="logoCtn">
+			<a class="logo" href="#"><img src="img/logo.png" width="173" height="21" border="0" alt="Subledger Logo"></a>
+		</div>
+	</div>
+</header>
+
+<section id="content">
+	<div class="ctn">
+
+		<header class="header">
+
+			<label for="key_id" class="caption">Key ID</label>
+			<input type="text" id="key_id" name="key_id" placeholder="Key ID" class="input input1 full-width margin-bottom" value="q94AwWLKow837L2AidxX15">
+			<label for="secret" class="caption">ref</label>
+			<input type="text" id="secret" name="secret" placeholder="Secret" class="input input1 full-width margin-bottom" value="gbw1tb0KTvGTYmqnWUbF01">
+			<label for="org_id" class="caption">org_id</label>
+			<input type="text" id="org_id" name="org_id" placeholder="Org ID" class="input input1 full-width" value="TnmilrLvIQvIk6FaI0Ldb2">
+
+			<button class="btn btn3 default action">Login</button>
+		</header>
+
+	</div>
+</section>
+<footer id="footer">
+	<div class="ctn">
+		<nav>
+			<ul>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Blog</a></li>
+				<li><a href="#">Jobs</a></li>
+				<li><a href="#"> Terms of service</a></li>
+			</ul>
+		</nav>
+		<div class="copyright">&copy; Subledger 2013</div>
+	</div>
+</footer>
+
+<script src="bower_components/jquery/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+<script src="libs/selectyze.jquery.min.js"></script>
+<script src="bower_components/jquery-timepicker-jt/jquery.timepicker.min.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>

@@ -163,6 +163,16 @@ strong {
 		}
 
 
+		&.default {
+			background-color: #1E7C98;
+			border: 1px solid #165c72;
+			color: #fff;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, .51);
+			&:hover,
+			&:focus{
+				background-color:  lighten(#1E7C98, 10%);
+			}
+		}
 		&.cancel {
 			background-color: #1e7b95;
 			border: 1px solid #165c72;
@@ -364,6 +374,17 @@ strong {
 			content: url('../img/icon-money-small.png');
 		}
 	}
+	&.stream {
+		&:before {
+			position: relative;
+			left: -5%;
+			width: 21px;
+			height: 21px;
+			top: 5px;
+			padding-right: 5%;
+			content: url('../img/icon-stream.png');
+		}
+	}
 	&.search {
 		background-image: url('../img/icon-search.png');
 		background-position: 5% center;
@@ -398,5 +419,4 @@ strong {
 			.opacity(80);
 		}
 	}
-
 }
