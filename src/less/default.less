@@ -13,7 +13,6 @@ ul {
 li {
 	display: inline-block;
 }
-
 a {
 	color: @blue;
 	text-decoration: none;
@@ -163,6 +162,16 @@ strong {
 		}
 
 
+		&.default {
+			background-color: #1E7C98;
+			border: 1px solid #165c72;
+			color: #fff;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, .51);
+			&:hover,
+			&:focus{
+				background-color:  lighten(#1E7C98, 10%);
+			}
+		}
 		&.cancel {
 			background-color: #1e7b95;
 			border: 1px solid #165c72;
@@ -409,15 +418,4 @@ strong {
 			.opacity(80);
 		}
 	}
-}
-
-
-/** errors **/
-
-.error{
-    border:1px solid red !important;
-}
-.errorMessage{
-    font-weight: bold;
-    color:red;
 }
