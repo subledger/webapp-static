@@ -6803,6 +6803,20 @@ body {
   color: #616367;
   text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.75);
 }
+#content article .model1.small,
+#content .article .model1.small {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+#content article .model1.small .col1,
+#content .article .model1.small .col1 {
+  width: 15%;
+}
+#content article .model1.small .col2,
+#content .article .model1.small .col2 {
+  width: 65%;
+}
 #content article .model1.transparent,
 #content .article .model1.transparent {
   background-color: transparent;
