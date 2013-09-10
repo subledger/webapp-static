@@ -1,0 +1,13 @@
+{
+  "name": "selectyze",
+  "homepage": "https://github.com/alpixel/Selectyze",
+  "_release": "master",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "84294a3fe45ee915cb604706b124389d3176fbb7"
+  },
+  "_source": "git://github.com/alpixel/Selectyze.git",
+  "_target": "*",
+  "_originalSource": "git://github.com/alpixel/Selectyze"
+}

@@ -1,35 +1,14 @@
 
 <div class="ctn">
 	<div class="boocx">
-		<select name="boocx" id="boocx">
-			<option value="">Boocx no1</option>
-			<option value="">Boocx no2</option>
-			<option value="">Boocx no3</option>
-			<option value="">Boocx no4</option>
-			<option value="">Boocx no5</option>
+
+        <select name="" id="" class="select book">
+           {{#each books}}
+               <option value="{{id}}" {{#ifCond id ../selectedbook}}selected="selected"{{/ifCond}}>{{desc}}</option>
+           {{/each}}
 		</select>
 	</div>
     <ul>
-        <!--<li class="active">
-            <a href="#" class="icon journal action" data-action="newbook">New Book
-                <span class="arrow"><span class="inner"></span></span></a>
-        </li>
-        <li>
-            <a href="#" class="icon journal action" data-action="books">Books
-                <span class="arrow"><span class="inner"></span></span></a>
-        </li>
-        <li>
-             <a href="#" class="icon drafts action" data-action="newjournal">New Journal Entry
-                 <span class="arrow"><span class="inner"></span></span> </a>
-        </li>
-        <li>
-            <a href="#" class="icon drafts action" data-action="draftsjournals">Draft Journal Entry {{#if active_books}}<span class="amount">{{active_books}}</span>{{/if}}
-                <span class="arrow"><span class="inner"></span></span> </a>
-        </li>
-        <li>
-            <a href="#" class="icon money action" data-action="newaccount">New Account
-                <span class="arrow"><span class="inner"></span></span></a>
-        </li>-->
         <li>
             <a href="#" class="icon money action" data-action="accounts">Accounts
                 <span class="arrow"><span class="inner"></span></span></a>

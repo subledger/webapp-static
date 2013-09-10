@@ -1,0 +1,14 @@
+{
+  "name": "async",
+  "homepage": "https://github.com/caolan/async",
+  "version": "0.1.24",
+  "_release": "0.1.24",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.24",
+    "commit": "033112450707e11cdfff34aa5b529595f9f8c18a"
+  },
+  "_source": "git://github.com/caolan/async.git",
+  "_target": "~0.1.23",
+  "_originalSource": "async"
+}

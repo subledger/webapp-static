@@ -2,7 +2,7 @@ define(['jquery'] , function ($) {
 
     var Utils = {
         parse: function(data){
-            console.log(data);
+
             var result = {};
             if(data !== undefined){
                result = JSON.parse(JSON.stringify(data));
@@ -83,10 +83,67 @@ define(['jquery'] , function ($) {
             datetime.setHours(hours);
             datetime.setMinutes(minute);
 
-
-
             return datetime;
+        },
+        timeago: function (date) {
+            var seconds = Math.floor(( ((new Date().getTime()) -date) /1000 )),
+                interval = Math.floor(seconds / 31556926);
+
+            if (interval >= 1) {
+                if(interval > 1){
+                    return interval + " years";
+                } else {
+                    return interval + " year";
+                }
+            }
+
+
+            interval = Math.floor(seconds / 2629743);
+            if (interval >= 1) {
+                if(interval > 1){
+                    return interval + " months";
+                } else {
+                    return interval + " month";
+                }
+            }
+            interval = Math.floor(seconds / 604800);
+            if (interval >= 1) {
+                if(interval > 1){
+                    return interval + " weeks";
+                } else {
+                    return interval + " week";
+                }
+            }
+
+
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+                if(interval > 1){
+                    return interval + " days";
+                } else {
+                    return interval + " day";
+                }
+            }
+
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) {
+                if(interval > 1){
+                    return interval + " hours";
+                } else {
+                    return interval + " hour";
+                }
+            }
+
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) {
+                return interval + " min";
+            }
+
+            return Math.floor(seconds) + "sec";
+
+
         }
+
     };
 
     return Utils;

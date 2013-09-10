@@ -1,23 +1,26 @@
+{{#ifCond createBtn true}}
+
+{{/ifCond}}
+
 {{#if journalEntries}}
     {{#each journalEntries}}
 
-    <article class="action" data-id="{{id}}" data-action="journal" >
-        <div class="model1 action hover"  style="display: block;">
+    <article class="action" data-id="{{id}}" data-action="journal"  data-book-id="{{../book_id}}">
+        <div class="small model1 action hover"  style="display: block;">
             <ul>
-               <li class="col1"><strong>{{desc}}</strong></li>
-               <li class="col2">{{date}}</li>
-               <li class="col3">{{time}}</li>
-               <li class="col4">dr {{balance.debit_value.amount}}</li>
-               <li class="col5">cr {{balance.credit_value.amount}}</li>
+               <li class="col1">{{timeago}}</li>
+               <li class="col1">{{desc}}</li>
+               <li class="col5">{{#ifCond balance.value.type "credit"}}cr {{/ifCond}}{{#ifCond balance.value.type "debit"}}dr {{/ifCond}} {{balance.value.amount}}</li>
            </ul>
         </div>
     </article>
 
 
     {{/each}}
-
-{{else}}
-    No Journal Entry!
+{{ else }}
+     {{#ifCond createBtn true}}
+           No Journals Entries
+     {{/ifCond}}
 {{/if}}
 
 

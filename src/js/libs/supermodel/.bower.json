@@ -1,0 +1,14 @@
+{
+  "name": "supermodel",
+  "homepage": "https://github.com/pathable/supermodel",
+  "version": "0.0.4",
+  "_release": "0.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.4",
+    "commit": "505e3d4a1fae726825218e1840b7f9c297277088"
+  },
+  "_source": "git://github.com/pathable/supermodel.git",
+  "_target": "*",
+  "_originalSource": "git://github.com/pathable/supermodel/"
+}

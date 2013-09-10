@@ -14,122 +14,251 @@ define([
             this.DataStructure = DataStructure;
 
         },
-        applyTemplate: function(selector, template, data){
-            var _this = this;
-
-            console.log("applyTemplate",selector, data);
-
-
-            // TODO : Clean this ...
-            $(selector).html(template(data));
-
-            $(selector).find(".prettySelect").each(function(){
-                $(this).Selectyze();
-            });
-
+        bindTimePicker: function($selector){
             var now = new Date();
 
-
             var roundedTime = Utils.getTime(now, true);
-            if($(selector).find('.btn.clock .time').val() === ""){
-                $(selector).find('.btn.clock .time').attr("value", roundedTime );
-                $(selector).find('.btn.clock span').text(roundedTime);
+            if($selector.find('.btn.clock .time').val() === ""){
+                $selector.find('.btn.clock .time').attr("value", roundedTime );
+                $selector.find('.btn.clock span').text(roundedTime);
             }
 
-            $(selector).find('.btn.clock').timepicker({
+            $selector.find('.btn.clock').timepicker({
                 'timeFormat': 'h : i A',
                 'scrollDefaultNow': true //Set the scroll position to local time if no value selected.
             });
 
             $("body").on('click','.ui-timepicker-wrapper li', function(){
-                $(selector).find('.btn.clock span').text($(this).text());
-                $(selector).find('.btn.clock .time').attr("value", $(this).text() );
+                $selector.find('.btn.clock span').text($(this).text());
+                $selector.find('.btn.clock .time').attr("value", $(this).text() );
             });
+        },
+        bindDatePicker: function($selector){
 
+            var now = new Date();
 
             // Date picker
-            $(selector).find(".date").datepicker({
+            $selector.find(".date").datepicker({
                 dateFormat: "d MM y",
                 gotoCurrent: true,
                 onSelect: function () {
 
-                    $(selector).find(".btn.calendar span").text($(selector).find(".date").val());
+                    $selector.find(".btn.calendar span").text($selector.find(".date").val());
                 }
             });
-            if( $(selector).find(".date").val() === ""){
-                $(selector).find(".date").datepicker( "setDate", now );
+            if( $selector.find(".date").val() === ""){
+                $selector.find(".date").datepicker( "setDate", now );
 
-                $(selector).find(".btn.calendar span").text($(selector).find(".date").val());
+                $selector.find(".btn.calendar span").text($selector.find(".date").val());
             }
-            $(selector).find(".btn.calendar").click(function (e) {
+            $selector.find(".btn.calendar").click(function (e) {
                 e.preventDefault();
-                $(selector).find(".date").datepicker("show");
+                $selector.find(".date").datepicker("show");
             });
 
+        },
+        bindPrettySelect: function($selector){
+            $selector.find(".prettySelect").each(function(){
+                $(this).Selectyze();
+            });
+        },
+        bindEvents: function($selector){
+            var _this = this;
             // Events
-            $(selector).find('.btn, .action').on('click', function(e){
+            $selector.find('.btn, .action').on('click', function(e){
                 e.preventDefault();
 
 
-                var action = $(this).data('action'),
-                    parent = $(this).parents('article');
+                var action = $(e.currentTarget).data('action'),
+                    $parent = $(e.currentTarget).parents('article');
                 if(action == 'expand'){
                     //parent.toggleClass('close').toggleClass('open');
-                    $('.model1', parent).slideUp();
-                    $('.model2', parent).slideDown();
+                    $('.model1', $parent).slideUp();
+                    $('.model2', $parent).slideDown();
                 } else if (action == 'delete'){
                     parent.remove();
                 } else if (action == 'save'){
-                    //parent.toggleClass('close').toggleClass('open');
 
-                    _this.AppView.createOnSubmit(e);
+                    var type =  $parent.attr("data-type");
 
-                    $('.model1', parent).slideDown();
-                    $('.model2', parent).slideUp();
+                    if(type === "settings"){
+                        _this.AppView.login();
+                    } else {
+                        _this.AppView.createOnSubmit(e);
+                        $('.model1', $parent).slideDown();
+                        $('.model2', $parent).slideUp();
+                    }
+
                 } else if (action == 'savenew'){
-
+                                  console.log($parent);
                     _this.AppView.createOnSubmit(e);
 
                 } else if (action == 'close'){
                     //parent.toggleClass('close').toggleClass('open');
-                    $('.model1', parent).slideDown();
-                    $('.model2', parent).slideUp();
+
+
+                    var id = $(e.currentTarget).parents("article").attr("data-id");
+                    var book_id = $(e.currentTarget).parents("article").attr("data-book-id");
+
+                    console.log("close", id, book_id);
+
+                    if($(e.currentTarget).parents(".openJournal").length > 0){
+                        DataStructure.getOneJournal({book: book_id, id:id},function(journals){
+                            DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
+                                _this.applyTemplate($(e.currentTarget).parents(".openJournal"), _this.AppView.templates._draftJournals, DataStructure.prepareJournalsEntryData(journals), false, false, ".openJournal");
+
+                            });
+                        });
+                    }
+                    if($(e.currentTarget).parents(".openAccount").length > 0){
+                        DataStructure.getOneAccount({book: book_id, id:id},function(accounts){
+                            DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
+                                _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._accounts, DataStructure.prepareAccountsData(bookid, accounts), false, false, ".openAccount");
+
+                            });
+                        });
+                    }
+
+
+
+
                 } else if(action == 'journal'){
 
                     var journal_id = $(e.currentTarget).attr("data-id");
-
+                    $(e.currentTarget).wrap("<div class='openJournal'></div>");
                     _this.DataStructure.getJournalLines(journal_id,function(journalid){
-                        _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(journalid));
+                        _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(journalid));
                     });
                 } else if(action == 'account') {
                     var account_id = $(e.currentTarget).attr("data-id");
+                    $(e.currentTarget).parent("article").wrap("<div class='openAccount'></div>");
                     _this.DataStructure.getAccountLines(account_id,function(account_id){
-                        _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
+                        _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
                     });
+                } else if(action == 'login') {
+                    _this.AppView.login();
+                } else if(action == 'logout') {
+                    _this.AppView.logout();
                 }
             });
+        },
 
+        bindTemplate: function($selector, fl){
+            var _this = this;
+            var firstLoad = false;
+            if(fl !== undefined ){ firstLoad = fl; }
 
-            // Radio button
-            $(selector).find('.radio').on('click', function(e){
-                var myElm = $(this),
-                    parent = myElm.parents('form');
-                parent.find('.radio').removeClass('active');
-                myElm.addClass('active');
-            });
+            _this.bindPrettySelect($selector);
+
+            _this.bindTimePicker($selector);
+
+            _this.bindDatePicker($selector);
+
+            _this.bindEvents($selector);
 
 
             //Add journal Entry
-            $(selector).find('.addentry').on('click', function(e){
-                var $template = $(selector).find('.entry.template').clone();
+            $selector.find('.addentry').on('click', function(e){
+                var $template = $selector.find('.entry.template').clone();
                 $template.removeClass("template").addClass("newentry").css("border-top","1px solid #d4d4d4");
                 $template.find(".DivSelectyze").remove();
-                $(selector).find('.entry').last().after($template);
-                $(selector).find(".newentry").find(".prettySelect").each(function(){
+                $selector.find('.entry').last().after($template);
+                $selector.find(".newentry").find(".prettySelect").each(function(){
                     $(this).Selectyze();
                 });
-                $(selector).find(".newentry").removeClass("newentry");
+                $selector.find(".newentry").removeClass("newentry");
             });
+
+
+
+
+            if($selector.selector === "#subledgerapp"){
+
+                var book_id = $("#sidebar").find("select.book").val();
+                var load = false;
+                var loadnum = 0;
+
+                var type = $("#content").find('article:last').attr("data-action") || $("#content").find('article:last a').attr("data-action");
+
+                if(type === "journal" || type === "account" ){
+
+                    if(firstLoad){
+                        if(type === "journal"){
+                            _this.DataStructure.fillJournals(book_id);
+                        }
+                        if(type === "account"){
+                            _this.DataStructure.fillAccounts(book_id);
+                        }
+
+                        $("#content").unbind("scroll");
+                        $("#content").scroll(function(){ // On surveille l'évènement scroll
+
+                            var $last = $("#content").find('article:last');
+                            if($last.length > 0){
+                                var offset = $last.offset();
+                                /* Si l'élément offset est en bas de scroll, si aucun chargement
+                                 n'est en cours, si le nombre de commentaire affiché est supérieur
+                                 à 5 et si tout les commentaires ne sont pas affichés, alors on
+                                 lance la fonction. */
+                                if((offset.top-$("#content").height() <= $("#content").scrollTop())
+                                    && _this.DataStructure.loadstatus==false && ($('article').size()>=4) ){
+
+                                    // la valeur passe à vrai, on va charger
+                                    _this.DataStructure.loadstatus = true;
+
+                                    //On affiche un loader
+                                    $('.loadmore').show();
+
+                                    if(type === "journal"){
+                                        _this.DataStructure.loadMoreJournals(book_id, $('.loadmore'), _this.DataStructure.loadMoreJournals);
+                                    }
+                                    if(type === "account"){
+                                        _this.DataStructure.loadMoreAccounts(book_id, $('.loadmore'), _this.DataStructure.loadMoreAccounts);
+                                    }
+
+                                }
+                            } else {
+
+                            }
+
+                        });
+                    }
+
+                }
+            }
+
+        },
+        applyTemplate: function(selector, template, data, add, fl, unwrap){
+            var _this = this;
+
+            console.log("applyTemplate", selector, data, add, fl);
+            var addToTemplate = false;
+            if(add !== undefined ){ addToTemplate = add; }
+            var firstLoad = false ;
+            if(fl !== undefined ){ firstLoad = fl; }
+
+            if(template !== null){
+                if(addToTemplate){
+
+                    var $partial = $("<div class='notbinded'></div>").html(template(data));
+
+                    $(selector +"."+data.layout+"-layout").find("article:last").after($partial);
+
+                    _this.bindTemplate($(selector+"."+data.layout+"-layout").find(".notbinded"));
+                    $(selector+"."+data.layout+"-layout").find(".notbinded article").unwrap();
+
+                } else {
+                    $(selector).html(template(data));
+                    _this.bindTemplate($(selector), firstLoad);
+                }
+
+            } else {
+                $(selector).html(data);
+            }
+
+            if(unwrap !== undefined){
+                $(selector).find("article").unwrap(unwrap);
+            }
 
 
 

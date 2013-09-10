@@ -4,7 +4,7 @@
 require.config({
 
     paths : {
-
+        modernizr             : 'libs/modernizr.custom.19922.min',
         jquery                : 'libs/jquery/jquery',
         underscore            : 'libs/underscore/underscore',
         backbone              : 'libs/backbone/backbone',
@@ -33,6 +33,9 @@ require.config({
         utils:{
             deps    : ['jquery'],
             exports : 'Utils'
+        },
+        modernizr  :{
+            exports : 'Modernizr'
         },
         backbone   : {
             deps    : ['underscore', 'jquery'],

@@ -7,13 +7,44 @@ define([
         setSelector: function(selectors){
             this.formSelector = selectors;
         },
+        login: function(cb){
+            var key = $(this.formSelector.loginkey).val();
+            var secret = $(this.formSelector.loginsecret).val();
+            var org = $(this.formSelector.loginorg_id).val();
+            var valid = true;
+
+            $(this.formSelector.loginorg_id).removeClass("error").next(".errorMessage").remove();;
+            $(this.formSelector.loginsecret).removeClass("error").next(".errorMessage").remove();;
+            $(this.formSelector.loginorg_id).removeClass("error").next(".errorMessage").remove();;
+            if(!Utils.isNotEmpty(key)){
+                valid = false;
+                $(this.formSelector.loginkey).addClass("error").after("<div class='errorMessage'>Please enter a valid Key ID</div>");
+            }
+            if(!Utils.isNotEmpty(secret)){
+                valid = false;
+                $(this.formSelector.loginsecret).addClass("error").after("<div class='errorMessage'>Please enter a valid Secret</div>");
+            }
+            if(!Utils.isNotEmpty(org)){
+                valid = false;
+                $(this.formSelector.loginorg_id).addClass("error").after("<div class='errorMessage'>Please enter a valid Organisation ID</div>");
+            }
+
+            if(valid){
+
+                var settings = {
+                    key:key,
+                    secret:secret,
+                    org:org
+                };
+
+                cb(settings);
+            }
+        },
         serialize: function ($currentForm) {
 
             var fields = [];
 
-            if($currentForm.find(this.formSelector.book).length > 0){
-                fields.push({name:"book", field: $currentForm.find(this.formSelector.book), validation: "text", value:$currentForm.find(this.formSelector.book).val()});
-            }
+
 
             if($currentForm.find(this.formSelector.desc).length > 0){
                 fields.push({name:"desc", field: $currentForm.find(this.formSelector.desc), validation: "text", value:$currentForm.find(this.formSelector.desc).val()});
@@ -62,9 +93,7 @@ define([
             var date = {};
 
             $.each(fields.fields, function(index, current){
-                if(current.name === "book"){
-                    object["book"] = current.value;
-                }
+
                 if(current.name === "desc"){
                     object["description"] = current.value;
                 }
@@ -95,7 +124,6 @@ define([
 
                     $.each(current.fields, function(index2, current2){
 
-                        console.log(current2, fields, fields.fields);
 
                         if(current2.name === "entryaccount"){
                             line["account"] = current2.value;
@@ -248,7 +276,7 @@ define([
 
                 });
 
-                console.log(":::::" , debit, credit)
+
                 if(debit !== credit){
                     valid = false;
                     $(".entry").addClass("error");
