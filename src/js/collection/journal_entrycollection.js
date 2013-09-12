@@ -10,7 +10,6 @@ define([
 
     var Journal_entryCollection = Backbone.Collection.extend({
         url : 'whaterver'
-
     });
 
 

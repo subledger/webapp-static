@@ -6,10 +6,7 @@
                 <div class="left padding-top-half">
                     <strong>{{desc}}</strong>
                 </div>
-                <div class="right">
-                    <a href="chart.html" class="icon chart"><span class="caption">Chart page</span></a>
 
-                </div>
             </header>
             <section class="body">
                 <table cellpadding="0" cellspacing="0" border="0" class="account">
@@ -26,11 +23,11 @@
 
 
                             {{#each lines}}
-                               <tr>
+                               <tr data-journal-id="{{journal_entry}}">
                                    <td>{{date}}</td>
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
-                                   <td>{{#ifCond value.type "debit"}}<a href="#">{{value.amount}}</a>{{/ifCond}}</td>
-                                   <td>{{#ifCond value.type "credit"}}<a href="#">{{value.amount}}</a>{{/ifCond}}</td>
+                                   <td>{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{value.amount}}</a>{{/ifCond}}</td>
+                                   <td>{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{value.amount}}</a>{{/ifCond}}</td>
                                    <td>{{value.amount}}</td>
                                </tr>
                             {{/each}}

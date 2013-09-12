@@ -7366,3 +7366,7 @@ Login
   width: 400px;
   margin: 0 auto;
 }
+.openAccount header,
+.openAccount a {
+  cursor: pointer;
+}

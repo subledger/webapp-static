@@ -8,8 +8,9 @@ define([
     'models/balanceaccount',
     'models/balancejournal',
     'models/journal_entryline',
-    'models/account_line'
-], function ($, Backbone, Utils, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line) {
+    'models/account_line',
+    'models/posted_journal_entryline'
+], function ($, Backbone, Utils, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line, Posted_Journal_entryline) {
 
 
     Backbone.sync = function(method, model, options) {
@@ -60,7 +61,13 @@ define([
                                         Journal_entry.create(Utils.parse(current));
                                     });
                                     break;
+                                case 'onejournalentry':
 
+                                    $.each(Utils.parse(data), function(index, current){
+                                        current.posted = true;
+                                        Journal_entry.create(Utils.parse(current));
+                                    });
+                                    break;
                                 case 'journalbalance':
                                     data.journal = options.journal_id;
                                     BalanceJournal.create(Utils.parse(data));
@@ -72,7 +79,10 @@ define([
                                         Journal_entryline.create(Utils.parse(current));
                                     });
                                     break;
-
+                                case 'postedentryline':
+                                    $.each(Utils.parse(data), function(index, current){
+                                        Posted_Journal_entryline.create(Utils.parse(current));
+                                    });
                             }
                             break;
 
@@ -94,8 +104,13 @@ define([
         //console.log("sync",method, options.type, model, Utils.parse(model),  options );
         if(options.last_id === null || options.last_id === undefined){
 
-            params = {limit: 4, action:"before"};
+            params = {limit: 3, action:"before"};
+        } else if(options.last_id === "all"){
+            params = {limit: 100, action:"before"};
         }
+
+
+
         //console.log("last id ", options.last_id);
 
 
@@ -111,14 +126,16 @@ define([
                         options.api.organization(options.org_id).book( options.book_id ).account().create( Utils.parse(model), function(e,d){ cb(e,d) });
                         break;
                     case 'journalentry':
-                        options.api.organization(options.org_id).book( options.book_id ).journalEntry().createAndPost( Utils.parse(model), function(e,d){ cb(e,d) });
+                            options.api.organization(options.org_id).book( options.book_id ).journalEntry().createAndPost( Utils.parse(model), function(e,d){ cb(e,d) });
+
+
                         break;
                 }
 
                 break;
 
             case 'update':
-                console.log('sync update');
+                console.log('sync update', options.type, options.action, Utils.parse(model));
 
                 switch (options.type) {
                     case 'book':
@@ -152,13 +169,17 @@ define([
                     case 'journalentry':
                         switch (options.action) {
                             case 'update':
-                                options.api.organization(options.org_id).book( options.book_id ).journalEntry().update( Utils.parse(model), function(e,d){ cb(e,d) });
+                                var cleanModel = Utils.parse(model);
+                                var version = parseInt(cleanModel.version)+1;
+                                cleanModel.version = version.toString();
+
+                                options.api.organization(options.org_id).book( options.book_id ).journalEntry(options.journal_id).update( cleanModel, function(e,d){ cb(e,d) });
                                 break;
                             case 'activate':
-                                options.api.organization(options.org_id).book( options.book_id ).journalEntry().activate( function(e,d){ cb(e,d) });
+                                options.api.organization(options.org_id).book( options.book_id ).journalEntry(options.journal_id).activate( function(e,d){ cb(e,d) });
                                 break;
                             case 'archive':
-                                options.api.organization(options.org_id).book( options.book_id ).journalEntry().archive( function(e,d){ cb(e,d) });
+                                options.api.organization(options.org_id).book( options.book_id ).journalEntry(options.journal_id).archive( function(e,d){ cb(e,d) });
                                 break;
                         }
 
@@ -190,7 +211,11 @@ define([
                         options.api.organization(options.org_id).book(options.book_id).account(options.account_id).line().get(function(e,d){ cb(e, d.posted_lines); });
                         break;
                     case 'journalentry':
+                        console.log(options, params);
                         options.api.organization(options.org_id).book(options.book_id).journalEntry().get(params, function(e,d){ cb(e, d.active_journal_entries); });
+                        break;
+                    case 'onejournalentry':
+                        options.api.organization(options.org_id).book(options.book_id).journalEntry(options.current).get(function(e,d){ cb(e, d.posted_journal_entry); });
                         break;
                     case 'journalbalance':
                         options.api.organization(options.org_id).book(options.book_id).journalEntry(options.journal_id).balance(function(e,d){ cb(e, d.balance); });
@@ -198,7 +223,9 @@ define([
                     case 'entryline':
                         options.api.organization(options.org_id).book(options.book_id).journalEntry(options.journal_id).line().get(function(e,d){ cb(e, d.active_lines); });
                         break;
-
+                    case 'postedentryline':
+                        options.api.organization(options.org_id).book(options.book_id).journalEntry(options.journal_id).line().get({action:options.action, state:options.state},function(e,d){ cb(e, d.posted_lines); });
+                        break;
                 }
                 break;
         }

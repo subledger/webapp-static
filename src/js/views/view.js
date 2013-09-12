@@ -26,10 +26,11 @@ define([
     'hbs!template/account',
     'hbs!template/newaccount',
     'hbs!template/settings',
-    'hbs!template/login'
+    'hbs!template/login',
+    'hbs!template/source'
 
 ], function (Modernizr, $, _, Backbone, async, Utils, DataStructure, AppEvents, Forms, precompile, JSON,
-             Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, newAccountTemplate, settingsTemplate, loginTemplate ) {
+             Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, newAccountTemplate, settingsTemplate, loginTemplate, sourceTemplate ) {
 
     'use strict';
 
@@ -71,7 +72,8 @@ define([
             close: ".close",
             loginkey: "#key_id",
             loginsecret: "#secret",
-            loginorg_id: "#org_id"
+            loginorg_id: "#org_id",
+            version: ".version"
         },
         // Compile our stats template
         templates:{
@@ -86,12 +88,11 @@ define([
             _account: accountTemplate,
             _newAccount: newAccountTemplate,
             _settings: settingsTemplate,
-            _login: loginTemplate
+            _login: loginTemplate,
+            _source: sourceTemplate
         },
 
-        events: {
-            'click .savenew':	'createOnSubmit'
-        },
+
         startApp: function(settings){
             var _this = this;
 
@@ -103,7 +104,7 @@ define([
 
             DataStructure.initApi(settings);
             DataStructure.clearData();
-            DataStructure.setRelations(_this, Templates);
+            DataStructure.setRelations(_this, Templates, Forms);
 
             $("body").removeClass("login");
             Templates.applyTemplate(_this.templateSelector.nav, null, "");
@@ -143,12 +144,11 @@ define([
 
             var _this = this;
             var settings;
-            DataStructure.setRelations(_this, Templates);
+            //DataStructure.setRelations(_this, Templates, Forms);
 
             Templates.prepareTemplate(_this, DataStructure);
 
             Forms.setSelector(this.formSelector);
-
 
             if (Modernizr.localstorage) {
                 if (localStorage.subledgerKey && localStorage.subledgerSecret && localStorage.subledgerOrg){
@@ -200,10 +200,12 @@ define([
                 } else if(action == 'activity-stream'){
 
                     $(_this.templateSelector.main).removeClass("accounts-layout").addClass("journals-layout");
+
                     var book_id = $(_this.templateSelector.nav).find("select.book").val();
                     DataStructure.getNextJournals({book: book_id},function(journals){
+                        console.log("journals", journals);
                         DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
-                            Templates.applyTemplate(_this.templateSelector.main, _this.templates._draftJournals, DataStructure.prepareJournalsEntryData(journals, true), false, true);
+                            Templates.applyTemplate(_this.templateSelector.main, _this.templates._draftJournals, DataStructure.prepareJournalsEntryData(book_id, journals, true), false, true);
                             resetNav(e.currentTarget);
                         });
                     });
@@ -216,6 +218,7 @@ define([
                 } else if(action == 'accounts'){
 
                     $(_this.templateSelector.main).removeClass("journals-layout").addClass("accounts-layout");
+
                     var book_id = $(_this.templateSelector.nav).find("select.book").val();
                     DataStructure.getNextAccounts({book: book_id},function(accounts){
                         DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
@@ -230,14 +233,6 @@ define([
                     resetNav();
                 }
             });
-        },
-
-        createOnSubmit: function (el) {
-            console.log("click",el, el.currentTarget);
-            var $currentForm = $(el.currentTarget).parents(this.formSelector.form);
-
-            DataStructure.createOrUpdate(Forms, $currentForm);
-
         }
 
     });

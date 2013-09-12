@@ -45,7 +45,6 @@ define([
             var fields = [];
 
 
-
             if($currentForm.find(this.formSelector.desc).length > 0){
                 fields.push({name:"desc", field: $currentForm.find(this.formSelector.desc), validation: "text", value:$currentForm.find(this.formSelector.desc).val()});
             }
@@ -65,22 +64,32 @@ define([
             if($currentForm.find(this.formSelector.balance).length > 0){
                 fields.push({name:"balance", field: $currentForm.find(this.formSelector.balance), validation: "balance", value:$currentForm.find(this.formSelector.balance).val()});
             }
+            if($currentForm.find(this.formSelector.version).length > 0){
+                fields.push({name:"version", field: $currentForm.find(this.formSelector.version), validation: "none", value:$currentForm.find(this.formSelector.version).val()});
+            }
 
             var entry = [];
             if($currentForm.find(this.formSelector.entry).length > 0){
 
                 var _this = this;
                 $currentForm.find(this.formSelector.entry).each(function(){
-                    var entryfields = [];
-                    entryfields.push({name:"entryaccount", field: $(this).find(_this.formSelector.entryAccount), validation: "text", value: $(this).find(_this.formSelector.entryAccount).val()});
-                    entryfields.push({name:"entrydesc", field: $(this).find(_this.formSelector.entryDesc), validation: "text", value: $(this).find(_this.formSelector.entryDesc).val()});
-                    entryfields.push({name:"entryref", field: $(this).find(_this.formSelector.entryRef), validation: "url", value: $(this).find(_this.formSelector.entryRef).val()});
 
-                    $(this).find(_this.formSelector.entryDebit).val($(this).find(_this.formSelector.entryDebit).val().replace(",","."));
-                    $(this).find(_this.formSelector.entryCredit).val($(this).find(_this.formSelector.entryCredit).val().replace(",","."));
-                    entryfields.push({name:"entrydebit", field: [$(this).find(_this.formSelector.entryDebit), $(this).find(_this.formSelector.entryCredit)], validation: "onlyonefloat", onlyone: true, value: [$(this).find(_this.formSelector.entryDebit).val(), $(this).find(_this.formSelector.entryCredit).val()]});
+                    if($(this).hasClass("exist") || $(this).find(_this.formSelector.entryAccount).val() !== "" || $(this).find(_this.formSelector.entryDesc).val() !== "" || $(this).find(_this.formSelector.entryRef).val() !== "" || $(this).find(_this.formSelector.entryDebit).val() !== "" || $(this).find(_this.formSelector.entryCredit).val() !== "" ){
 
-                    entry.push({ name: "entry", fields:  entryfields });
+
+                        var entryfields = [];
+                        entryfields.push({name:"entryaccount", field: $(this).find(_this.formSelector.entryAccount), validation: "text", value: $(this).find(_this.formSelector.entryAccount).val()});
+                        entryfields.push({name:"entrydesc", field: $(this).find(_this.formSelector.entryDesc), validation: "text", value: $(this).find(_this.formSelector.entryDesc).val()});
+                        entryfields.push({name:"entryref", field: $(this).find(_this.formSelector.entryRef), validation: "url", value: $(this).find(_this.formSelector.entryRef).val()});
+
+                        $(this).find(_this.formSelector.entryDebit).val($(this).find(_this.formSelector.entryDebit).val().replace(",","."));
+                        $(this).find(_this.formSelector.entryCredit).val($(this).find(_this.formSelector.entryCredit).val().replace(",","."));
+
+                        entryfields.push({name:"entrydebit", field: [$(this).find(_this.formSelector.entryDebit), $(this).find(_this.formSelector.entryCredit)], validation: "onlyonefloat", onlyone: true, value: [$(this).find(_this.formSelector.entryDebit).val(), $(this).find(_this.formSelector.entryCredit).val()]});
+
+
+                        entry.push({ name: "entry", fields:  entryfields, exist:$(this).hasClass("exist") });
+                    }
                 });
 
             }
@@ -91,7 +100,7 @@ define([
 
             var object = {};
             var date = {};
-
+                    console.log(fields);
             $.each(fields.fields, function(index, current){
 
                 if(current.name === "desc"){
@@ -108,6 +117,9 @@ define([
                 }
                 if(current.name === "balance" ){
                     object["normal_balance"] = current.value;
+                }
+                if(current.name === "version" ){
+                    object["version"] = current.value;
                 }
 
             });
@@ -159,7 +171,7 @@ define([
 
             return object;
         },
-        validateFields: function (fields) {
+        validateFields: function (action, fields) {
             var valid = true;
 
             var validate = function(current){
@@ -277,7 +289,7 @@ define([
                 });
 
 
-                if(debit !== credit){
+                if(debit !== credit && action === "create"){
                     valid = false;
                     $(".entry").addClass("error");
                     $(".entry").last().after("<div class='errorMessage'>Entry lines must balance.</div>");

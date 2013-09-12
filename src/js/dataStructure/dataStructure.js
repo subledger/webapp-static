@@ -18,6 +18,7 @@ define([
     'collection/balancejournalcollection',
     'collection/journal_entrylinecollection',
     'collection/account_linecollection',
+    'collection/posted_journal_entrylinecollection',
 
     'models/identity',
     'models/org',
@@ -28,13 +29,14 @@ define([
     'models/balancejournal',
     'models/journal_entryline',
     'models/account_line',
+    'models/posted_journal_entryline',
 
     'subledger'
 
 
 ], function ($, _, Backbone, async, Utils, AppEvents,
-             IdentityCollection, OrgCollection, BookCollection, AccountCollection, Journal_entryCollection, BalanceAccountCollection, BalanceJournalCollection, Journal_entrylineCollection, Account_lineCollection,
-             Identity, Org, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line){
+             IdentityCollection, OrgCollection, BookCollection, AccountCollection, Journal_entryCollection, BalanceAccountCollection, BalanceJournalCollection, Journal_entrylineCollection, Account_lineCollection, Posted_Journal_entrylineCollection,
+             Identity, Org, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line, Posted_Journal_entryline){
 
     'use strict';
 
@@ -55,12 +57,14 @@ define([
             this.api.setCredentials(settings.key,settings.secret);
             this.org_id = settings.org;
         },
-        setRelations: function(AppView, Templates){
+        setRelations: function(AppView, Templates, Forms){
 
             this.DataStructure = this;
             this.AppView = AppView;
             this.Templates = Templates;
+            this.Forms = Forms;
 
+            window.Templates = this.Templates;
             window.AppView = this.AppView;
             window.DataStructure = this.DataStructure;
 
@@ -143,6 +147,16 @@ define([
                 inverse: 'lines'
             });
 
+            Journal_entry.has().many('posted_lines', {
+                collection: Posted_Journal_entrylineCollection,
+                inverse: 'journal'
+            });
+
+            Posted_Journal_entryline.has().one('journal_id', {
+                model: Journal_entry,
+                inverse: 'posted_lines'
+            });
+
 
             this.identitycollection = new IdentityCollection;
             this.orgcollection = new OrgCollection;
@@ -152,6 +166,7 @@ define([
             this.balanceaccountcollection = new BalanceAccountCollection;
             this.balancejournalcollection = new BalanceJournalCollection;
             this.journal_entrylinecollection = new Journal_entrylineCollection;
+            this.posted_journal_entrylinecollection = new Posted_Journal_entrylineCollection;
         },
         clearData: function(){
             Identity.reset();
@@ -230,13 +245,19 @@ define([
                 }
             });
         },
-        journalentryFetch: function(org_id, book_id, last_id, cb){
+        journalentryFetch: function(org_id, book_id, last_id, current,  cb){
+             var type = "journalentry";
+             if(current !== null && current !== undefined){
+                 type = "onejournalentry";
+             }
+
             this.journal_entrycollection.fetch({
-                type:"journalentry",
+                type:type,
                 org_id: org_id,
                 book_id: book_id,
                 api: this.api,
                 last_id: last_id,
+                current: current,
                 success: function(resp) {
 
                     cb(null, resp);
@@ -281,13 +302,21 @@ define([
                 }
             });
         },
-        entryLinesFetch: function(org_id, book_id, journal_id, cb){
+        entryLinesFetch: function(org_id, book_id, journal_id, posted, cb){
+            var state = "active";
+            var action = "starting";
+            if(posted !== null && posted !== undefined){
+
+            }
+
             this.journal_entrylinecollection.fetch({
-                type:"entryline",
+                type:"postedentryline",
                 org_id: org_id,
                 book_id: book_id,
                 journal_id: journal_id,
                 api: this.api,
+                state:state,
+                action:action,
                 success: function(resp) {
 
                     cb(null, resp);
@@ -297,6 +326,30 @@ define([
                     cb(error);
                 }
             });
+
+        },
+        posted_entryLinesFetch: function(org_id, book_id, journal_id,  cb){
+            var state = "posted";
+            var action = "starting";
+
+            this.posted_journal_entrylinecollection.fetch({
+                type:"postedentryline",
+                org_id: org_id,
+                book_id: book_id,
+                journal_id: journal_id,
+                api: this.api,
+                state:state,
+                action:action,
+                success: function(resp) {
+
+                    cb(null, resp);
+                },
+                error: function(error) {
+                    console.log("posted_journal_entrylinecollection error",error);
+                    cb(error);
+                }
+            });
+
         },
         accountLinesFetch: function(org_id, book_id, account_id, cb){
             this.journal_entrylinecollection.fetch({
@@ -377,6 +430,10 @@ define([
             var book_id = options.book;
             var last_id = options.following;
 
+            console.log("*********************************");
+            console.log("********** GET NEXT ACCOUNTS "+last_id+"  **************");
+            console.log("*********************************");
+
             console.log(last_id);
             var callback = function(err, data){
 
@@ -389,9 +446,31 @@ define([
             };
             this.accountFetch(this.org_id, book_id, last_id, callback);
         },
+        getAllAccounts: function(options, cb){
+            var book_id = options.book;
+
+            console.log("*********************************");
+            console.log("********** GET ALL ACCOUNTS **************");
+            console.log("*********************************");
+
+            var callback = function(err, data){
+
+                if(err === null){
+                    cb(data);
+                } else {
+                    cb(null);
+                }
+
+            };
+            this.accountFetch(this.org_id, book_id, "all", callback);
+        },
         getNextJournals: function(options, cb){
             var book_id = options.book;
             var last_id = options.following;
+
+            console.log("*********************************");
+            console.log("********** GET NEXT JOURNAL "+last_id+"  **************");
+            console.log("*********************************");
 
             console.log(last_id);
             var callback = function(err, data){
@@ -403,7 +482,27 @@ define([
                 }
 
             };
-            this.journalentryFetch(this.org_id, book_id, last_id, callback);
+            this.journalentryFetch(this.org_id, book_id, last_id, null, callback);
+
+        },
+        getOneJournal: function(options, cb){
+            var book_id = options.book;
+            var current = options.current;
+
+            console.log("*********************************");
+            console.log("********** GET ONE JOURNAL "+current+"  **************");
+            console.log("*********************************");
+
+            var callback = function(err, data){
+
+                if(err === null){
+                    cb(data);
+                } else {
+                    cb(null);
+                }
+
+            };
+            this.journalentryFetch(this.org_id, book_id, null, current, callback);
 
         },
         getAccountsBalance: function(options, cb){
@@ -485,6 +584,23 @@ define([
             this.entryLinesFetch(this.org_id, book_id, journal_id, callback);
 
         },
+        getPostedJournalLines: function(book_id, journal_id, cb){
+            var count = 0;
+
+            console.log("*********************************");
+            console.log("********** GET POSTED JOURNAL LINES **************");
+            console.log("*********************************");
+
+
+
+
+            var callback = function(err, resp){
+                cb(resp);
+            };
+
+            this.posted_entryLinesFetch(this.org_id, book_id, journal_id, callback);
+
+        },
         getAccountLines: function(account_id, cb){
             var count = 0;
 
@@ -564,7 +680,8 @@ define([
             return result;
 
         },
-        prepareJournalsEntryData: function(journals, createBtn){
+        prepareJournalsEntryData: function(bookid, journals, createBtn){
+
 
             var data = [];
             var journalentry = Utils.parse(journals);
@@ -589,8 +706,8 @@ define([
                     time: time,
                     ref: current.reference,
                     balance: balance[0],
-                    accounts: _this.prepareAccountsData(current.book).accounts,
-                    timeago: timeago + " ago"
+                    timeago: timeago + " ago",
+                    book_id:bookid
                 }
                 data.push(partial);
 
@@ -602,15 +719,17 @@ define([
 
             return result;
         },
-        prepareJournalEntryData: function(journalid){
+        prepareJournalEntryData: function(journalid, accounts){
 
-            var journalentry = Utils.parse(Journal_entry.all().get(journalid));
+            console.log("journalid", journalid);
             var book = Utils.parse(Journal_entry.all().get(journalid).book());
+            var journalentry = Utils.parse(Journal_entry.all().get(journalid));
             var datetime = new Date(journalentry.effective_at);
 
             var month = Utils.months[datetime.getMonth()-1];
 
             var time = Utils.getTime(datetime, false);
+
 
             var result = {
                 id:journalentry.id,
@@ -618,9 +737,10 @@ define([
                 date: datetime.getDate()+" "+month+" "+datetime.getFullYear(),
                 time: time,
                 ref: journalentry.reference,
-                accounts: this.prepareAccountsData(Journal_entry.all().get(journalid).book()).accounts,
+                accounts: Utils.parse(Book.all().get(book.id).accounts()),
                 lines: Utils.parse(Journal_entry.all().get(journalid).lines()),
-                book_id:book.id
+                book_id:book.id,
+                version: journalentry.version
             };
 
             //console.log("test data", result);
@@ -667,6 +787,7 @@ define([
             var book = Utils.parse(Account.all().get(accountid).book());
             var lines = Utils.parse(Account.all().get(accountid).lines());
 
+
             var datedlines = [];
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
@@ -693,136 +814,186 @@ define([
             return result;
 
         },
-        getOneJournal: function(options, cb){
+        prepareSourceData: function(accounts, journal, lines){
+            var account = Utils.parse(accounts);
+            var journal = Utils.parse(journal);
+
+
+            var lines = Utils.parse(lines);
+
+
+            console.log("##### account ", account);
+            console.log("##### journal ", journal);
+            console.log("##### lines", lines);
+            var balance = Utils.parse(Journal_entry.all().get(journal[0].id).balance());
+            console.log("##### balance", balance);
+
+            var totalcredit = 0;
+            var totaldebit = 0;
+            var datedlines = [];
+            $.each(lines, function(index, current){
+                var datetime = new Date(current.posted_at);
+
+                var month = Utils.months[datetime.getMonth()-1];
+
+                var time = Utils.getTime(datetime, false);
+
+                if(current.value.type === 'debit'){
+                    totalcredit = totalcredit + parseInt(current.value.amount);
+                }
+                if(current.value.type === 'credit'){
+                    totaldebit = totaldebit + parseInt(current.value.amount);
+                }
+                current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
+                datedlines.push(current);
+            });
+
+            var result = {
+                accountdesc:account[0].description,
+                desc: journal[0].description,
+                date: datedlines[0].date,
+                balance: balance[0],
+                lines: datedlines,
+                totalcredit: totalcredit,
+                totaldebit: totaldebit
+            };
+            return result;
+        },
+        getCurrentJournal: function(options, cb){
             console.log(Utils.parse(Journal_entry.all().get(options.id)));
             cb([Utils.parse(Journal_entry.all().get(options.id))]);
         },
-        getOneAccount: function(options, cb){
+        getCurrentAccount: function(options, cb){
             console.log(Utils.parse(Account.all().get(options.id)));
             cb([Utils.parse(Account.all().get(options.id))]);
         },
-        loadnum:0,
         loadstatus:false,
-        loadMoreJournals: function(book_id, $loadIcon, callback, lastid){
+        loadMoreJournals: function(book_id, callback, lastid){
             var _this = this;
             var last_id = $("#content").find('article:last').attr('data-id');
             if(lastid !== undefined){
                 last_id = lastid;
             }
-            try{
-                _this.DataStructure.getNextJournals({book: book_id, following:last_id},function(journals){
-                    var parsedJournals = Utils.parse(journals);
-                    if(parsedJournals !== null){
-                        if(typeof parsedJournals[0] !== 'undefined'){
-                            if(journals !== null && parsedJournals[0].id !== last_id ){
-                                if($("#content").find('article[data-id="'+parsedJournals[0].id+'"]').length === 0 ){
-                                    _this.DataStructure.getJournalsBalance({book: book_id, journals:journals},function(bookid){
-                                        if($("#content").find('article[data-id="'+parsedJournals[0].id+'"]').length === 0 ){
-                                            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._draftJournals, _this.DataStructure.prepareJournalsEntryData(journals), true);
-                                            //resetNav(e.currentTarget);
+
+            window.DataStructure.getNextJournals({book: book_id, following:last_id},function(journals){
+                var parsedJournals = Utils.parse(journals);
+                if(parsedJournals !== null){
+                    if(typeof parsedJournals[0] !== 'undefined'){
+                        if(journals !== null && parsedJournals[0].id !== last_id ){
+                            if($("#content").find('article[data-id="'+parsedJournals[0].id+'"]').length === 0 ){
+                                window.DataStructure.getJournalsBalance({book: book_id, journals:journals},function(bookid){
+                                    if($("#content").find('article[data-id="'+parsedJournals[0].id+'"]').length === 0 ){
+                                        if($("#subledgerapp").hasClass("journals-layout")){
+                                            window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journals), true);
                                         }
+                                    }
 
-                                        _this.DataStructure.loadnum++;
-                                        if(_this.DataStructure.loadnum < 3){
+                                    window.DataStructure.loadstatus = false;
+                                    callback(book_id, parsedJournals[0].id);
 
-                                            try{ _this.DataStructure.loadMoreJournals(book_id, $loadIcon, callback, parsedJournals[0].id ); } catch(err){ }
-
-                                        } else {
-                                            _this.DataStructure.loadnum = 0;
-                                            _this.DataStructure.loadstatus = false;
-                                            //$loadIcon.fadeOut(500);
-                                        }
-                                        try{ callback(book_id, Utils.parse(journals)[0].id); } catch(err){ }
-
-                                    });
-                                } else {
-                                    try{ _this.DataStructure.loadMoreJournals(book_id, $loadIcon, callback, parsedJournals[0].id ); } catch(err){ }
-                                }
+                                });
+                            } else {
+                                window.DataStructure.loadMoreJournals(book_id, callback, parsedJournals[0].id );
                             }
                         }
                     }
-                });
-            } catch(e){}
+                }
+            });
+
         },
-        loadMoreAccounts: function(book_id, $loadIcon, callback, lastid){
+        loadMoreAccounts: function(book_id, callback, lastid){
             var _this = this;
             var last_id = $("#content").find('article:last a').attr('data-id');
             if(lastid !== undefined){
                 last_id = lastid;
             }
-            try{
-                _this.DataStructure.getNextAccounts({book: book_id, following:last_id},function(accounts){
-                    var parsedAccounts = Utils.parse(accounts);
-                    if(parsedAccounts !== null){
-                        if(typeof parsedAccounts[0] !== 'undefined'){
-                            if(accounts !== null && parsedAccounts[0].id !== last_id ){
-                                if($("#content").find('article a[data-id="'+parsedAccounts[0].id+'"]').length === 0 ){
-                                    _this.DataStructure.getAccountsBalance({book: book_id, accounts:accounts},function(bookid){
-                                        if($("#content").find('article a[data-id="'+parsedAccounts[0].id+'"]').length === 0 ){
-                                            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, _this.DataStructure.prepareAccountsData(bookid, accounts), true);
-                                            //resetNav(e.currentTarget);
+
+            window.DataStructure.getNextAccounts({book: book_id, following:last_id},function(accounts){
+                var parsedAccounts = Utils.parse(accounts);
+                if(parsedAccounts !== null){
+                    if(typeof parsedAccounts[0] !== 'undefined'){
+                        if(accounts !== null && parsedAccounts[0].id !== last_id ){
+                            if($("#content").find('article a[data-id="'+parsedAccounts[0].id+'"]').length === 0 ){
+
+                                window.DataStructure.getAccountsBalance({book: book_id, accounts:accounts},function(bookid){
+                                    if($("#content").find('article a[data-id="'+parsedAccounts[0].id+'"]').length === 0 ){
+                                        if($("#subledgerapp").hasClass("accounts-layout")){
+                                            window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._accounts, window.DataStructure.prepareAccountsData(bookid, accounts), true);
                                         }
+                                    }
 
-                                        _this.DataStructure.loadnum++;
-                                        if(_this.DataStructure.loadnum < 3){
+                                    window.DataStructure.loadstatus = false;
+                                    callback(book_id, parsedAccounts[0].id);
 
-                                            try{ _this.DataStructure.loadMoreAccounts(book_id, $loadIcon, callback, parsedAccounts.id ); } catch(err){ }
+                                });
 
-                                        } else {
-                                            _this.DataStructure.loadnum = 0;
-                                            _this.DataStructure.loadstatus = false;
-                                            //$loadIcon.fadeOut(500);
-                                        }
-                                        try{ callback(book_id, parsedAccounts[0].id); } catch(err){ }
 
-                                    });
-                                } else {
-                                    try{ _this.DataStructure.loadMoreAccounts(book_id, $loadIcon, callback, parsedAccounts[0].id ); } catch(err){ }
-                                }
+                            } else {
+                                window.DataStructure.loadMoreAccounts(book_id, callback, parsedAccounts[0].id );
                             }
                         }
                     }
-                });
-            } catch(e){}
+                }
+            });
+
         },
         fillJournals: function(book_id, journal){
             var _this = this;
 
-                var offset = $("#content").find('article:last').offset();
+                if($("#content").find('article:last').length > 0){
+                    var offset = $("#content").find('article:last').offset();
 
-                if($("#content").height() > offset.top){
-                    _this.DataStructure.loadstatus = true;
+                    console.log("fillJournals",$("#content").height() +100, offset.top, book_id, journal);
+                    if(($("#content").height() +200) > offset.top){
+                        window.DataStructure.loadstatus = true;
 
-                    _this.DataStructure.loadMoreJournals(book_id, $('.loadmore'), _this.DataStructure.fillJournals, journal);
+                        window.DataStructure.loadMoreJournals(book_id, window.DataStructure.fillJournals, journal);
+                    }
                 }
+
+
 
         },
         fillAccounts: function(book_id, account){
             var _this = this;
 
-                var offset = $("#content").find('article:last').offset();
+                if($("#content").find('article:last').length > 0){
+                    var offset = $("#content").find('article:last').offset();
+                    console.log("fillAccounts",$("#content").height() +100, offset.top, book_id, account);
+                    if(($("#content").height() +200)  > offset.top){
+                        window.DataStructure.loadstatus = true;
 
-                if($("#content").height() > offset.top){
-                    _this.DataStructure.loadstatus = true;
-
-                    _this.DataStructure.loadMoreAccounts(book_id, $('.loadmore'), _this.DataStructure.fillJournals, account);
+                        window.DataStructure.loadMoreAccounts(book_id, window.DataStructure.fillAccounts, account);
+                    }
                 }
 
+
+
         },
-        createOrUpdate: function(Forms, $currentForm){
+        createOrUpdate: function(el){
             var _this = this;
-            var type = $currentForm.attr("data-type");
-            var bookid = $currentForm.attr("data-book-id");
-            var fields = Forms.serialize($currentForm);
+            var $currentForm = $(el.currentTarget).parents(_this.AppView.formSelector.form);
 
-            var valid = Forms.validateFields(fields);
+            var action = $(el.currentTarget).attr("data-action");
+            var type = 'book';
+            if($("#subledgerapp").hasClass("journals-layout")){
+                   type='journalentry';
+            } else if ($("#subledgerapp").hasClass("accounts-layout")){
+                type='account';
+            }
 
-            console.log("jsonify",Forms.jsonify(fields));
 
+            var bookid = $currentForm.attr("data-book-id") || $currentForm.parents("article").attr("data-book-id");
+            var fields = _this.Forms.serialize($currentForm);
+            console.log("fields", fields);
+            var valid = _this.Forms.validateFields(action, fields);
+
+            //console.log("jsonify",_this.Forms.jsonify(fields));
+            console.log("type", type, action, "bookid", bookid);
             console.log("is valid" , valid);
             if(valid){
-                var data = Forms.jsonify(fields);
-                var type = $currentForm.attr("data-type");
+                console.log("passed validation");
+                var data = _this.Forms.jsonify(fields);
 
                 var success = function(data){
                     console.log(type+" saved :", data);
@@ -849,7 +1020,32 @@ define([
                         console.log("********** SUBMIT JOURNAL **************");
                         console.log("*********************************");
 
-                        _this.journal_entrycollection.create(data, {wait:true, type:type, org_id:_this.org_id, book_id:bookid, api: _this.api, success: function(){ success(data); } });
+                        if(action === "create"){
+                            _this.journal_entrycollection.create(data, {wait:true, type:type, org_id:_this.org_id, book_id:bookid, api: _this.api, success: function(){ success(data); } });
+                        } else if (action === "save"){
+
+                            var id = $currentForm.parents("article").attr("data-id");
+
+                            var successjournal = function(data){
+                                console.log(type+" saved :", data);
+                            };
+
+                             data.id = id;
+                            console.log('update', id, data);
+                            var cleanedData = Utils.parse(data);
+                            var lines = cleanedData.lines;
+
+                            delete cleanedData['lines'];
+                            console.log("lines", lines);
+                            _this.journal_entrycollection.create(cleanedData, {action:"update", merge:true, wait:true, type:type, org_id:_this.org_id, book_id:bookid, journal_id:id,  api: _this.api, success: function(){ successjournal(data); } });
+                                    /*
+                            $.each(lines, function(){
+
+                            });
+                                       */
+
+                        }
+
                         break;
                 }
 

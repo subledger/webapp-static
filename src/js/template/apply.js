@@ -12,7 +12,6 @@ define([
         prepareTemplate: function(AppView, DataStructure){
             this.AppView = AppView;
             this.DataStructure = DataStructure;
-
         },
         bindTimePicker: function($selector){
             var now = new Date();
@@ -62,87 +61,62 @@ define([
                 $(this).Selectyze();
             });
         },
-        bindEvents: function($selector){
+        bindInfiniteScroll: function(firstLoad){
             var _this = this;
-            // Events
-            $selector.find('.btn, .action').on('click', function(e){
-                e.preventDefault();
+
+            var book_id = $("#sidebar").find("select.book").val();
+            var load = false;
 
 
-                var action = $(e.currentTarget).data('action'),
-                    $parent = $(e.currentTarget).parents('article');
-                if(action == 'expand'){
-                    //parent.toggleClass('close').toggleClass('open');
-                    $('.model1', $parent).slideUp();
-                    $('.model2', $parent).slideDown();
-                } else if (action == 'delete'){
-                    parent.remove();
-                } else if (action == 'save'){
+            var type = $("#content").find('article:last').attr("data-action") || $("#content").find('article:last a').attr("data-action");
 
-                    var type =  $parent.attr("data-type");
+            if(type === "journal" || type === "account" ){
 
-                    if(type === "settings"){
-                        _this.AppView.login();
-                    } else {
-                        _this.AppView.createOnSubmit(e);
-                        $('.model1', $parent).slideDown();
-                        $('.model2', $parent).slideUp();
+                if(firstLoad){
+                    if(type === "journal"){
+                        _this.DataStructure.fillJournals(book_id);
+                    }
+                    if(type === "account"){
+                        _this.DataStructure.fillAccounts(book_id);
                     }
 
-                } else if (action == 'savenew'){
-                                  console.log($parent);
-                    _this.AppView.createOnSubmit(e);
+                    $("#content").unbind("scroll");
+                    $("#content").scroll(function(){ // On surveille l'évènement scroll
 
-                } else if (action == 'close'){
-                    //parent.toggleClass('close').toggleClass('open');
+                        var $last = $("#content").find('article:last');
+                        if($last.length > 0){
+                            var offset = $last.offset();
+                            /* Si l'élément offset est en bas de scroll, si aucun chargement
+                             n'est en cours, si le nombre de commentaire affiché est supérieur
+                             à 5 et si tout les commentaires ne sont pas affichés, alors on
+                             lance la fonction. */
+                            if((offset.top-$("#content").height() <= $("#content").scrollTop())
+                                && _this.DataStructure.loadstatus==false && ($('article').size()>=4) ){
 
+                                // la valeur passe à vrai, on va charger
+                                _this.DataStructure.loadstatus = true;
 
-                    var id = $(e.currentTarget).parents("article").attr("data-id");
-                    var book_id = $(e.currentTarget).parents("article").attr("data-book-id");
+                                //On affiche un loader
+                                $('.loadmore').show();
 
-                    console.log("close", id, book_id);
+                                if(type === "journal"){
+                                    _this.DataStructure.fillJournals(book_id);
+                                }
+                                if(type === "account"){
+                                    _this.DataStructure.fillAccounts(book_id);
+                                }
 
-                    if($(e.currentTarget).parents(".openJournal").length > 0){
-                        DataStructure.getOneJournal({book: book_id, id:id},function(journals){
-                            DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
-                                _this.applyTemplate($(e.currentTarget).parents(".openJournal"), _this.AppView.templates._draftJournals, DataStructure.prepareJournalsEntryData(journals), false, false, ".openJournal");
+                            }
+                        } else {
 
-                            });
-                        });
-                    }
-                    if($(e.currentTarget).parents(".openAccount").length > 0){
-                        DataStructure.getOneAccount({book: book_id, id:id},function(accounts){
-                            DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
-                                _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._accounts, DataStructure.prepareAccountsData(bookid, accounts), false, false, ".openAccount");
+                        }
 
-                            });
-                        });
-                    }
-
-
-
-
-                } else if(action == 'journal'){
-
-                    var journal_id = $(e.currentTarget).attr("data-id");
-                    $(e.currentTarget).wrap("<div class='openJournal'></div>");
-                    _this.DataStructure.getJournalLines(journal_id,function(journalid){
-                        _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(journalid));
                     });
-                } else if(action == 'account') {
-                    var account_id = $(e.currentTarget).attr("data-id");
-                    $(e.currentTarget).parent("article").wrap("<div class='openAccount'></div>");
-                    _this.DataStructure.getAccountLines(account_id,function(account_id){
-                        _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
-                    });
-                } else if(action == 'login') {
-                    _this.AppView.login();
-                } else if(action == 'logout') {
-                    _this.AppView.logout();
                 }
-            });
-        },
 
+            }
+
+        },
         bindTemplate: function($selector, fl){
             var _this = this;
             var firstLoad = false;
@@ -158,6 +132,7 @@ define([
 
 
             //Add journal Entry
+            /*
             $selector.find('.addentry').on('click', function(e){
                 var $template = $selector.find('.entry.template').clone();
                 $template.removeClass("template").addClass("newentry").css("border-top","1px solid #d4d4d4");
@@ -168,63 +143,9 @@ define([
                 });
                 $selector.find(".newentry").removeClass("newentry");
             });
-
-
-
-
+              */
             if($selector.selector === "#subledgerapp"){
-
-                var book_id = $("#sidebar").find("select.book").val();
-                var load = false;
-                var loadnum = 0;
-
-                var type = $("#content").find('article:last').attr("data-action") || $("#content").find('article:last a').attr("data-action");
-
-                if(type === "journal" || type === "account" ){
-
-                    if(firstLoad){
-                        if(type === "journal"){
-                            _this.DataStructure.fillJournals(book_id);
-                        }
-                        if(type === "account"){
-                            _this.DataStructure.fillAccounts(book_id);
-                        }
-
-                        $("#content").unbind("scroll");
-                        $("#content").scroll(function(){ // On surveille l'évènement scroll
-
-                            var $last = $("#content").find('article:last');
-                            if($last.length > 0){
-                                var offset = $last.offset();
-                                /* Si l'élément offset est en bas de scroll, si aucun chargement
-                                 n'est en cours, si le nombre de commentaire affiché est supérieur
-                                 à 5 et si tout les commentaires ne sont pas affichés, alors on
-                                 lance la fonction. */
-                                if((offset.top-$("#content").height() <= $("#content").scrollTop())
-                                    && _this.DataStructure.loadstatus==false && ($('article').size()>=4) ){
-
-                                    // la valeur passe à vrai, on va charger
-                                    _this.DataStructure.loadstatus = true;
-
-                                    //On affiche un loader
-                                    $('.loadmore').show();
-
-                                    if(type === "journal"){
-                                        _this.DataStructure.loadMoreJournals(book_id, $('.loadmore'), _this.DataStructure.loadMoreJournals);
-                                    }
-                                    if(type === "account"){
-                                        _this.DataStructure.loadMoreAccounts(book_id, $('.loadmore'), _this.DataStructure.loadMoreAccounts);
-                                    }
-
-                                }
-                            } else {
-
-                            }
-
-                        });
-                    }
-
-                }
+                _this.bindInfiniteScroll(firstLoad);
             }
 
         },
@@ -262,6 +183,113 @@ define([
 
 
 
+        },
+        bindEvents: function($selector){
+            var _this = this;
+            // Events
+            $selector.find('.btn, .action').on('click', function(e){
+                e.preventDefault();
+
+                var id = $(e.currentTarget).parents("article").attr("data-id");
+                var book_id = $(e.currentTarget).parents("article").attr("data-book-id") || $(e.currentTarget).attr("data-book-id");
+
+                var journal_id = $(e.currentTarget).attr("data-id");
+                var account_id = $(e.currentTarget).attr("data-id");
+                var action = $(e.currentTarget).data('action');
+                var $parent = $(e.currentTarget).parents('article');
+                var type =  $parent.attr("data-type");
+
+                if(action == 'expand'){
+                    //parent.toggleClass('close').toggleClass('open');
+                    $('.model1', $parent).slideUp();
+                    $('.model2', $parent).slideDown();
+
+                } else if (action == 'collapse'){
+                    $('.model2', $parent).slideUp();
+                    $('.model1', $parent).slideDown();
+                } else if (action == 'save'){
+
+                    if(type === "settings"){
+                        _this.AppView.login();
+                    } else {
+                        _this.DataStructure.createOrUpdate(e);
+                        $('.model1', $parent).slideDown();
+                        $('.model2', $parent).slideUp();
+                    }
+
+                } else if (action == 'create'){
+                    console.log($parent);
+                    _this.DataStructure.createOrUpdate(e);
+
+                } else if (action == 'close'){
+                    //parent.toggleClass('close').toggleClass('open');
+
+                    /*
+                    console.log("close", id, book_id);
+
+                    if($(e.currentTarget).parents(".openJournal").length > 0){
+                        DataStructure.getCurrentJournal({book: book_id, id:id},function(journals){
+                            DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
+                                _this.applyTemplate($(e.currentTarget).parents(".openJournal"), _this.AppView.templates._draftJournals, DataStructure.prepareJournalsEntryData(book_id, journals), false, false, ".openJournal");
+
+                            });
+                        });
+                    }
+                     */
+                    if($(e.currentTarget).parents(".openAccount").length > 0){
+                        _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
+                            _this.DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
+                                _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._accounts, DataStructure.prepareAccountsData(bookid, accounts), false, false, ".openAccount");
+
+                            });
+                        });
+                    }
+
+
+
+
+                } else if(action == 'journal'){
+
+                    /*
+                    $(e.currentTarget).wrap("<div class='openJournal'></div>");
+                    console.log("book_id",book_id);
+                    _this.DataStructure.getAllAccounts({book: book_id},function(accounts){
+                        _this.DataStructure.getJournalLines(journal_id,function(journalid){
+                            _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(journalid, accounts));
+                        });
+                    });
+                    */
+
+                } else if(action == 'account') {
+
+                    $(e.currentTarget).parent("article").wrap("<div class='openAccount'></div>");
+                    _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
+                        _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
+                        });
+                    });
+                } else if(action == 'source') {
+                    console.log({book: book_id, id:id});
+                    _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
+
+                        journal_id = $(e.currentTarget).parents("tr").attr("data-journal-id");
+
+                        _this.DataStructure.getOneJournal({book: book_id, current:journal_id},function(journal){
+
+                            _this.DataStructure.getJournalsBalance({book: book_id, journals:journal},function(bookid){
+                                _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(lines){
+
+                                    _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(accounts, journal, lines));
+                                });
+                            });
+                        });
+                    });
+                } else if(action == 'login') {
+                    _this.AppView.login();
+                } else if(action == 'logout') {
+                    _this.AppView.logout();
+                }
+            });
         }
     };
 

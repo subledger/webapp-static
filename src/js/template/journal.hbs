@@ -14,10 +14,11 @@
 
             <section class="body">
                 <div class="block1">
+                    <input type="hidden" class="version" value="{{version}}">
                     <label for="description" class="caption">Description</label>
-                    <input type="text" id="description" name="description" placeholder="Description" class="input input1 full-width margin-bottom" value="{{desc}}">
+                    <input type="text" id="description" name="description" placeholder="Description" class="input input1 full-width margin-bottom desc" value="{{desc}}">
                     <label for="ref" class="caption">ref</label>
-                    <input type="text" id="ref" name="ref" placeholder="Reference" class="input input1 full-width" value="{{ref}}">
+                    <input type="text" id="ref" name="ref" placeholder="Reference" class="input input1 full-width ref" value="{{ref}}">
                 </div>
                 <div class="block2">
                     <div class="col col1">Entries</div>
@@ -31,10 +32,10 @@
                     <div class="col col1">
                         <div class="left  margin-top">
                             {{#if accounts}}
-                                    <select name="" id="" class="select prettySelect" style="display: none;">
+                                    <select name="" id="" class="select prettySelect entryAccount" style="display: none;">
                                         <option value="">Choose an account</option>
                                         {{#each accounts}}
-                                                <option value="{{id}}">{{desc}}</option>
+                                                <option value="{{id}}">{{description}}</option>
                                             </article>
                                         {{/each}}
                                        </select>
@@ -44,18 +45,18 @@
                         </div>
                         <div class="left">
                             <label for="description" class="caption">Description</label>
-                            <input type="text" id="description" name="description" placeholder="Description" class="input input1 margin-bottom">
+                            <input type="text" id="description" name="description" placeholder="Description" class="input input1 margin-bottom entryDesc">
                             <label for="ref" class="caption">ref</label>
-                            <input type="text" id="ref" name="ref" placeholder="Reference" class="input input1">
+                            <input type="text" id="ref" name="ref" placeholder="Reference" class="input input1 entryRef">
                         </div>
                     </div>
                     <div class="col col2 margin-top">
                         <label for="debit" class="caption">Debit</label>
-                        <input type="text" id="debit" name="debit" placeholder="00.00" class="input input1">
+                        <input type="text" id="debit" name="debit" placeholder="00.00" class="input input1 entryDebit">
                     </div>
                     <div class="col col3 margin-top">
                         <label for="credit" class="caption">Credit</label>
-                        <input type="text" id="credit" name="credit" placeholder="00.00" class="input input1">
+                        <input type="text" id="credit" name="credit" placeholder="00.00" class="input input1 entryCredit">
                     </div>
                 </div>
                 <div class="block4">
@@ -68,7 +69,7 @@
 
             <footer class="footer">
                 <div class="left">
-                    <button class="btn btn3 trash action" data-action="delete">Archive</button>
+                    <button class="btn btn3 trash action" data-action="archive">Archive</button>
                 </div>
                 <div class="middle">
 
@@ -83,7 +84,7 @@
                 </div>
                 <div class="right">
                     <button class="btn btn3 margin-right action" data-action="close">Cancel</button>
-                    <button class="btn btn3 save action" data-action="save">Save &amp; New</button>
+                    <button class="btn btn3 save action" data-action="save">Save</button>
                 </div>
             </footer>
         </form>
