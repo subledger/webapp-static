@@ -32,15 +32,19 @@ define([
                                 case 'book':
 
                                     $.each(Utils.parse(data), function(index, current){
-                                        Book.create(Utils.parse(current));
+                                        Book.create(current);
                                     });
                                     break;
 
                                 case 'account':
 
                                     $.each(Utils.parse(data), function(index, current){
-                                        Account.create(Utils.parse(current));
+                                        Account.create(current);
                                     });
+                                    break;
+                                case 'oneaccount':
+
+                                    Account.create(data);
                                     break;
 
                                 case 'accountbalance':
@@ -51,22 +55,19 @@ define([
                                 case 'accountline':
 
                                     $.each(Utils.parse(data), function(index, current){
-                                        Account_line.create(Utils.parse(current));
+                                        Account_line.create(current);
                                     });
                                     break;
 
                                 case 'journalentry':
 
                                     $.each(Utils.parse(data), function(index, current){
-                                        Journal_entry.create(Utils.parse(current));
+                                        Journal_entry.create(current);
                                     });
                                     break;
                                 case 'onejournalentry':
 
-                                    $.each(Utils.parse(data), function(index, current){
-                                        current.posted = true;
-                                        Journal_entry.create(Utils.parse(current));
-                                    });
+                                    Journal_entry.create(Utils.parse(data));
                                     break;
                                 case 'journalbalance':
                                     data.journal = options.journal_id;
@@ -76,12 +77,13 @@ define([
                                 case 'entryline':
 
                                     $.each(Utils.parse(data), function(index, current){
-                                        Journal_entryline.create(Utils.parse(current));
+                                        Journal_entryline.create(current);
                                     });
                                     break;
                                 case 'postedentryline':
+                                    console.log("postedentryline", data);
                                     $.each(Utils.parse(data), function(index, current){
-                                        Posted_Journal_entryline.create(Utils.parse(current));
+                                        Posted_Journal_entryline.create(current);
                                     });
                             }
                             break;
@@ -204,6 +206,10 @@ define([
                     case 'account':
                         options.api.organization(options.org_id).book(options.book_id).account().get(params, function(e,d){ cb(e, d.active_accounts); });
                         break;
+                    case 'oneaccount':
+                        options.api.organization(options.org_id).book(options.book_id).account(options.current).get(function(e,d){ cb(e, d.active_account); });
+                        break;
+
                     case 'accountbalance':
                         options.api.organization(options.org_id).book(options.book_id).account(options.account_id).balance(function(e,d){ cb(e, d.balance); });
                         break;

@@ -6564,6 +6564,19 @@ strong {
   opacity: 80;
   filter: alpha(opacity=8000);
 }
+.desc + .errorMessage {
+  top: -20px;
+  position: relative;
+}
+.error {
+  border: 1px solid red !important;
+}
+.DivSelectyze.error {
+  border: 1px solid red !important;
+}
+.errorMessage {
+  color: red;
+}
 body {
   background-color: #e2e4e7;
   color: #616367;

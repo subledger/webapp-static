@@ -13,9 +13,9 @@ define([
             var org = $(this.formSelector.loginorg_id).val();
             var valid = true;
 
-            $(this.formSelector.loginorg_id).removeClass("error").next(".errorMessage").remove();;
-            $(this.formSelector.loginsecret).removeClass("error").next(".errorMessage").remove();;
-            $(this.formSelector.loginorg_id).removeClass("error").next(".errorMessage").remove();;
+            $(this.formSelector.loginorg_id).removeClass("error").next(".errorMessage").remove();
+            $(this.formSelector.loginsecret).removeClass("error").next(".errorMessage").remove();
+            $(this.formSelector.loginorg_id).removeClass("error").next(".errorMessage").remove();
             if(!Utils.isNotEmpty(key)){
                 valid = false;
                 $(this.formSelector.loginkey).addClass("error").after("<div class='errorMessage'>Please enter a valid Key ID</div>");
@@ -100,7 +100,7 @@ define([
 
             var object = {};
             var date = {};
-                    console.log(fields);
+
             $.each(fields.fields, function(index, current){
 
                 if(current.name === "desc"){
@@ -247,10 +247,12 @@ define([
 
             $(".entry").removeClass("error");
             $(".entry").last().next(".errorMessage").remove();
+            $(".error").removeClass("error");
+
             /* To be clarified and enhance */
             $.each(fields.fields, function(index, current){
 
-                $(current.field).removeClass("error");
+
                 $(current.field).next(".errorMessage").remove();
                 $(current.field).next().next(".errorMessage").remove();
 

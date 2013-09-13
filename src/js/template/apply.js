@@ -3,10 +3,11 @@ define([
     'handlebars',
     'template/helpers/ifCond',
     'utils',
+    'chart/chart',
     'selectyze',
     'jqueryui',
     'timepicker'
-], function ($, Handlebars, ifCond, Utils) {
+], function ($, Handlebars, ifCond, Utils, Chart) {
     var Template = {
 
         prepareTemplate: function(AppView, DataStructure){
@@ -149,21 +150,26 @@ define([
             }
 
         },
-        applyTemplate: function(selector, template, data, add, fl, unwrap){
+        applyTemplate: function(selector, template, data, add, fl, unwrap, addOntop){
             var _this = this;
 
             console.log("applyTemplate", selector, data, add, fl);
             var addToTemplate = false;
             if(add !== undefined ){ addToTemplate = add; }
             var firstLoad = false ;
-            if(fl !== undefined ){ firstLoad = fl; }
+            if(fl !== undefined && fl !== null ){ firstLoad = fl; }
 
             if(template !== null){
                 if(addToTemplate){
 
                     var $partial = $("<div class='notbinded'></div>").html(template(data));
 
-                    $(selector +"."+data.layout+"-layout").find("article:last").after($partial);
+                    if(addOntop !== undefined && addOntop !== null ){
+                        $(selector +"."+data.layout+"-layout").find("article:not(.form):first").before($partial);
+                    } else {
+                        $(selector +"."+data.layout+"-layout").find("article:last").after($partial);
+                    }
+
 
                     _this.bindTemplate($(selector+"."+data.layout+"-layout").find(".notbinded"));
                     $(selector+"."+data.layout+"-layout").find(".notbinded article").unwrap();
@@ -177,7 +183,7 @@ define([
                 $(selector).html(data);
             }
 
-            if(unwrap !== undefined){
+            if(unwrap !== undefined && unwrap !== null){
                 $(selector).find("article").unwrap(unwrap);
             }
 
@@ -255,7 +261,7 @@ define([
                     console.log("book_id",book_id);
                     _this.DataStructure.getAllAccounts({book: book_id},function(accounts){
                         _this.DataStructure.getJournalLines(journal_id,function(journalid){
-                            _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(journalid, accounts));
+                            _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(journalid));
                         });
                     });
                     */
@@ -269,21 +275,45 @@ define([
                         });
                     });
                 } else if(action == 'source') {
-                    console.log({book: book_id, id:id});
-                    _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
+
+                    _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accountId){
 
                         journal_id = $(e.currentTarget).parents("tr").attr("data-journal-id");
 
-                        _this.DataStructure.getOneJournal({book: book_id, current:journal_id},function(journal){
+                        _this.DataStructure.getOneJournal({book: book_id, current:journal_id},function(journalId){
 
-                            _this.DataStructure.getJournalsBalance({book: book_id, journals:journal},function(bookid){
-                                _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(lines){
+                            _this.DataStructure.getJournalsBalance({book: book_id, journals:journalId},function(bookid){
+                                _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
 
-                                    _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(accounts, journal, lines));
+                                    _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(book_id, accountId, journalId, linesId));
                                 });
                             });
                         });
                     });
+
+                } else if(action == 'chart') {
+
+                    journal_id = $(e.currentTarget).attr("data-journal-id");
+                    account_id = $(e.currentTarget).attr("data-account-id");
+
+                    _this.DataStructure.getJournalsBalance({book: book_id, journals:[journal_id]},function(bookid){
+                        _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
+
+                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._chart, _this.DataStructure.prepareSourceData(book_id, [account_id], [journal_id], linesId));
+                            Chart.init(_this.DataStructure.prepareSourceData(book_id, [account_id], [journal_id], linesId));
+                        });
+                    });
+
+                } else if(action == 'sourcefromchart') {
+
+                    journal_id = $(e.currentTarget).attr("data-journal-id");
+                    account_id = $(e.currentTarget).attr("data-account-id");
+                    _this.DataStructure.getJournalsBalance({book: book_id, journals:[journal_id]},function(bookid){
+                        _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
+                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(book_id, [account_id], [journal_id], linesId));
+                        });
+                    });
+
                 } else if(action == 'login') {
                     _this.AppView.login();
                 } else if(action == 'logout') {
