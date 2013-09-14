@@ -106,7 +106,7 @@ define([
         //console.log("sync",method, options.type, model, Utils.parse(model),  options );
         if(options.last_id === null || options.last_id === undefined){
 
-            params = {limit: 3, action:"before"};
+            params = {limit: 5, action:"before"};
         } else if(options.last_id === "all"){
             params = {limit: 100, action:"before"};
         }
