@@ -23,9 +23,10 @@ require.config({
         forms                 : 'forms/forms',
         selectyze             : 'libs/selectyze/jquery/Selectyze.jquery',
         timepicker            : 'libs/jt.timepicker/jquery.timepicker',
+		highcharts            : 'libs/highcharts/js/highcharts',
+		highchartsmodule1     : 'libs/highcharts/js/modules/exporting',
         jqueryui              : 'libs/jquery-ui-1.10.3.custom'
     },
-
     shim : {
         underscore : {
             exports : '_'
@@ -58,6 +59,12 @@ require.config({
         },
         'supermodel' : {
             deps: ['backbone'],
+            exports :  'Supermodel'
+        },
+        'highcharts' : {
+            exports :  'Supermodel'
+        },
+        'highchartsmodule1' : {
             exports :  'Supermodel'
         }
     }

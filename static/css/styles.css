@@ -6564,6 +6564,21 @@ strong {
   opacity: 80;
   filter: alpha(opacity=8000);
 }
+#key_id + .errorMessage,
+#secret + .errorMessage,
+.desc + .errorMessage {
+  top: -20px;
+  position: relative;
+}
+.error {
+  border: 1px solid red !important;
+}
+.DivSelectyze.error {
+  border: 1px solid red !important;
+}
+.errorMessage {
+  color: red;
+}
 body {
   background-color: #e2e4e7;
   color: #616367;
@@ -7365,4 +7380,8 @@ Login
   padding: 30px 0 0 0;
   width: 400px;
   margin: 0 auto;
+}
+.openAccount header,
+.openAccount a {
+  cursor: pointer;
 }
