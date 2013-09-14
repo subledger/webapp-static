@@ -242,6 +242,7 @@ define([
                         });
                     }
                      */
+                    /*
                     if($(e.currentTarget).parents(".openAccount").length > 0){
                         _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
                             _this.DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
@@ -250,7 +251,7 @@ define([
                             });
                         });
                     }
-
+                     */
 
 
 
@@ -293,24 +294,24 @@ define([
 
                 } else if(action == 'chart') {
 
-                    journal_id = $(e.currentTarget).attr("data-journal-id");
+
                     account_id = $(e.currentTarget).attr("data-account-id");
 
-                    _this.DataStructure.getJournalsBalance({book: book_id, journals:[journal_id]},function(bookid){
-                        _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
-
-                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._chart, _this.DataStructure.prepareSourceData(book_id, [account_id], [journal_id], linesId));
-                            Chart.init(_this.DataStructure.prepareSourceData(book_id, [account_id], [journal_id], linesId));
+                    _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
+                        _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._chart, _this.DataStructure.prepareAccountData(account_id));
+                            Chart.init(_this.DataStructure.prepareAccountData(account_id));
                         });
                     });
 
                 } else if(action == 'sourcefromchart') {
 
-                    journal_id = $(e.currentTarget).attr("data-journal-id");
+
                     account_id = $(e.currentTarget).attr("data-account-id");
-                    _this.DataStructure.getJournalsBalance({book: book_id, journals:[journal_id]},function(bookid){
-                        _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
-                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(book_id, [account_id], [journal_id], linesId));
+
+                    _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
+                        _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
                         });
                     });
 

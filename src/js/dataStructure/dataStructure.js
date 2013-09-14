@@ -1028,7 +1028,7 @@ define([
            // console.log("type", type, action, "bookid", bookid);
            // console.log("is valid" , valid);
             if(valid){
-                console.log("passed validation");
+                //console.log("passed validation");
                 var data = _this.Forms.jsonify(fields);
 
                 var success = function(data){
