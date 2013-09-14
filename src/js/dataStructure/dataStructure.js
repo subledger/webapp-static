@@ -178,10 +178,11 @@ define([
             Journal_entry.reset();
             BalanceJournal.reset();
             Journal_entryline.reset();
+            Posted_Journal_entryline.reset();
         },
         nodata: function(message){
             AppEvents.trigger("nodata", message)
-            console.log(message);
+            //console.log(message);
         },
         identityFetch: function(cb){
 
@@ -193,7 +194,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("orgcollection error",error);
+                    //console.log("orgcollection error",error);
                     cb(error, null);
                 }
             });
@@ -208,7 +209,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("orgcollection error",error);
+                    //console.log("orgcollection error",error);
                     cb(error, null);
                 }
             });
@@ -223,7 +224,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("bookcollection error",error);
+                    //console.log("bookcollection error",error);
                     cb(error, null);
                 }
             });
@@ -245,7 +246,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("accountcollection error",error);
+                    //console.log("accountcollection error",error);
                     cb(error);
                 }
             });
@@ -268,7 +269,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("journal_entrycollection error",error);
+                    //console.log("journal_entrycollection error",error);
                     cb(error);
                 }
             });
@@ -285,7 +286,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("accountbalancecollection error",error);
+                    //console.log("accountbalancecollection error",error);
                     cb(error);
                 }
             });
@@ -302,7 +303,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("journalbalancecollection error",error);
+                    //console.log("journalbalancecollection error",error);
                     cb(error);
                 }
             });
@@ -327,7 +328,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("journal_entrylinecollection error",error);
+                    //console.log("journal_entrylinecollection error",error);
                     cb(error);
                 }
             });
@@ -350,7 +351,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("posted_journal_entrylinecollection error",error);
+                    //console.log("posted_journal_entrylinecollection error",error);
                     cb(error);
                 }
             });
@@ -368,7 +369,7 @@ define([
                     cb(null, resp);
                 },
                 error: function(error) {
-                    console.log("journal_accountlinecollection error",error);
+                    //console.log("journal_accountlinecollection error",error);
                     cb(error);
                 }
             });
@@ -386,15 +387,15 @@ define([
                             callback();
                         },
                         organisation: function(callback){
-                            console.log("*********************************");
-                            console.log("********** GET ORG **************");
-                            console.log("*********************************");
+                            //console.log("*********************************");
+                            //console.log("********** GET ORG **************");
+                            //console.log("*********************************");
 
 
                             _this.orgFetch(callback);
                         }
                     },function(err, results) {
-                            console.log("err", err);
+                            //console.log("err", err);
                             cb(err, results);
 
                     });
@@ -405,9 +406,9 @@ define([
 
                     _this.org_id = _this.orgcollection.models[0].id;
 
-                    console.log("*********************************");
-                    console.log("********** GET BOOKS **************");
-                    console.log("*********************************");
+                    //console.log("*********************************");
+                    //console.log("********** GET BOOKS **************");
+                    //console.log("*********************************");
 
                     _this.bookFetch(_this.org_id, cb);
 
@@ -417,7 +418,7 @@ define([
 
 
                 if(err !== null){
-                    console.log("Error", err);
+                    //console.log("Error", err);
                 } else {
 
 
@@ -435,11 +436,11 @@ define([
             var book_id = options.book;
             var last_id = options.following;
 
-            console.log("*********************************");
-            console.log("********** GET NEXT ACCOUNTS "+last_id+"  **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET NEXT ACCOUNTS "+last_id+"  **************");
+            //console.log("*********************************");
 
-            console.log(last_id);
+            //console.log(last_id);
             var callback = function(err, data){
 
                 if(err === null){
@@ -458,9 +459,9 @@ define([
         getAllAccounts: function(options, cb){
             var book_id = options.book;
 
-            console.log("*********************************");
-            console.log("********** GET ALL ACCOUNTS **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET ALL ACCOUNTS **************");
+            //console.log("*********************************");
 
             var callback = function(err, data){
 
@@ -477,11 +478,11 @@ define([
             var book_id = options.book;
             var last_id = options.following;
 
-            console.log("*********************************");
-            console.log("********** GET NEXT JOURNAL "+last_id+"  **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET NEXT JOURNAL "+last_id+"  **************");
+            //console.log("*********************************");
 
-            console.log(last_id);
+            //console.log(last_id);
             var callback = function(err, data){
 
                 if(err === null){
@@ -502,9 +503,9 @@ define([
             var book_id = options.book;
             var current = options.current;
 
-            console.log("*********************************");
-            console.log("********** GET ONE JOURNAL "+current+"  **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET ONE JOURNAL "+current+"  **************");
+            //console.log("*********************************");
 
             var callback = function(err, data){
 
@@ -526,9 +527,9 @@ define([
             var book_id = options.book;
             var current = options.current;
 
-            console.log("*********************************");
-            console.log("********** GET ONE ACCOUNT "+current+"  **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET ONE ACCOUNT "+current+"  **************");
+            //console.log("*********************************");
 
             var callback = function(err, data){
 
@@ -553,9 +554,9 @@ define([
             var book_id = options.book;
             var accounts_ids = options.accounts;
 
-            console.log("*********************************");
-            console.log("********** GET ACCOUNTS BALANCE **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET ACCOUNTS BALANCE **************");
+            //console.log("*********************************");
 
 
             async.whilst(
@@ -585,9 +586,9 @@ define([
             var book_id = options.book;
             var journal_entries_ids = options.journals;
 
-            console.log("*********************************");
-            console.log("********** GET JOURNALS BALANCE **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET JOURNALS BALANCE **************");
+            //console.log("*********************************");
 
 
             async.whilst(
@@ -611,9 +612,9 @@ define([
         getJournalLines: function(journal_id, cb){
             var count = 0;
 
-            console.log("*********************************");
-            console.log("********** GET JOURNALS LINES **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET JOURNALS LINES **************");
+            //console.log("*********************************");
 
             var book_id = Utils.parse(Journal_entry.all().get(journal_id).book()).id;
 
@@ -628,9 +629,9 @@ define([
         getPostedJournalLines: function(book_id, journal_id, cb){
             var count = 0;
 
-            console.log("*********************************");
-            console.log("********** GET POSTED JOURNAL LINES **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+            //console.log("********** GET POSTED JOURNAL LINES **************");
+            //console.log("*********************************");
 
 
 
@@ -649,9 +650,9 @@ define([
         getAccountLines: function(account_id, cb){
             var count = 0;
 
-            console.log("*********************************");
-            console.log("********** GET ACCOUNT LINES **************");
-            console.log("*********************************");
+            //console.log("*********************************");
+           // console.log("********** GET ACCOUNT LINES **************");
+           // console.log("*********************************");
 
 
             var book_id = Utils.parse(Account.all().get(account_id).book()).id;
@@ -879,7 +880,7 @@ define([
             $.each(lines, function(index, value){
 
                 var current = Utils.parse(Posted_Journal_entryline.all().get(value));
-
+                var rawdate = current.posted_at;
                 var datetime = new Date(current.posted_at);
 
                 var month = Utils.months[datetime.getMonth()-1];
@@ -1030,26 +1031,26 @@ define([
 
             var bookid = $currentForm.attr("data-book-id") || $currentForm.parents("article").attr("data-book-id");
             var fields = _this.Forms.serialize($currentForm);
-            console.log("fields", fields);
+            //console.log("fields", fields);
             var valid = _this.Forms.validateFields(action, fields);
 
             //console.log("jsonify",_this.Forms.jsonify(fields));
-            console.log("type", type, action, "bookid", bookid);
-            console.log("is valid" , valid);
+           // console.log("type", type, action, "bookid", bookid);
+           // console.log("is valid" , valid);
             if(valid){
                 console.log("passed validation");
                 var data = _this.Forms.jsonify(fields);
 
                 var success = function(data){
-                    console.log(type+" saved :", Utils.parse(data));
+                 //   console.log(type+" saved :", Utils.parse(data));
                     switch (type) {
                         case 'account':
                             var account = Utils.parse(data).active_account;
                             _this.DataStructure.getOneAccount({book: bookid, current:account.id},function(accounts){
-                                console.log([accounts]);
+                              //  console.log([accounts]);
                                 _this.DataStructure.getAccountsBalance({book: bookid, accounts:[accounts]},function(bookid){
                                     window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._accounts, window.DataStructure.prepareAccountsData(bookid, accounts), true, null, null, true);
-                                     console.log($(".form.new").find(".model1"), $(".form.new").find(".model2"));
+                              //       console.log($(".form.new").find(".model1"), $(".form.new").find(".model2"));
                                     $(".form.new").find(".model1").slideDown();
                                     $(".form.new").find(".model2").slideUp();
 
@@ -1067,23 +1068,23 @@ define([
                 //console.log("bookid",bookid, $currentForm);
                 switch (type) {
                     case 'book':
-                        console.log("*********************************");
-                        console.log("********** SUBMIT BOOK **************");
-                        console.log("*********************************");
+                      //  console.log("*********************************");
+                      //  console.log("********** SUBMIT BOOK **************");
+                      //  console.log("*********************************");
 
                         _this.bookcollection.create(data, {wait:true, type:type, org_id:_this.org_id, api: _this.api, success: function(){ success(data); } });
                         break;
                     case 'account':
-                        console.log("*********************************");
-                        console.log("********** SUBMIT ACCOUNT **************");
-                        console.log("*********************************");
+                      //  console.log("*********************************");
+                     //   console.log("********** SUBMIT ACCOUNT **************");
+                      //  console.log("*********************************");
 
                         _this.accountcollection.create(data, {wait:true, type:type, org_id:_this.org_id, book_id:bookid, api: _this.api, success: function(data){ success(data); } });
                         break;
                     case 'journalentry':
-                        console.log("*********************************");
-                        console.log("********** SUBMIT JOURNAL **************");
-                        console.log("*********************************");
+                      //  console.log("*********************************");
+                      //  console.log("********** SUBMIT JOURNAL **************");
+                      //  console.log("*********************************");
 
                         if(action === "create"){
                             _this.journal_entrycollection.create(data, {wait:true, type:type, org_id:_this.org_id, book_id:bookid, api: _this.api, success: function(){ success(data); } });
@@ -1092,16 +1093,16 @@ define([
                             var id = $currentForm.parents("article").attr("data-id");
 
                             var successjournal = function(data){
-                                console.log(type+" saved :", data);
+                           //     console.log(type+" saved :", data);
                             };
 
                              data.id = id;
-                            console.log('update', id, data);
+                          //  console.log('update', id, data);
                             var cleanedData = Utils.parse(data);
                             var lines = cleanedData.lines;
 
                             delete cleanedData['lines'];
-                            console.log("lines", lines);
+                          //  console.log("lines", lines);
                             _this.journal_entrycollection.create(cleanedData, {action:"update", merge:true, wait:true, type:type, org_id:_this.org_id, book_id:bookid, journal_id:id,  api: _this.api, success: function(){ successjournal(data); } });
                                     /*
                             $.each(lines, function(){

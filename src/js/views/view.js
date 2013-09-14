@@ -119,7 +119,7 @@ define([
             });
             AppEvents.bind("navReady", function(){
                 Templates.applyTemplate(_this.templateSelector.nav, _this.templates._nav, DataStructure.prepareNavData());
-                _this.bindNav();
+                Templates.bindNav();
             });
 
             AppEvents.bind("nodata", function(message){
@@ -133,7 +133,7 @@ define([
             var _this = this;
 
             Forms.login(function(settings){
-                console.log("start app");
+              //  console.log("start app");
                 _this.startApp(settings);
             });
         },
@@ -171,71 +171,9 @@ define([
 
 
 
-        },
-
-        bindNav: function(){
-            var _this = this;
-
-
-
-            $('.btn, .action').on('click', function(e){
-                e.preventDefault();
-
-                var resetNav = function(current){
-                    $(current).parents("ul").find(".active").removeClass("active");
-                    $(current).parent("li").addClass("active");
-                }
-
-                var action = $(this).data('action');
-                if(action == 'newbook'){
-                    $(_this.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
-                    Templates.applyTemplate(_this.templateSelector.main, _this.templates._newBook, {});
-                    resetNav(e.currentTarget);
-                } else if(action == 'books'){
-                    $(_this.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
-                    Templates.applyTemplate(_this.templateSelector.main, _this.templates._books, DataStructure.prepareBooksData());
-                    resetNav(e.currentTarget);
-                } else if (action == 'newjournal'){
-                    $(_this.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
-                    Templates.applyTemplate(_this.templateSelector.main, _this.templates._newJournal, DataStructure.prepareNewJournalOrAccount(fakedata.book_id));
-                    resetNav(e.currentTarget);
-                } else if(action == 'activity-stream'){
-
-                    $(_this.templateSelector.main).removeClass("accounts-layout").addClass("journals-layout");
-
-                    var book_id = $(_this.templateSelector.nav).find("select.book").val();
-                    DataStructure.getNextJournals({book: book_id},function(journals){
-                        console.log("journals", journals);
-                        DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
-                            Templates.applyTemplate(_this.templateSelector.main, _this.templates._draftJournals, DataStructure.prepareJournalsEntryData(book_id, journals, true), false, true);
-                            resetNav(e.currentTarget);
-                        });
-                    });
-
-
-                } else if(action == 'newaccount'){
-                    $(_this.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
-                    Templates.applyTemplate(_this.templateSelector.main, _this.templates._newAccount, DataStructure.prepareNewJournalOrAccount(fakedata.book_id));
-                    resetNav(e.currentTarget);
-                } else if(action == 'accounts'){
-
-                    $(_this.templateSelector.main).removeClass("journals-layout").addClass("accounts-layout");
-
-                    var book_id = $(_this.templateSelector.nav).find("select.book").val();
-                    DataStructure.getNextAccounts({book: book_id},function(accounts){
-                        DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
-                            Templates.applyTemplate(_this.templateSelector.main, _this.templates._accounts, DataStructure.prepareAccountsData(bookid, accounts, true), false, true);
-                            resetNav(e.currentTarget);
-                        });
-                    });
-
-                } else if(action == 'settings'){
-                    $(_this.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
-                    Templates.applyTemplate(_this.templateSelector.main, _this.templates._settings,  DataStructure.prepareSettingsData(_this.settings) );
-                    resetNav();
-                }
-            });
         }
+
+
 
     });
 

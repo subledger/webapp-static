@@ -278,11 +278,11 @@ define([
                             if(current2.name === "entrydebit"){
                                 if(current2.value[0] !== "" && current2.value[0] !== "0"){
                                     debit = debit + parseFloat(current2.value[0]);
-                                    console.log("add debit", parseFloat(current2.value[0]), debit);
+                                    //console.log("add debit", parseFloat(current2.value[0]), debit);
                                 }
                                 if(current2.value[1] !== "" && current2.value[1] !== "0"){
                                     credit = credit + parseFloat(current2.value[1]);
-                                    console.log("add credit", parseFloat(current2.value[0]), credit);
+                                    //console.log("add credit", parseFloat(current2.value[0]), credit);
                                 }
                             }
                         }

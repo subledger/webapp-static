@@ -153,7 +153,7 @@ define([
         applyTemplate: function(selector, template, data, add, fl, unwrap, addOntop){
             var _this = this;
 
-            console.log("applyTemplate", selector, data, add, fl);
+            //console.log("applyTemplate", selector, data, add, fl);
             var addToTemplate = false;
             if(add !== undefined ){ addToTemplate = add; }
             var firstLoad = false ;
@@ -224,7 +224,7 @@ define([
                     }
 
                 } else if (action == 'create'){
-                    console.log($parent);
+                   // console.log($parent);
                     _this.DataStructure.createOrUpdate(e);
 
                 } else if (action == 'close'){
@@ -318,6 +318,53 @@ define([
                     _this.AppView.login();
                 } else if(action == 'logout') {
                     _this.AppView.logout();
+                }
+            });
+        },
+        bindNav: function(){
+            var _this = this;
+
+
+
+            $('.btn, .action').on('click', function(e){
+                e.preventDefault();
+
+                var resetNav = function(current){
+                    $(current).parents("ul").find(".active").removeClass("active");
+                    $(current).parent("li").addClass("active");
+                }
+
+                var action = $(this).data('action');
+                var book_id;
+                if(action == 'activity-stream'){
+
+                    $(_this.AppView.templateSelector.main).removeClass("accounts-layout").addClass("journals-layout");
+
+                    book_id = $(_this.AppView.templateSelector.nav).find("select.book").val();
+                    DataStructure.getNextJournals({book: book_id},function(journals){
+                        // console.log("journals", journals);
+                        DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
+                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._draftJournals, DataStructure.prepareJournalsEntryData(book_id, journals, true), false, true);
+                            resetNav(e.currentTarget);
+                        });
+                    });
+
+                } else if(action == 'accounts'){
+
+                    $(_this.AppView.templateSelector.main).removeClass("journals-layout").addClass("accounts-layout");
+
+                    book_id = $(_this.AppView.templateSelector.nav).find("select.book").val();
+                    DataStructure.getNextAccounts({book: book_id},function(accounts){
+                        DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
+                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, DataStructure.prepareAccountsData(bookid, accounts, true), false, true);
+                            resetNav(e.currentTarget);
+                        });
+                    });
+
+                } else if(action == 'settings'){
+                    $(_this.AppView.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
+                    _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._settings,  DataStructure.prepareSettingsData(_this.AppView.settings) );
+                    resetNav();
                 }
             });
         }

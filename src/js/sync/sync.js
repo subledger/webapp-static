@@ -81,7 +81,7 @@ define([
                                     });
                                     break;
                                 case 'postedentryline':
-                                    console.log("postedentryline", data);
+                                   // console.log("postedentryline", data);
                                     $.each(Utils.parse(data), function(index, current){
                                         Posted_Journal_entryline.create(current);
                                     });
@@ -90,10 +90,10 @@ define([
 
                     }
                 }
-                console.log("success", error, data);
+               // console.log("success", error, data);
                 options.success(data);
             } else {
-                console.log("error", error, data);
+               // console.log("error", error, data);
                 options.error(error);
             }
 
@@ -137,7 +137,7 @@ define([
                 break;
 
             case 'update':
-                console.log('sync update', options.type, options.action, Utils.parse(model));
+               // console.log('sync update', options.type, options.action, Utils.parse(model));
 
                 switch (options.type) {
                     case 'book':
@@ -217,7 +217,7 @@ define([
                         options.api.organization(options.org_id).book(options.book_id).account(options.account_id).line().get(function(e,d){ cb(e, d.posted_lines); });
                         break;
                     case 'journalentry':
-                        console.log(options, params);
+                     //   console.log(options, params);
                         options.api.organization(options.org_id).book(options.book_id).journalEntry().get(params, function(e,d){ cb(e, d.active_journal_entries); });
                         break;
                     case 'onejournalentry':

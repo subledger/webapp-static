@@ -9,14 +9,16 @@
 ### > bower install
 ### > grunt build (or 'grunt dev' for developpement)
 ### > cd dist (or 'cd src' for developpement)
-###   > static
+### > static
 
 Then open browser at http://localhost:8080/
 
+### key: q94AwWLKow837L2AidxX15
+### secret: gbw1tb0KTvGTYmqnWUbF01
+### org_id: TnmilrLvIQvIk6FaI0Ldb2
 
 ##Time Picker
 http://jonthornton.github.io/jquery-timepicker/
-
 
 ## Date picker
 http://jqueryui.com/datepicker/
