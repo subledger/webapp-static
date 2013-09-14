@@ -35,16 +35,6 @@ define([
 
     'use strict';
 
-    var fakedata = {
-        username:'Dan Murphy',
-        picture:'img/tmp/profile.jpg',
-        id:'12345678',
-        key: "q94AwWLKow837L2AidxX15",
-        secret: "gbw1tb0KTvGTYmqnWUbF01",
-        org_id: "TnmilrLvIQvIk6FaI0Ldb2",
-        book_id: "bXVL7VqEfub7ihoGZDe017"
-    };
-
     var AppView = Backbone.View.extend({
 
         el: '#subledgerapp',

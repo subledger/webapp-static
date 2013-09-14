@@ -6564,6 +6564,8 @@ strong {
   opacity: 80;
   filter: alpha(opacity=8000);
 }
+#key_id + .errorMessage,
+#secret + .errorMessage,
 .desc + .errorMessage {
   top: -20px;
   position: relative;
