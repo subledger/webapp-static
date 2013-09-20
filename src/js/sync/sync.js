@@ -101,14 +101,17 @@ define([
 
 
         }
-
-        var params = {limit: 1, action:"preceding", id: options.last_id};
+        var state = "active";
+        if(options.state !== undefined){
+            state = options.state;
+        }
+        var params = {limit: 1, action:"preceding", id: options.last_id, state: state};
         //console.log("sync",method, options.type, model, Utils.parse(model),  options );
         if(options.last_id === null || options.last_id === undefined){
 
-            params = {limit: 5, action:"before"};
+            params = {limit: 5, action:"before", state: state};
         } else if(options.last_id === "all"){
-            params = {limit: 100, action:"before"};
+            params = {limit: 100, action:"before", state: state};
         }
 
 
@@ -218,7 +221,7 @@ define([
                         break;
                     case 'journalentry':
                      //   console.log(options, params);
-                        options.api.organization(options.org_id).book(options.book_id).journalEntry().get(params, function(e,d){ cb(e, d.active_journal_entries); });
+                        options.api.organization(options.org_id).book(options.book_id).journalEntry().get(params, function(e,d){ cb(e, d.posted_journal_entries); });
                         break;
                     case 'onejournalentry':
                         options.api.organization(options.org_id).book(options.book_id).journalEntry(options.current).get(function(e,d){ cb(e, d.posted_journal_entry); });

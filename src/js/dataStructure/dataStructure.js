@@ -254,6 +254,7 @@ define([
                 api: this.api,
                 last_id: last_id,
                 current: current,
+                state: "posted",
                 success: function(resp) {
 
                     cb(null, resp);
