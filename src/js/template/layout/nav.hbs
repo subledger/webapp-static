@@ -2,13 +2,13 @@
 <div class="ctn">
 	<div class="boocx">
 
-        <select name="" id="" class="select book">
+        <select name="" id="" class="select prettySelect book">
            {{#each books}}
                <option value="{{id}}" {{#ifCond id ../selectedbook}}selected="selected"{{/ifCond}}>{{desc}}</option>
            {{/each}}
 		</select>
 	</div>
-    <ul>
+    <ul class="side-menu">
         <li>
             <a href="#" class="icon money action" data-action="accounts">Accounts
                 <span class="arrow"><span class="inner"></span></span></a>
