@@ -105,7 +105,7 @@ define([
         if(options.state !== undefined){
             state = options.state;
         }
-        var params = {limit: 1, action:"preceding", id: options.last_id, state: state};
+        var params = {limit: 5, action:"preceding", id: options.last_id, state: state};
         //console.log("sync",method, options.type, model, Utils.parse(model),  options );
         if(options.last_id === null || options.last_id === undefined){
 

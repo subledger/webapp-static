@@ -9,7 +9,7 @@
         <div class="small model1 action hover"  style="display: block;">
             <ul>
                <li class="col1">{{timeago}}</li>
-               <li class="col1">{{desc}}</li>
+               <li class="col2">{{desc}}</li>
                <li class="col5">{{#ifCond balance.value.type "credit"}}cr {{/ifCond}}{{#ifCond balance.value.type "debit"}}dr {{/ifCond}} {{balance.value.amount}}</li>
            </ul>
         </div>

@@ -42,7 +42,8 @@ define([
         templateSelector: {
             header:"#header",
             nav:"#sidebar",
-            main: "#subledgerapp"
+            main: "#subledgerapp",
+            loading: ".loading"
         },
         formSelector:{
             form: ".form",
@@ -87,7 +88,7 @@ define([
 
         startApp: function(settings){
             var _this = this;
-
+            $(_this.templateSelector.loading).show();
             _this.settings = settings;
 
             localStorage.setItem("subledgerKey", _this.settings.key);
@@ -100,12 +101,14 @@ define([
 
             $("body").removeClass("login");
             Templates.applyTemplate(_this.templateSelector.nav, null, "");
-            Templates.applyTemplate(_this.templateSelector.main, null, "Loading...");
+
+            Templates.applyTemplate(_this.templateSelector.main, null, "");
 
             Templates.applyTemplate(_this.templateSelector.header, _this.templates._header, {});
 
             AppEvents.bind("ready", function(){
                 Templates.applyTemplate(_this.templateSelector.main, null, "");
+                $(_this.templateSelector.loading).hide();
             });
             AppEvents.bind("navReady", function(){
                 Templates.applyTemplate(_this.templateSelector.nav, _this.templates._nav, DataStructure.prepareNavData());

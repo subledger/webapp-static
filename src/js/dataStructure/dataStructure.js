@@ -744,6 +744,7 @@ define([
                     desc: current.description,
                     date: datetime.getDate()+" "+month+" "+datetime.getFullYear(),
                     time: time,
+                    rawdate: datetime,
                     ref: current.reference,
                     balance: balance[0],
                     timeago: timeago + " ago",
@@ -752,6 +753,11 @@ define([
                 data.push(partial);
 
             });
+
+            data.sort(function(a, b) {
+                return b.rawdate.getTime() - a.rawdate.getTime();
+            });
+
 
             var result = { journalEntries : data, createBtn:createBtn, layout:"journals"  };
 
@@ -917,7 +923,7 @@ define([
             if(lastid !== undefined){
                 last_id = lastid;
             }
-
+            $(window.AppView.templateSelector.loading).show();
             window.DataStructure.getNextJournals({book: book_id, following:last_id},function(journals){
 
                 if(journals !== null){
@@ -932,6 +938,7 @@ define([
                                     }
 
                                     window.DataStructure.loadstatus = false;
+                                    $(window.AppView.templateSelector.loading).hide();
                                     callback(book_id, journals[0]);
 
                                 });
@@ -950,7 +957,7 @@ define([
             if(lastid !== undefined){
                 last_id = lastid;
             }
-
+            $(window.AppView.templateSelector.loading).show();
             window.DataStructure.getNextAccounts({book: book_id, following:last_id},function(accounts){
 
                 if(accounts !== null){
@@ -966,6 +973,7 @@ define([
                                     }
 
                                     window.DataStructure.loadstatus = false;
+                                    $(window.AppView.templateSelector.loading).hide();
                                     callback(book_id, accounts[0]);
 
                                 });
