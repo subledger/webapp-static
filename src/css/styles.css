@@ -7390,6 +7390,9 @@ Login
   width: 400px;
   margin: 0 auto;
 }
+.login #content .ctn {
+  padding-bottom: 25px;
+}
 .login #content button {
   width: 100%;
   margin-top: 15px;
@@ -7402,4 +7405,19 @@ Login
 .openAccount header,
 .openAccount a {
   cursor: pointer;
+}
+.action {
+  cursor: pointer;
+}
+.noticePreviousJournals {
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.noticePreviousJournals:hover {
+  text-decoration: underline;
 }

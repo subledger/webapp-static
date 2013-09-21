@@ -42,6 +42,12 @@ define([
 
 
     var DataStructure = {
+
+
+        /**********************************************/
+        /********** INIT AND STRUCTURE ****************/
+        /**********************************************/
+
         initApi: function(settings){
             this.api = new Subledger("https://fakt.api.boocx.com/v1/");
             this.api.setCredentials(settings.key,settings.secret);
@@ -174,6 +180,13 @@ define([
             AppEvents.trigger("nodata", message)
             //console.log(message);
         },
+
+
+
+        /**********************************************/
+        /***************** FETCHING *******************/
+        /**********************************************/
+
         identityFetch: function(cb){
 
             this.identitycollection.fetch({
@@ -241,7 +254,7 @@ define([
                 }
             });
         },
-        journalentryFetch: function(org_id, book_id, last_id, current,  cb){
+        journalentryFetch: function(org_id, book_id, first_id, last_id, current,  cb){
              var type = "journalentry";
              if(current !== null && current !== undefined){
                  type = "onejournalentry";
@@ -252,6 +265,7 @@ define([
                 org_id: org_id,
                 book_id: book_id,
                 api: this.api,
+                first_id: first_id,
                 last_id: last_id,
                 current: current,
                 state: "posted",
@@ -365,6 +379,12 @@ define([
                 }
             });
         },
+
+        /**********************************************/
+        /****************** GETTER ********************/
+        /**********************************************/
+
+
         getInitialData: function(){
 
             var _this = this;
@@ -487,8 +507,32 @@ define([
                 }
 
             };
-            this.journalentryFetch(this.org_id, book_id, last_id, null, callback);
+            this.journalentryFetch(this.org_id, book_id, null, last_id, null, callback);
 
+        },
+        getPreviousJournals: function(options, cb){
+            var book_id = options.book;
+            var first_id = options.following;
+
+            //console.log("*********************************");
+            //console.log("********** GET NEXT JOURNAL "+last_id+"  **************");
+            //console.log("*********************************");
+
+            //console.log(last_id);
+            var callback = function(err, data){
+
+                if(err === null){
+                    var journals = [];
+                    $.each(Utils.parse(data), function(index, value){
+                        journals.push(value.id);
+                    });
+                    cb(journals);
+                } else {
+                    cb(null);
+                }
+
+            };
+            this.journalentryFetch(this.org_id, book_id, first_id, null, null, callback);
         },
         getOneJournal: function(options, cb){
             var book_id = options.book;
@@ -511,7 +555,7 @@ define([
                 }
 
             };
-            this.journalentryFetch(this.org_id, book_id, null, current, callback);
+            this.journalentryFetch(this.org_id, book_id, null, null, current, callback);
 
         },
         getOneAccount: function(options, cb){
@@ -625,8 +669,6 @@ define([
             //console.log("*********************************");
 
 
-
-
             var callback = function(err, data){
                 var lines = [];
                 $.each(Utils.parse(data), function(index, value){
@@ -655,6 +697,21 @@ define([
             this.accountLinesFetch(this.org_id, book_id, account_id, callback);
 
         },
+        getCurrentJournal: function(options, cb){
+            //console.log(Utils.parse(Journal_entry.all().get(options.id)));
+            cb([options.id]);
+        },
+        getCurrentAccount: function(options, cb){
+            //console.log(Utils.parse(Account.all().get(options.id)));
+            cb([options.id]);
+        },
+
+
+        /**********************************************/
+        /****************** PREPARE *******************/
+        /**********************************************/
+
+
         prepareSettingsData: function(settings){
             return settings;
 
@@ -731,6 +788,7 @@ define([
 
             $.each(journalentryIdsArray, function(index, value){
                 var current = Utils.parse(Journal_entry.all().get(value));
+
                 var datetime = new Date(current.effective_at);
 
                 var month = Utils.months[datetime.getMonth()-1];
@@ -765,10 +823,10 @@ define([
 
             return result;
         },
-        prepareJournalEntryData: function(journalid){
+        prepareJournalEntryData: function(bookid, journalid, linesId){
 
             //console.log("journalid", journalid);
-            var book = Utils.parse(Journal_entry.all().get(journalid).book());
+
             var journalentry = Utils.parse(Journal_entry.all().get(journalid));
             var datetime = new Date(journalentry.effective_at);
 
@@ -777,17 +835,41 @@ define([
             var time = Utils.getTime(datetime, false);
 
 
+
+            var totalcredit = 0;
+            var totaldebit = 0
+            var datedlines = [];
+            $.each(linesId, function(index, value){
+
+                var current = Utils.parse(Posted_Journal_entryline.all().get(value));
+                var rawdate = current.posted_at;
+                var datetime = new Date(current.posted_at);
+
+                var month = Utils.months[datetime.getMonth()-1];
+
+                var time = Utils.getTime(datetime, false);
+
+                if(current.value.type === 'debit'){
+                    totalcredit = totalcredit + parseInt(current.value.amount);
+                }
+                if(current.value.type === 'credit'){
+                    totaldebit = totaldebit + parseInt(current.value.amount);
+                }
+                current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
+                datedlines.push(current);
+            });
+
             var result = {
-                id:journalentry.id,
+                id: journalid,
+                bookid: bookid,
+                journalid: journalid,
                 desc: journalentry.description,
-                date: datetime.getDate()+" "+month+" "+datetime.getFullYear(),
-                time: time,
-                ref: journalentry.reference,
-                accounts: Utils.parse(Book.all().get(book.id).accounts()),
-                lines: Utils.parse(Journal_entry.all().get(journalid).lines()),
-                book_id:book.id,
-                version: journalentry.version
+                date: datedlines[0].date,
+                lines: datedlines,
+                totalcredit: totalcredit,
+                totaldebit: totaldebit
             };
+
 
             //console.log("test data", result);
 
@@ -908,13 +990,118 @@ define([
             };
             return result;
         },
-        getCurrentJournal: function(options, cb){
-            //console.log(Utils.parse(Journal_entry.all().get(options.id)));
-            cb([Utils.parse(Journal_entry.all().get(options.id))]);
+
+
+        /**********************************************/
+        /******************* ACTIONS ******************/
+        /**********************************************/
+        showSettings: function(){
+
+
+            var _this = this;
+
+            window.clearInterval(_this.journalInterval);
+
+            $(_this.AppView.templateSelector.main).removeClass("accounts-layout").removeClass("journals-layout");
+            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._settings,  _this.prepareSettingsData(_this.AppView.settings) );
+            _this.Templates.setNavActiveItem();
+            $(_this.AppView.templateSelector.loading).hide();
         },
-        getCurrentAccount: function(options, cb){
-            //console.log(Utils.parse(Account.all().get(options.id)));
-            cb([options.id]);
+        bindLoadNewActivityStream: function(book_id, $first){
+            var _this = this;
+            $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").click(function(){
+
+                _this.getPreviousJournals({book: book_id, following: $first.attr("data-id")}, function(journalsId){
+                    //console.log("preceding journals", journalsId);
+
+                    _this.getJournalsBalance({book: book_id, journals:journalsId},function(bookid){
+                        if($("#content").find('article[data-id="'+journalsId[0]+'"]').length === 0 ){
+                            if($("#subledgerapp").hasClass("journals-layout")){
+
+                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideUp(400, function(){
+
+                                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").remove();
+
+                                });
+
+                                _this.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journalsId), true, null, null, true);
+
+                            }
+                        }
+
+                        $(window.AppView.templateSelector.loading).hide();
+
+                    });
+                });
+            });
+        },
+        bindActivityStreamNotice: function(book_id){
+            var _this = this;
+            window.clearInterval(_this.journalInterval);
+            _this.journalInterval = window.setInterval(function(){
+
+                var $first = $(_this.AppView.templateSelector.main).find("article[data-action=journal]").first();
+                //console.log("interval", $first.attr("data-id"));
+
+
+                _this.getPreviousJournals({book: book_id, following: $first.attr("data-id")}, function(journalsId){
+                    //console.log("preceding journals", journalsId);
+                    if(typeof journalsId[0] !== 'undefined'){
+                        if(journalsId.length > 0){
+                            if($(_this.AppView.templateSelector.main).find(".noticePreviousJournals").length > 0){
+                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").text(journalsId.length+" new Journals Entries");
+                            } else {
+                                $first.before("<div class='noticePreviousJournals' style='display:none;'>"+journalsId.length+" new Journals Entries</div>");
+                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideDown();
+                                _this.bindLoadNewActivityStream(book_id, $first);
+                            }
+
+                        }
+                    }
+
+                });
+
+            },7000);
+        },
+        loadActivityStream: function(book_id){
+
+            //console.log("loadActivityStream")
+            var _this = this;
+
+            window.clearInterval(_this.journalInterval);
+
+            $(_this.AppView.templateSelector.main).removeClass("accounts-layout").addClass("journals-layout");
+
+            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, null, "");
+            $(_this.AppView.templateSelector.loading).show();
+            _this.getNextJournals({book: book_id},function(journals){
+                // console.log("journals", journals);
+                _this.getJournalsBalance({book: book_id, journals: journals},function(bookid){
+                    $(_this.AppView.templateSelector.loading).hide();
+                    _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._draftJournals, _this.prepareJournalsEntryData(book_id, journals, true), false, true);
+                    _this.Templates.setNavActiveItem("activity-stream");
+
+                    _this.bindActivityStreamNotice(book_id);
+
+                });
+            });
+        },
+        loadAccounts: function(book_id){
+
+            var _this = this;
+            window.clearInterval(_this.journalInterval);
+
+            $(_this.AppView.templateSelector.main).removeClass("journals-layout").addClass("accounts-layout");
+
+            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, null, "");
+            $(_this.AppView.templateSelector.loading).show();
+            _this.getNextAccounts({book: book_id},function(accounts){
+                _this.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
+                    $(_this.AppView.templateSelector.loading).hide();
+                    _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, _this.prepareAccountsData(bookid, accounts, true), false, true);
+                    _this.Templates.setNavActiveItem("accounts");
+                });
+            });
         },
         loadstatus:false,
         loadMoreJournals: function(book_id, callback, lastid){

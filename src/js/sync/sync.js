@@ -108,8 +108,12 @@ define([
         var params = {limit: 5, action:"preceding", id: options.last_id, state: state};
         //console.log("sync",method, options.type, model, Utils.parse(model),  options );
         if(options.last_id === null || options.last_id === undefined){
+            if(options.first_id === null || options.first_id === undefined){
+                params = {limit: 5, action:"before", state: state};
+            } else {
+                params = {limit: 100, action:"following", state: state, id: options.first_id};
+            }
 
-            params = {limit: 5, action:"before", state: state};
         } else if(options.last_id === "all"){
             params = {limit: 100, action:"before", state: state};
         }

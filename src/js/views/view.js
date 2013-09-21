@@ -88,6 +88,9 @@ define([
 
         startApp: function(settings){
             var _this = this;
+
+            window.clearInterval(DataStructure.journalInterval);
+
             $(_this.templateSelector.loading).show();
             _this.settings = settings;
 
@@ -106,10 +109,28 @@ define([
 
             Templates.applyTemplate(_this.templateSelector.header, _this.templates._header, {});
 
+            AppEvents.unbind("ready");
             AppEvents.bind("ready", function(){
                 Templates.applyTemplate(_this.templateSelector.main, null, "");
                 $(_this.templateSelector.loading).hide();
+                var book_id = $(_this.templateSelector.nav).find("select.book").val();
+
+               //if we want to do deek linkings
+               switch(_this.currentPage){
+                   case 'activity-stream':
+
+                       DataStructure.loadActivityStream(book_id);
+                       break;
+                   case 'accounts':
+                       DataStructure.loadAccounts(book_id);
+                       break;
+                   default:
+                       DataStructure.loadActivityStream(book_id);
+                       break;
+               }
+
             });
+
             AppEvents.bind("navReady", function(){
                 Templates.applyTemplate(_this.templateSelector.nav, _this.templates._nav, DataStructure.prepareNavData());
                 Templates.bindNav();
@@ -156,6 +177,7 @@ define([
 
                 } else {
                     Templates.applyTemplate(_this.templateSelector.main, _this.templates._login, {});
+                    $(_this.templateSelector.loading).hide();
                 }
 
             } else {
