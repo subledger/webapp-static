@@ -270,13 +270,17 @@ define([
                 } else if(action == 'account') {
 
                     $(e.currentTarget).parent("article").wrap("<div class='openAccount'></div>");
+
+                    $(_this.AppView.templateSelector.loading).show();
                     _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
                         _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            $(_this.AppView.templateSelector.loading).hide();
                             _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
                         });
                     });
                 } else if(action == 'source') {
-
+                    _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
+                    $(_this.AppView.templateSelector.loading).show();
                     _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accountId){
 
                         journal_id = $(e.currentTarget).parents("tr").attr("data-journal-id");
@@ -285,7 +289,7 @@ define([
 
                             _this.DataStructure.getJournalsBalance({book: book_id, journals:journalId},function(bookid){
                                 _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
-
+                                    $(_this.AppView.templateSelector.loading).hide();
                                     _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(book_id, accountId, journalId, linesId));
                                 });
                             });
@@ -296,9 +300,11 @@ define([
 
 
                     account_id = $(e.currentTarget).attr("data-account-id");
-
+                    _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
+                    $(_this.AppView.templateSelector.loading).show();
                     _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
                         _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            $(_this.AppView.templateSelector.loading).hide();
                             _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._chart, _this.DataStructure.prepareAccountData(account_id));
                             Chart.init(_this.DataStructure.prepareAccountData(account_id));
                         });
@@ -308,9 +314,11 @@ define([
 
 
                     account_id = $(e.currentTarget).attr("data-account-id");
-
+                    _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
+                    $(_this.AppView.templateSelector.loading).show();
                     _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
                         _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            $(_this.AppView.templateSelector.loading).hide();
                             _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
                         });
                     });
@@ -342,9 +350,12 @@ define([
                     $(_this.AppView.templateSelector.main).removeClass("accounts-layout").addClass("journals-layout");
 
                     book_id = $(_this.AppView.templateSelector.nav).find("select.book").val();
+                    _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
+                    $(_this.AppView.templateSelector.loading).show();
                     DataStructure.getNextJournals({book: book_id},function(journals){
                         // console.log("journals", journals);
                         DataStructure.getJournalsBalance({book: book_id, journals: journals},function(bookid){
+                            $(_this.AppView.templateSelector.loading).hide();
                             _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._draftJournals, DataStructure.prepareJournalsEntryData(book_id, journals, true), false, true);
                             resetNav(e.currentTarget);
                         });
@@ -355,8 +366,11 @@ define([
                     $(_this.AppView.templateSelector.main).removeClass("journals-layout").addClass("accounts-layout");
 
                     book_id = $(_this.AppView.templateSelector.nav).find("select.book").val();
+                    _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
+                    $(_this.AppView.templateSelector.loading).show();
                     DataStructure.getNextAccounts({book: book_id},function(accounts){
                         DataStructure.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
+                            $(_this.AppView.templateSelector.loading).hide();
                             _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, DataStructure.prepareAccountsData(bookid, accounts, true), false, true);
                             resetNav(e.currentTarget);
                         });

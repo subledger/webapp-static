@@ -6092,6 +6092,15 @@ td.visible-print {
 .css3 .selectyzeValue:focus {
   background-color: #ffffff;
 }
+aside .DivSelectyze {
+  width: 100%;
+}
+aside .css3 .selectyzeValue {
+  line-height: 12px;
+}
+aside .css3 li a {
+  line-height: 17px;
+}
 .css3 li {
   display: block;
 }
@@ -6685,33 +6694,33 @@ body {
   border-radius: 13px;
   box-shadow: 0 1px 0 #f7f7f7, inset 0 1px 3px rgba(41, 43, 46, 0.25);
 }
-#sidebar li {
+#sidebar .side-menu li {
   display: block;
 }
-#sidebar li:hover,
-#sidebar li:focus,
-#sidebar li.active {
+#sidebar .side-menu li:hover,
+#sidebar .side-menu li:focus,
+#sidebar .side-menu li.active {
   border-top: none;
 }
-#sidebar li:hover a,
-#sidebar li:focus a,
-#sidebar li.active a {
+#sidebar .side-menu li:hover a,
+#sidebar .side-menu li:focus a,
+#sidebar .side-menu li.active a {
   background-color: #dbdde1;
   color: #1b6f8b;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
   outline: 0;
 }
-#sidebar li:hover .arrow .inner,
-#sidebar li:focus .arrow .inner {
+#sidebar .side-menu li:hover .arrow .inner,
+#sidebar .side-menu li:focus .arrow .inner {
   left: 20%;
 }
-#sidebar li.active .arrow .inner {
+#sidebar .side-menu li.active .arrow .inner {
   left: 0px;
 }
-#sidebar li.border-bottom {
+#sidebar .side-menu li.border-bottom {
   border-bottom: 1px solid #f9fafb;
 }
-#sidebar li a {
+#sidebar .side-menu li a {
   line-height: 47px;
   padding-left: 15%;
   width: auto;
@@ -6725,7 +6734,7 @@ body {
   transition: all 0.4s;
   outline: 0;
 }
-#sidebar li .arrow {
+#sidebar .side-menu li .arrow {
   width: 26px;
   height: 49px;
   display: block;
@@ -6734,7 +6743,7 @@ body {
   top: -1px;
   overflow: hidden;
 }
-#sidebar li .arrow .inner {
+#sidebar .side-menu li .arrow .inner {
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
   width: 26px;
