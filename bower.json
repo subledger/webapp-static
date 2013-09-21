@@ -12,6 +12,7 @@
     "hbs": "git://github.com/SlexAxton/require-handlebars-plugin",
     "supermodel": "git://github.com/pathable/supermodel/",
     "selectyze": "git://github.com/alpixel/Selectyze",
-    "jt.timepicker": "git://github.com/jonthornton/jquery-timepicker"
+    "jt.timepicker": "git://github.com/jonthornton/jquery-timepicker",
+    "highcharts.com": "~3.0.5"
   }
 }
