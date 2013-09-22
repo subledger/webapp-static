@@ -139,7 +139,7 @@ define(['jquery'] , function ($) {
                 return interval + " min";
             }
 
-            return Math.floor(seconds) + "sec";
+            return Math.floor(seconds) + " sec";
 
 
         }

@@ -1010,6 +1010,13 @@ define([
         bindLoadNewActivityStream: function(book_id, $first){
             var _this = this;
             $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").click(function(){
+                var $cloneLoading = $(window.AppView.templateSelector.loading).clone();
+                $cloneLoading.appendTo($(_this.AppView.templateSelector.main).find(".noticePreviousJournals"));
+                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).css("margin-top", "15px");
+                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).css("padding-bottom", "35px");
+                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).show();
+
+                window.clearInterval(_this.journalInterval);
 
                 _this.getPreviousJournals({book: book_id, following: $first.attr("data-id")}, function(journalsId){
                     //console.log("preceding journals", journalsId);
@@ -1018,14 +1025,15 @@ define([
                         if($("#content").find('article[data-id="'+journalsId[0]+'"]').length === 0 ){
                             if($("#subledgerapp").hasClass("journals-layout")){
 
-                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideUp(400, function(){
+                                setTimeout(function(){
+                                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideUp(400, function(){
+                                        $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").remove();
+                                    });
+                                }, 500);
 
-                                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").remove();
-
-                                });
 
                                 _this.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journalsId), true, null, null, true);
-
+                                _this.bindActivityStreamNotice(book_id);
                             }
                         }
 
@@ -1033,6 +1041,7 @@ define([
 
                     });
                 });
+
             });
         },
         bindActivityStreamNotice: function(book_id){
@@ -1059,6 +1068,12 @@ define([
                         }
                     }
 
+                });
+
+                $("article").each(function(){
+                       var datetime = $(this).attr("data-timestamp");
+                       var timeago = Utils.timeago(new Date(datetime));
+                       $(this).find(".timeago").text(timeago + " ago");
                 });
 
             },7000);
