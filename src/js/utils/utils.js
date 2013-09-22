@@ -52,6 +52,9 @@ define(['jquery'] , function ($) {
             if(rounded){
                 min = roundedmin;
             }
+            if(min !== "00" && min < 10){
+                min = "0"+min;
+            }
             return hours+" : "+min+" "+ampm;
         },
 

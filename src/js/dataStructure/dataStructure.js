@@ -850,10 +850,10 @@ define([
                 var time = Utils.getTime(datetime, false);
 
                 if(current.value.type === 'debit'){
-                    totalcredit = totalcredit + parseInt(current.value.amount);
+                    totalcredit = totalcredit + parseFloat(current.value.amount);
                 }
                 if(current.value.type === 'credit'){
-                    totaldebit = totaldebit + parseInt(current.value.amount);
+                    totaldebit = totaldebit + parseFloat(current.value.amount);
                 }
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
@@ -967,10 +967,10 @@ define([
                 var time = Utils.getTime(datetime, false);
 
                 if(current.value.type === 'debit'){
-                    totalcredit = totalcredit + parseInt(current.value.amount);
+                    totalcredit = totalcredit + parseFloat(current.value.amount);
                 }
                 if(current.value.type === 'credit'){
-                    totaldebit = totaldebit + parseInt(current.value.amount);
+                    totaldebit = totaldebit + parseFloat(current.value.amount);
                 }
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
