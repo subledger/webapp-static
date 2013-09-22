@@ -22,14 +22,22 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
             //console.log("lines", lines);
 
             $('#graph').highcharts({
+				colors: ["#1E7C98"],
                 chart: {
                     zoomType: 'x',
                     spacingRight: 20
                 },
                 title: {
-                    text: 'Account activities'
+                    text: 'Account activities',
+					style: {
+						color: '#1E7C98'
+					}
                 },
                 subtitle: {
+
+					style: {
+						color: '#1E7C98'
+					},
                     text: document.ontouchstart === undefined ?
                         'Click and drag in the plot area to zoom in' :
                         'Pinch the chart to zoom in'
@@ -43,7 +51,10 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                 },
                 yAxis: {
                     title: {
-                        text: type + " values"
+                        text: type + " values",
+						style: {
+							color: '#1E7C98'
+						}
                     }
                 },
                 tooltip: {
@@ -57,8 +68,8 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                         fillColor: {
                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
                             stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+								[0, "#1E7C98"],
+								[1, "rgba(30,124,152,0)"]
                             ]
                         },
                         lineWidth: 1,
