@@ -1048,7 +1048,7 @@ define([
             var _this = this;
             window.clearInterval(_this.journalInterval);
             _this.journalInterval = window.setInterval(function(){
-
+                _this.DataStructure.loadstatus==false;
                 var $first = $(_this.AppView.templateSelector.main).find("article[data-action=journal]").first();
                 //console.log("interval", $first.attr("data-id"));
 
@@ -1071,6 +1071,7 @@ define([
                 });
 
                 $("article").each(function(){
+
                        var datetime = $(this).attr("data-timestamp");
                        var timeago = Utils.timeago(new Date(datetime));
                        $(this).find(".timeago").text(timeago + " ago");
@@ -1084,6 +1085,7 @@ define([
             var _this = this;
 
             window.clearInterval(_this.journalInterval);
+            window.DataStructure.loadstatus = false;
 
             $(_this.AppView.templateSelector.main).removeClass("accounts-layout").addClass("journals-layout");
 
@@ -1105,6 +1107,7 @@ define([
 
             var _this = this;
             window.clearInterval(_this.journalInterval);
+            window.DataStructure.loadstatus = false;
 
             $(_this.AppView.templateSelector.main).removeClass("journals-layout").addClass("accounts-layout");
 
@@ -1120,6 +1123,7 @@ define([
         },
         loadstatus:false,
         loadMoreJournals: function(book_id, callback, lastid){
+
             var _this = this;
             var last_id = $("#content").find('article:last').attr('data-id');
             if(lastid !== undefined){
@@ -1134,7 +1138,7 @@ define([
                             if($("#content").find('article[data-id="'+journals[0]+'"]').length === 0 ){
                                 window.DataStructure.getJournalsBalance({book: book_id, journals:journals},function(bookid){
                                     if($("#content").find('article[data-id="'+journals[0]+'"]').length === 0 ){
-                                        if($("#subledgerapp").hasClass("journals-layout")){
+                                        if($("#subledgerapp").hasClass("journals-layout") && $("#content").find('article').first().attr("data-book-id") === book_id){
                                             window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journals), true);
                                         }
                                     }
@@ -1145,6 +1149,7 @@ define([
 
                                 });
                             } else {
+                                _this.DataStructure.loadstatus==false;
                                 window.DataStructure.loadMoreJournals(book_id, callback, journals[0] );
                             }
                         }
@@ -1182,6 +1187,7 @@ define([
 
 
                             } else {
+                                _this.DataStructure.loadstatus==false;
                                 window.DataStructure.loadMoreAccounts(book_id, callback, accounts[0] );
                             }
                         }
