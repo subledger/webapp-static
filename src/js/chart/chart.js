@@ -2,6 +2,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
     var Chart = {
         init: function(data){
+            console.log(data);
             var type;
             var lines = [];
             $.each(data.lines, function(index, current){
@@ -18,6 +19,8 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                 lines.push([Date.UTC(year,month, day, hours, min, sec ), parseFloat(current.value.amount)]);
                 type = current.value.type;
             });
+
+            lines.reverse();
 
             //console.log("lines", lines);
 

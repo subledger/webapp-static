@@ -33,12 +33,14 @@ define(['jquery'] , function ($) {
             var roundedmin = "00";
             var ampm = "AM";
 
-
-            if(min > 15 && min < 45){
-                roundedmin = "30";
-            }
-            if(min >= 45){
-                hours = hours+1;
+            if(rounded){
+                if(min > 15 && min < 45){
+                    roundedmin = "30";
+                }
+                if(min >= 45){
+                    hours = hours+1;
+                }
+                min = roundedmin;
             }
             if(hours > 11){
                 ampm = "PM";
@@ -48,9 +50,6 @@ define(['jquery'] , function ($) {
             }
             if(hours === 0){
                 hours = 12;
-            }
-            if(rounded){
-                min = roundedmin;
             }
             if(min !== "00" && min < 10){
                 min = "0"+min;

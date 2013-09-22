@@ -30,9 +30,9 @@
                                <tr data-journal-id="{{journal_entry}}">
                                    <td>{{date}}</td>
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
-                                   <td>{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{value.amount}}</a>{{/ifCond}}</td>
-                                   <td>{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{value.amount}}</a>{{/ifCond}}</td>
-                                   <td>{{value.amount}}</td>
+                                   <td>{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
+                                   <td>{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
+                                   <td>{{balance}}</td>
                                </tr>
                             {{/each}}
 

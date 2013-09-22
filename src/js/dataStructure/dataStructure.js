@@ -362,16 +362,43 @@ define([
             });
 
         },
-        accountLinesFetch: function(org_id, book_id, account_id, cb){
-            this.journal_entrylinecollection.fetch({
-                type:"accountline",
+        accountLinesFetch: function(org_id, book_id, account_id, cb, precedingLines){
+            var _this = this;
+
+            var last = null;
+            var type = "accountline";
+            if(precedingLines !== undefined){
+                last = precedingLines[0].id;
+                type = "moreaccountline";
+            }
+            _this.journal_entrylinecollection.fetch({
+                type: type,
                 org_id: org_id,
                 book_id: book_id,
                 account_id: account_id,
                 api: this.api,
+                following: last,
                 success: function(resp) {
 
-                    cb(null, resp);
+
+                    var mergeResp = [];
+                    if(precedingLines !== undefined){
+                        mergeResp = precedingLines;
+
+                        $.each(Utils.parse(resp), function(index, value){
+                            mergeResp.push(value);
+                        });
+
+                    } else {
+                        mergeResp = Utils.parse(resp);
+                    }
+
+                    if(resp.length === 25){
+                        _this.accountLinesFetch(org_id, book_id, account_id, cb, mergeResp);
+                    } else {
+                        cb(null, mergeResp);
+                    }
+
                 },
                 error: function(error) {
                     //console.log("journal_accountlinecollection error",error);
@@ -895,7 +922,8 @@ define([
                     id: current.id,
                     desc: current.description,
                     normal_balance: current.normal_balance,
-                    balance: balance[0]
+                    balance: balance[0],
+                    balanceamount: parseFloat(balance[0].value.amount).toFixed(2)
                 }
                 data.push(partial);
 
@@ -916,7 +944,11 @@ define([
             var book = Utils.parse(Account.all().get(accountid).book());
             var lines = Utils.parse(Account.all().get(accountid).lines());
 
+            lines.sort(function(a, b) {
+                return new Date(a.posted_at).getTime() - new Date(b.posted_at).getTime();
+            });
 
+            var balance = 0;
             var datedlines = [];
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
@@ -924,11 +956,13 @@ define([
                 var month = Utils.months[datetime.getMonth()-1];
 
                 var time = Utils.getTime(datetime, false);
-
+                balance = balance + parseFloat(current.value.amount);
+                current.balance = balance.toFixed(2);
+                current.amount = parseFloat(current.value.amount).toFixed(2);
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
             });
-
+            datedlines.reverse();
 
             var result = {
                 id:accountid,
@@ -974,6 +1008,10 @@ define([
                 }
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
+            });
+
+            datedlines.sort(function(a, b) {
+                return new Date(b.rawdate).getTime() - new Date(a.rawdate).getTime();
             });
 
             var result = {

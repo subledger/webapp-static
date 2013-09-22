@@ -58,6 +58,12 @@ define([
                                         Account_line.create(current);
                                     });
                                     break;
+                                case 'moreaccountline':
+
+                                    $.each(Utils.parse(data), function(index, current){
+                                        Account_line.create(current);
+                                    });
+                                    break;
 
                                 case 'journalentry':
 
@@ -118,7 +124,9 @@ define([
             params = {limit: 100, action:"before", state: state};
         }
 
-
+        if(options.type === "moreaccountline"){
+            params = {limit: 25, action:"preceding", id: options.following};
+        }
 
         //console.log("last id ", options.last_id);
 
@@ -222,6 +230,9 @@ define([
                         break;
                     case 'accountline':
                         options.api.organization(options.org_id).book(options.book_id).account(options.account_id).line().get(function(e,d){ cb(e, d.posted_lines); });
+                        break;
+                    case 'moreaccountline':
+                        options.api.organization(options.org_id).book(options.book_id).account(options.account_id).line().get(params, function(e,d){ cb(e, d.posted_lines); });
                         break;
                     case 'journalentry':
                      //   console.log(options, params);
