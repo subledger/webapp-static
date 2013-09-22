@@ -105,17 +105,24 @@ define([
                     $("#content").unbind("scroll");
                     $("#content").scroll(function(){ // On surveille l'évènement scroll
 
+                        //console.log("scroll");
                         var $last = $("#content").find('article:last');
                         if($last.length > 0){
+
                             var offset = $last.offset();
+                            //console.log("scroll 2", offset, _this.DataStructure.loadstatus, offset.top-$("#content").height(),"<=", $("#content").scrollTop());
                             /* Si l'élément offset est en bas de scroll, si aucun chargement
                              n'est en cours, si le nombre de commentaire affiché est supérieur
                              à 5 et si tout les commentaires ne sont pas affichés, alors on
                              lance la fonction. */
                             if((offset.top-$("#content").height() <= $("#content").scrollTop())
-                                && _this.DataStructure.loadstatus==false && ($('article').size()>=4) ){
+                                && ($('article').size()>=4) ){
+
+                                //console.log("scroll 3", _this.DataStructure.loadstatus, offset.top-$("#content").height(),"<=", $("#content").scrollTop());
 
                                 _this.DataStructure.loadstatus = true;
+
+
 
                                 if(type === "journal"){
                                     _this.DataStructure.fillJournals(book_id);
