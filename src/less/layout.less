@@ -460,6 +460,8 @@ table{
 		color: #616367;
 		text-align: right;
 		font-size: 13px;
+
+		.line-right{border-right: 1px solid rgba(255,255,255,0.5);}
 		thead{
 			font-size: 12px;}
 		thead th{
@@ -470,10 +472,13 @@ table{
 			color: #616367;
 			text-shadow: 0 1px 0 rgba(255,255,255,.75);
 			td:first-child{text-align:left}
-
 		}
-		tbody tr:nth-child(odd){
-			background-color:@lightblue;
+		tbody tr{
+			.line-right{border-right: 1px solid rgba(213, 228, 233, 0.5)}
+			&:nth-child(odd){
+				.line-right{border-right: 1px solid rgba(255,255,255,0.5);}
+				background-color:@lightblue;
+			}
 		}
 		tfoot{
 			td:first-child{
@@ -481,7 +486,6 @@ table{
 				background-color:transparent;
 				padding-right:15px;
 				border:0;
-
 			}
 			td{
 				background-color:@lightblue;

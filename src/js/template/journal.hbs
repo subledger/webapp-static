@@ -15,15 +15,15 @@
                     <thead>
                         <tr>
                             <td style="width:60%"></td>
-                            <th style="width:20%">Debit</th>
-                            <th style="width:20%">Credit</th>
+                            <th style="width:20%" class="text-right line-right">Debit</th>
+                            <th style="width:20%" class="text-right">Credit</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each lines}}
                             <tr>
                                 <td>{{description}}</td>
-                                <td>{{#ifCond value.type "debit"}}{{value.amount}}{{/ifCond}}</td>
+                                <td class="line-right">{{#ifCond value.type "debit"}}{{value.amount}}{{/ifCond}}</td>
                                 <td>{{#ifCond value.type "credit"}}{{value.amount}}{{/ifCond}}</td>
                             </tr>
                         {{/each}}
@@ -31,7 +31,7 @@
                     <tfoot>
                         <tr>
                             <td>Total</td>
-                            <td>{{totaldebit}}</td>
+                            <td class="line-right">{{totaldebit}}</td>
                             <td>{{totalcredit}}</td>
                         </tr>
                     </tfoot>
