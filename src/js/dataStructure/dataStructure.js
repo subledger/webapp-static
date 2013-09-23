@@ -976,7 +976,7 @@ define([
 
         },
         prepareNewAccountLineData: function(lines){
-            console.log("lines", Utils.parse(lines));
+            //console.log("lines", Utils.parse(lines));
             return Utils.parse(lines);
         },
         prepareAccountData: function(accountid){
