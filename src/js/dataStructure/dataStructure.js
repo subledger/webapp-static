@@ -414,7 +414,8 @@ define([
                     }
 
                     if(resp.length === 25 && mergeResp.length < 50){
-                        _this.accountLinesFetch(org_id, book_id, account_id, cb, mergeResp);
+                        //_this.accountLinesFetch(org_id, book_id, account_id, cb, mergeResp);
+                        cb(null, mergeResp);
                     } else {
                         cb(null, mergeResp);
                     }
