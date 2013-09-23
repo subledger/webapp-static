@@ -1334,8 +1334,8 @@ define([
                         case 'account':
                             var account = Utils.parse(data).active_account;
                             _this.DataStructure.getOneAccount({book: bookid, current:account.id},function(accounts){
-                              //  console.log([accounts]);
-                                _this.DataStructure.getAccountsBalance({book: bookid, accounts:[accounts]},function(bookid){
+                                console.log("getAccountsBalance",bookid, accounts);
+                                _this.DataStructure.getAccountsBalance({book: bookid, accounts:accounts},function(bookid){
                                     window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._accounts, window.DataStructure.prepareAccountsData(bookid, accounts), true, null, null, true);
                               //       console.log($(".form.new").find(".model1"), $(".form.new").find(".model2"));
                                     $(".form.new").find(".model1").slideDown();
