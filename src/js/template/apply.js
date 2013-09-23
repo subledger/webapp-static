@@ -347,7 +347,7 @@ define([
                             _this.DataStructure.getAccountLines(account_id,function(account_id){
                                 $(_this.AppView.templateSelector.loading).hide();
                                 _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._chart, _this.DataStructure.prepareAccountData(account_id));
-                                Chart.init(_this.DataStructure.prepareAccountData(account_id));
+                                Chart.init(_this.DataStructure.prepareAccountData(account_id), book_id, account_id, _this.DataStructure, _this.AppView);
                             });
                         });
                         break;

@@ -362,6 +362,26 @@ define([
             });
 
         },
+        accountNewLinesFetch: function(org_id, book_id, account_id, last_id, cb){
+            var _this = this;
+            _this.journal_entrylinecollection.fetch({
+                type: "newaccountline",
+                org_id: org_id,
+                book_id: book_id,
+                account_id: account_id,
+                api: this.api,
+                after: last_id,
+                success: function(resp) {
+
+                    cb(null, resp);
+
+                },
+                error: function(error) {
+                    //console.log("journal_accountlinecollection error",error);
+                    cb(error);
+                }
+            });
+        },
         accountLinesFetch: function(org_id, book_id, account_id, cb, precedingLines){
             var _this = this;
 
@@ -393,7 +413,7 @@ define([
                         mergeResp = Utils.parse(resp);
                     }
 
-                    if(resp.length === 25){
+                    if(resp.length === 25 && mergeResp.length < 50){
                         _this.accountLinesFetch(org_id, book_id, account_id, cb, mergeResp);
                     } else {
                         cb(null, mergeResp);
@@ -724,6 +744,23 @@ define([
             this.accountLinesFetch(this.org_id, book_id, account_id, callback);
 
         },
+        getAccountNewLines: function(account_id, cb, last_id){
+            var count = 0;
+
+            //console.log("*********************************");
+            // console.log("********** GET ACCOUNT LINES **************");
+            // console.log("*********************************");
+
+
+            var book_id = Utils.parse(Account.all().get(account_id).book()).id;
+
+            var callback = function(err, resp){
+                cb(resp);
+            };
+
+            this.accountNewLinesFetch(this.org_id, book_id, account_id, last_id, callback);
+
+        },
         getCurrentJournal: function(options, cb){
             //console.log(Utils.parse(Journal_entry.all().get(options.id)));
             cb([options.id]);
@@ -938,6 +975,10 @@ define([
 
 
         },
+        prepareNewAccountLineData: function(lines){
+            console.log("lines", Utils.parse(lines));
+            return Utils.parse(lines);
+        },
         prepareAccountData: function(accountid){
 
             var account = Utils.parse(Account.all().get(accountid));
@@ -948,7 +989,7 @@ define([
                 return new Date(a.posted_at).getTime() - new Date(b.posted_at).getTime();
             });
 
-            var balance = 0;
+            var balance = parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount);
             var datedlines = [];
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
@@ -956,8 +997,9 @@ define([
                 var month = Utils.months[datetime.getMonth()-1];
 
                 var time = Utils.getTime(datetime, false);
-                balance = balance + parseFloat(current.value.amount);
+
                 current.balance = balance.toFixed(2);
+                balance = balance - parseFloat(current.value.amount);
                 current.amount = parseFloat(current.value.amount).toFixed(2);
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
