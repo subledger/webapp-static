@@ -6215,6 +6215,12 @@ strong {
 .full-width {
   width: 100%;
 }
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
 .right {
   float: right;
 }
@@ -7258,6 +7264,9 @@ table.source {
   text-align: right;
   font-size: 13px;
 }
+table.source .line-right {
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+}
 table.source thead {
   font-size: 12px;
 }
@@ -7275,8 +7284,14 @@ table.source tbody {
 table.source tbody td:first-child {
   text-align: left;
 }
+table.source tbody tr .line-right {
+  border-right: 1px solid rgba(213, 228, 233, 0.5);
+}
 table.source tbody tr:nth-child(odd) {
   background-color: #d5e4e9;
+}
+table.source tbody tr:nth-child(odd) .line-right {
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
 }
 table.source tfoot td:first-child {
   text-align: right;
