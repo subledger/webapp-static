@@ -232,7 +232,9 @@ define([
                 }
             });
         },
+
         accountFetch: function(org_id, book_id, last_id, current, cb){
+
             var type = "account";
             if(current !== null && current !== undefined){
                 type = "oneaccount";
@@ -384,7 +386,7 @@ define([
         },
         accountLinesFetch: function(org_id, book_id, account_id, cb, precedingLines){
             var _this = this;
-
+            console.log("account_id", account_id);
             var last = null;
             var type = "accountline";
             if(precedingLines !== undefined){
@@ -728,7 +730,7 @@ define([
             this.posted_entryLinesFetch(this.org_id, book_id, journal_id, callback);
 
         },
-        getAccountLines: function(account_id, cb){
+        getAccountLines: function(book_id, account_id, cb){
             var count = 0;
 
             //console.log("*********************************");
@@ -736,7 +738,7 @@ define([
            // console.log("*********************************");
 
 
-            var book_id = Utils.parse(Account.all().get(account_id).book()).id;
+            //var book_id = Utils.parse(Account.all().get(account_id).book()).id;
 
             var callback = function(){
                 cb(account_id);
@@ -770,7 +772,36 @@ define([
             //console.log(Utils.parse(Account.all().get(options.id)));
             cb([options.id]);
         },
+        getAccountFromJeLine: function(lineId){
 
+            return Utils.parse(Posted_Journal_entryline.all().get(lineId)).account;
+        },
+        addAccountDataToJeLines: function(book_id, linesId, cb){
+            var _this = this;
+            var index = 0;
+            async.whilst(
+                function () { return index < linesId.length; },
+                function (itcallback) {
+
+                    var accountid = _this.getAccountFromJeLine(linesId[index]);
+
+                    _this.getOneAccount({book: book_id, current:accountid},function(accounts){
+
+                        itcallback();
+                    });
+
+                    index++;
+
+                }, function (err, result) {
+                    cb(linesId);
+                }
+            );
+
+        },
+        getAccountData: function(accountid){
+
+            return Utils.parse(Account.all().get(accountid));
+        },
 
         /**********************************************/
         /****************** PREPARE *******************/
@@ -921,8 +952,11 @@ define([
                     totaldebit = totaldebit + parseFloat(current.value.amount);
                 }
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
+                current.accountdesc = Utils.parse(Account.all().get(current.account)).description;
+
                 datedlines.push(current);
             });
+
 
             var result = {
                 id: journalid,
@@ -936,7 +970,7 @@ define([
             };
 
 
-            //console.log("test data", result);
+            console.log("test data", result);
 
             return result;
 
@@ -987,10 +1021,10 @@ define([
             var lines = Utils.parse(Account.all().get(accountid).lines());
 
             lines.sort(function(a, b) {
-                return new Date(a.posted_at).getTime() - new Date(b.posted_at).getTime();
+                return new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime();
             });
 
-            var balance = parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount);
+
             var datedlines = [];
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
@@ -999,20 +1033,27 @@ define([
 
                 var time = Utils.getTime(datetime, false);
 
-                current.balance = balance.toFixed(2);
-                balance = balance - parseFloat(current.value.amount);
-                current.amount = parseFloat(current.value.amount).toFixed(2);
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
             });
-            datedlines.reverse();
+
+
+            var balance = parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount);
+            $.each(datedlines, function(index, current){
+                datedlines[index].balance = balance.toFixed(2);
+                balance = balance - parseFloat(current.value.amount);
+                datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
+            });
+
+
 
             var result = {
                 id:accountid,
                 desc: account.description,
                 ref: account.reference,
                 lines: datedlines,
-                book_id:book.id
+                book_id:book.id,
+                balance: balance
             };
 
             //console.log("test data", result);
@@ -1130,24 +1171,31 @@ define([
             window.clearInterval(_this.journalInterval);
             _this.journalInterval = window.setInterval(function(){
                 _this.DataStructure.loadstatus==false;
-                var $first = $(_this.AppView.templateSelector.main).find("article[data-action=journal]").first();
+                var $first = $(_this.AppView.templateSelector.main).find("article").not(".form").first();
                 //console.log("interval", $first.attr("data-id"));
 
 
                 _this.getPreviousJournals({book: book_id, following: $first.attr("data-id")}, function(journalsId){
                     //console.log("preceding journals", journalsId);
-                    if(typeof journalsId[0] !== 'undefined'){
-                        if(journalsId.length > 0){
-                            if($(_this.AppView.templateSelector.main).find(".noticePreviousJournals").length > 0){
-                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").text(journalsId.length+" new Journals Entries");
-                            } else {
-                                $first.before("<div class='noticePreviousJournals' style='display:none;'>"+journalsId.length+" new Journals Entries</div>");
-                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideDown();
-                                _this.bindLoadNewActivityStream(book_id, $first);
-                            }
+                    if($("#subledgerapp").hasClass("journals-layout")){
+                        $first = $(_this.AppView.templateSelector.main).find("article").not(".form").first();
 
+                        if(typeof journalsId[0] !== 'undefined'){
+                            if(journalsId.length > 0){
+                                if($(_this.AppView.templateSelector.main).find(".noticePreviousJournals").length > 0){
+                                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").text(journalsId.length+" new Journals Entries");
+                                } else {
+
+                                    $first.before("<div class='noticePreviousJournals' style='display:none;'>"+journalsId.length+" new Journals Entries</div>");
+                                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideDown();
+                                    _this.bindLoadNewActivityStream(book_id, $first);
+                                }
+
+                            }
                         }
+
                     }
+
 
                 });
 
@@ -1221,6 +1269,8 @@ define([
                                     if($("#content").find('article[data-id="'+journals[0]+'"]').length === 0 ){
                                         if($("#subledgerapp").hasClass("journals-layout") && $("#content").find('article').first().attr("data-book-id") === book_id){
                                             window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journals), true);
+                                        } else {
+                                            window.clearInterval(_this.journalInterval);
                                         }
                                     }
 
@@ -1234,7 +1284,11 @@ define([
                                 window.DataStructure.loadMoreJournals(book_id, callback, journals[0] );
                             }
                         }
+                    } else {
+                        $(window.AppView.templateSelector.loading).hide();
                     }
+                } else {
+                    $(window.AppView.templateSelector.loading).hide();
                 }
             });
 
@@ -1257,6 +1311,8 @@ define([
                                     if($("#content").find('article a[data-id="'+accounts[0]+'"]').length === 0 ){
                                         if($("#subledgerapp").hasClass("accounts-layout")){
                                             window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._accounts, window.DataStructure.prepareAccountsData(bookid, accounts), true);
+                                        } else {
+                                            window.clearInterval(_this.journalInterval);
                                         }
                                     }
 
@@ -1272,7 +1328,11 @@ define([
                                 window.DataStructure.loadMoreAccounts(book_id, callback, accounts[0] );
                             }
                         }
+                    } else {
+                        $(window.AppView.templateSelector.loading).hide();
                     }
+                } else {
+                    $(window.AppView.templateSelector.loading).hide();
                 }
             });
 

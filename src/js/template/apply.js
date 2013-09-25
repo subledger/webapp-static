@@ -299,9 +299,11 @@ define([
                          //console.log("book_id",book_id);
 
                          _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
-                            _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(book_id, journal_id, linesId));
-                         });
+                             _this.DataStructure.addAccountDataToJeLines(book_id, linesId, function(detailedlines){
+                                 _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(book_id, journal_id, detailedlines));
 
+                             });
+                         });
 
                         break;
                     case 'account':
@@ -309,11 +311,25 @@ define([
 
                         $(_this.AppView.templateSelector.loading).show();
                         _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
-                            _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            _this.DataStructure.getAccountLines(book_id, account_id,function(account_id){
                                 $(_this.AppView.templateSelector.loading).hide();
                                 _this.applyTemplate($(e.currentTarget).parents(".openAccount"), _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
                             });
                         });
+                        break;
+                    case 'accountfromjeline':
+                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
+                        $(_this.AppView.templateSelector.loading).show();
+                        book_id = $(e.currentTarget).attr("data-book-id");
+                        account_id = $(e.currentTarget).attr("data-account-id");
+                        _this.DataStructure.getAccountsBalance({book: book_id, accounts: [account_id]},function(bookid){
+                            _this.DataStructure.getAccountLines(book_id, account_id,function(accountid){
+                                $(_this.AppView.templateSelector.loading).hide();
+                                _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
+                            });
+                        });
+
                         break;
                     case 'source':
 
@@ -344,7 +360,7 @@ define([
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
                         $(_this.AppView.templateSelector.loading).show();
                         _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
-                            _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            _this.DataStructure.getAccountLines(book_id, account_id,function(account_id){
                                 $(_this.AppView.templateSelector.loading).hide();
                                 _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._chart, _this.DataStructure.prepareAccountData(account_id));
                                 Chart.init(_this.DataStructure.prepareAccountData(account_id), book_id, account_id, _this.DataStructure, _this.AppView);
@@ -359,7 +375,7 @@ define([
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
                         $(_this.AppView.templateSelector.loading).show();
                         _this.DataStructure.getCurrentAccount({book: book_id, id:id},function(accounts){
-                            _this.DataStructure.getAccountLines(account_id,function(account_id){
+                            _this.DataStructure.getAccountLines(book_id, account_id,function(account_id){
                                 $(_this.AppView.templateSelector.loading).hide();
                                 _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._account, _this.DataStructure.prepareAccountData(account_id));
                             });

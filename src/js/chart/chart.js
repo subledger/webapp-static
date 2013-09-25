@@ -1,7 +1,7 @@
 define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
     var Chart = {
-        bindInterval: function(book_id, account_id, DataStructure, AppView, series){
+        bindInterval: function(book_id, account_id, DataStructure, AppView, series, balance){
 
             DataStructure.journalInterval = window.setInterval(function(){
 
@@ -11,6 +11,12 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                      //console.log(DataStructure.prepareNewAccountLineData(account_id));
 
                     var lines = DataStructure.prepareNewAccountLineData(account_id);
+
+                    $.each(lines, function(index, current){
+                        lines[index].balance = balance.toFixed(2);
+                        balance = balance + parseFloat(current.value.amount);
+
+                    });
 
                     $.each(lines, function(index, value){
 
@@ -24,7 +30,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                         var sec = datetime.getSeconds();
 
                         $('#graph').attr("data-last-id", value.id)
-                        series.addPoint([Date.UTC(year,month, day, hours, min, sec ), parseFloat(value.value.amount)], true, true);
+                        series.addPoint([Date.UTC(year,month, day, hours, min, sec ), parseFloat(value.balance)], true, true);
                     });
 
 
@@ -45,6 +51,9 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
             var type;
             var lines = [];
+            var balance = parseFloat(data.balance);
+
+
             $.each(data.lines, function(index, current){
 
                 var datetime = new Date(current.posted_at);
@@ -56,7 +65,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                 var sec = datetime.getSeconds();
                 //console.log(datetime, year,month, day, hours, min, sec );
                 //console.log(new Date(year,month, day, hours, min, sec ));
-                lines.push([Date.UTC(year,month, day, hours, min, sec ), parseFloat(current.value.amount)]);
+                lines.push([Date.UTC(year,month, day, hours, min, sec ), parseFloat(current.balance)]);
                 type = current.value.type;
             });
 
@@ -79,7 +88,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
                             // set up the updating of the chart each second
                             var series = this.series[0];
-                            _this.bindInterval(book_id, account_id, DataStructure, AppView, series);
+                            _this.bindInterval(book_id, account_id, DataStructure, AppView, series, balance);
                         }
                     }
                 },
@@ -107,7 +116,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                 },
                 yAxis: {
                     title: {
-                        text: type + " values",
+                        text: "Balance values",
 						style: {
 							color: '#1E7C98'
 						}
@@ -144,7 +153,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
                 series: [{
                     type: 'area',
-                    name: type + " value",
+                    name: "Balance",
                     data: lines
                 }]
             });

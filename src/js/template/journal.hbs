@@ -22,7 +22,7 @@
                     <tbody>
                         {{#each lines}}
                             <tr>
-                                <td>{{description}}</td>
+                                <td><a href="#" data-book-id="{{../bookid}}" data-account-id="{{account}}" class="action" data-action="accountfromjeline">{{accountdesc}}</a></td>
                                 <td class="line-right">{{#ifCond value.type "debit"}}{{value.amount}}{{/ifCond}}</td>
                                 <td>{{#ifCond value.type "credit"}}{{value.amount}}{{/ifCond}}</td>
                             </tr>
