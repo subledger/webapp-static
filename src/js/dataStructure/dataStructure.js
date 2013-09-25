@@ -386,7 +386,7 @@ define([
         },
         accountLinesFetch: function(org_id, book_id, account_id, cb, precedingLines){
             var _this = this;
-            console.log("account_id", account_id);
+           // console.log("account_id", account_id);
             var last = null;
             var type = "accountline";
             if(precedingLines !== undefined){
@@ -970,7 +970,7 @@ define([
             };
 
 
-            console.log("test data", result);
+           // console.log("test data", result);
 
             return result;
 
@@ -1053,7 +1053,7 @@ define([
                 ref: account.reference,
                 lines: datedlines,
                 book_id:book.id,
-                balance: balance
+                balance: parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount)
             };
 
             //console.log("test data", result);
@@ -1398,7 +1398,7 @@ define([
                         case 'account':
                             var account = Utils.parse(data).active_account;
                             _this.DataStructure.getOneAccount({book: bookid, current:account.id},function(accounts){
-                                console.log("getAccountsBalance",bookid, accounts);
+                               // console.log("getAccountsBalance",bookid, accounts);
                                 _this.DataStructure.getAccountsBalance({book: bookid, accounts:accounts},function(bookid){
                                     window.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._accounts, window.DataStructure.prepareAccountsData(bookid, accounts), true, null, null, true);
                               //       console.log($(".form.new").find(".model1"), $(".form.new").find(".model2"));
