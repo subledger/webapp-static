@@ -88,7 +88,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
                             // set up the updating of the chart each second
                             var series = this.series[0];
-                            _this.bindInterval(book_id, account_id, DataStructure, AppView, series, balance);
+                            _this.bindInterval(book_id, account_id, DataStructure, AppView, series, parseFloat(data.balance));
                         }
                     }
                 },
