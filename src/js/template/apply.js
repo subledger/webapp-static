@@ -318,7 +318,7 @@ define([
                         });
                         break;
                     case 'accountfromjeline':
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
                         $(_this.AppView.templateSelector.loading).show();
                         book_id = $(e.currentTarget).attr("data-book-id");
@@ -332,8 +332,7 @@ define([
 
                         break;
                     case 'source':
-
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
 
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
                         $(_this.AppView.templateSelector.loading).show();
@@ -354,7 +353,7 @@ define([
                         break;
                     case 'chart':
 
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
 
                         account_id = $(e.currentTarget).attr("data-account-id");
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
@@ -369,7 +368,7 @@ define([
                         break;
                     case 'sourcefromchart':
 
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
 
                         account_id = $(e.currentTarget).attr("data-account-id");
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
@@ -382,12 +381,12 @@ define([
                         });
                         break;
                     case 'login':
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
 
                         _this.AppView.login();
                         break;
                     case 'logout':
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
 
                         _this.AppView.logout();
                         break;
@@ -413,15 +412,16 @@ define([
                 var book_id = $(_this.AppView.templateSelector.nav).find("select.book").val();
                 switch (action) {
                     case 'activity-stream':
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
                         _this.DataStructure.loadActivityStream(book_id);
                         break;
                     case 'accounts':
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        _this.DataStructure.clearInterval();
                         _this.DataStructure.loadAccounts(book_id);
                         break;
                     case 'settings':
-                        window.clearInterval(_this.DataStructure.journalInterval);
+                        $(_this.AppView.templateSelector.loading).hide();
+                        _this.DataStructure.clearInterval();
                         _this.DataStructure.showSettings();
                         break;
                 }

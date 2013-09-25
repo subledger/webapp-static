@@ -1169,7 +1169,10 @@ define([
         bindActivityStreamNotice: function(book_id){
             var _this = this;
             window.clearInterval(_this.journalInterval);
+            _this.interalIsActive = true;
             _this.journalInterval = window.setInterval(function(){
+
+
                 _this.DataStructure.loadstatus==false;
                 var $first = $(_this.AppView.templateSelector.main).find("article").not(".form").first();
                 //console.log("interval", $first.attr("data-id"));
@@ -1273,7 +1276,7 @@ define([
                                             window.clearInterval(_this.journalInterval);
                                         }
                                     }
-
+                                       //console.log("load");
                                     window.DataStructure.loadstatus = false;
                                     $(window.AppView.templateSelector.loading).hide();
                                     callback(book_id, journals[0]);
@@ -1470,6 +1473,10 @@ define([
 
             //Forms.clearForm($currentForm, draft);
 
+        },
+        clearInterval:function(){
+
+            window.clearInterval(this.journalInterval);
         }
     };
 

@@ -94,9 +94,9 @@ define([
             $(_this.templateSelector.loading).show();
             _this.settings = settings;
 
-            localStorage.setItem("subledgerKey", _this.settings.key);
-            localStorage.setItem("subledgerSecret", _this.settings.secret);
-            localStorage.setItem("subledgerOrg", _this.settings.org);
+            sessionStorage.setItem("subledgerKey", _this.settings.key);
+            sessionStorage.setItem("subledgerSecret", _this.settings.secret);
+            sessionStorage.setItem("subledgerOrg", _this.settings.org);
 
             DataStructure.initApi(settings);
             DataStructure.clearData();
@@ -153,7 +153,7 @@ define([
         },
         logout: function(){
             var _this = this;
-            localStorage.clear();
+            sessionStorage.clear();
             window.location.href = window.location;
         },
         initialize: function (options) {
@@ -167,11 +167,11 @@ define([
             Forms.setSelector(this.formSelector);
 
             if (Modernizr.localstorage) {
-                if (localStorage.subledgerKey && localStorage.subledgerSecret && localStorage.subledgerOrg){
+                if (sessionStorage.subledgerKey && sessionStorage.subledgerSecret && sessionStorage.subledgerOrg){
                     settings = {
-                        key: localStorage.subledgerKey,
-                        secret: localStorage.subledgerSecret,
-                        org: localStorage.subledgerOrg
+                        key: sessionStorage.subledgerKey,
+                        secret: sessionStorage.subledgerSecret,
+                        org: sessionStorage.subledgerOrg
                     };
                     _this.startApp(settings);
 
