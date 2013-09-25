@@ -11,7 +11,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                      //console.log(DataStructure.prepareNewAccountLineData(account_id));
                     var balanceupdated = parseFloat(balance);
                     var lines = DataStructure.prepareNewAccountLineData(account_id);
-                    console.log("new lines", lines, account_id, balanceupdated);
+                    //console.log("new lines", lines, account_id, balanceupdated);
                     $.each(lines, function(index, value){
                         lines[index].balance = balanceupdated.toFixed(2);
                         balanceupdated = balanceupdated + parseFloat(value.value.amount);
@@ -28,7 +28,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                         var sec = datetime.getSeconds();
 
                         $('#graph').attr("data-last-id", value.id);
-                        console.log("balance:", year,month, day, hours, min, sec, Date.UTC(year,month, day, hours, min, sec ), value.posted_at, parseFloat(balanceupdated), parseFloat(balance));
+                        //console.log("balance:", year,month, day, hours, min, sec, Date.UTC(year,month, day, hours, min, sec ), value.posted_at, parseFloat(balanceupdated), parseFloat(balance));
                         series.addPoint([Date.UTC(year,month, day, hours, min, sec ), balanceupdated], true, true);
                     });
 
