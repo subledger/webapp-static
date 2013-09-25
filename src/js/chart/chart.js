@@ -3,19 +3,21 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
     var Chart = {
         bindInterval: function(book_id, account_id, DataStructure, AppView, series, balance){
 
+            var balanceupdated = parseFloat(balance);
             DataStructure.journalInterval = window.setInterval(function(){
 
                 var last_id = $('#graph').attr("data-last-id");
 
                 DataStructure.getAccountNewLines(account_id,function(account_id){
                      //console.log(DataStructure.prepareNewAccountLineData(account_id));
-                    var balanceupdated = parseFloat(balance);
+
                     var lines = DataStructure.prepareNewAccountLineData(account_id);
                     //console.log("new lines", lines, account_id, balanceupdated);
                     $.each(lines, function(index, value){
                         lines[index].balance = balanceupdated.toFixed(2);
+                        console.log(balanceupdated);
                         balanceupdated = balanceupdated + parseFloat(value.value.amount);
-
+                        console.log(balanceupdated, value.value.amount);
 
 
 
@@ -29,7 +31,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
 
                         $('#graph').attr("data-last-id", value.id);
                         //console.log("balance:", year,month, day, hours, min, sec, Date.UTC(year,month, day, hours, min, sec ), value.posted_at, parseFloat(balanceupdated), parseFloat(balance));
-                        series.addPoint([Date.UTC(year,month, day, hours, min, sec ), balanceupdated], true, true);
+                        series.addPoint([Date.UTC(year,month, day, hours, min, sec ), parseFloat(balanceupdated.toFixed(2))], true, true);
                     });
 
 
