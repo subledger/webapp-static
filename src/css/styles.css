@@ -6622,6 +6622,21 @@ body {
   background: url('../img/sepshadow_03.png') right bottom transparent no-repeat;
   height: 50px;
 }
+#header .logoCtn a {
+  position: relative;
+}
+#header .logoCtn .beta {
+  background: #28A5C9;
+  border-radius: 3px;
+  color: #FFF;
+  padding: 3px;
+  line-height: 12px;
+  font-size: 12px;
+  position: absolute;
+  float: left;
+  right: -36px;
+  top: 0px;
+}
 #header nav {
   float: right;
   position: relative;
