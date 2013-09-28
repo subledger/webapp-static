@@ -213,7 +213,21 @@ define([
 
 
                 } else {
-                    $(selector).html(template(data));
+                    var $ctn;
+                    if(firstLoad){
+                        $ctn = $("<div class='notbinded' style='display:none;'></div>").html(template(data));
+
+                        $(selector).html($ctn);
+                        $(selector).find(".notbinded article").css("display", "none");
+                        $(selector).find(".notbinded").css("display", "block");
+                        $(selector).find(".notbinded article").slideDown(400, function(){
+                            $(selector+"."+data.layout+"-layout").find(".notbinded article").unwrap();
+                        });
+
+                    } else {
+                        $(selector).html(template(data));
+                    }
+
                     _this.bindTemplate($(selector), firstLoad);
                 }
 
@@ -301,7 +315,6 @@ define([
                          _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
                              _this.DataStructure.addAccountDataToJeLines(book_id, linesId, function(detailedlines){
                                  _this.applyTemplate($(e.currentTarget).parent(".openJournal"), _this.AppView.templates._journal, _this.DataStructure.prepareJournalEntryData(book_id, journal_id, detailedlines));
-
                              });
                          });
 
@@ -344,8 +357,10 @@ define([
 
                                 _this.DataStructure.getJournalsBalance({book: book_id, journals:journalId},function(bookid){
                                     _this.DataStructure.getPostedJournalLines(book_id, journal_id,function(linesId){
-                                        $(_this.AppView.templateSelector.loading).hide();
-                                        _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(book_id, accountId, journalId, linesId));
+                                        _this.DataStructure.addAccountDataToJeLines(book_id, linesId, function(detailedlines){
+                                            $(_this.AppView.templateSelector.loading).hide();
+                                            _this.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._source, _this.DataStructure.prepareSourceData(book_id, accountId, journalId, detailedlines));
+                                        });
                                     });
                                 });
                             });

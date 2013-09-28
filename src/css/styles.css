@@ -6824,6 +6824,10 @@ body {
 #content a.article {
   display: block;
 }
+#content article header a,
+#content .article header a {
+  border-bottom: 0 none;
+}
 #content article .model1,
 #content .article .model1,
 #content article .model2,
@@ -7254,6 +7258,10 @@ table.account th,
 table.account td {
   padding: 10px 0 10px 10px;
 }
+table.account th:first-child,
+table.account td:first-child {
+  padding: 10px 28px 10px 28px;
+}
 table.account tbody {
   text-align: left;
   color: #616367;
@@ -7261,6 +7269,14 @@ table.account tbody {
 }
 table.account tbody tr:nth-child(even) {
   background: url('../img/tablebg_07.jpg');
+}
+table.account .total {
+  background-color: #d5e4e9;
+  border-bottom: 3px double #8e8e8f;
+}
+table.account .number {
+  text-align: right;
+  padding: 10px 28px 10px 0;
 }
 table.source {
   width: 100%;

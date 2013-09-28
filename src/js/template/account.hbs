@@ -18,21 +18,27 @@
                         <tr>
                             <th>Date</th>
                             <th>Description</th>
-                            <th>Debit</th>
-                            <th>Credit</th>
-                            <th>Balance</th>
+                            <th class="number">Debit</th>
+                            <th class="number">Credit</th>
+                            <th class="number">Balance</th>
                         </tr>
                     </thead>
                     <tbody>
 
-
+                             <tr data-journal-id="{{journal_entry}}">
+                                <td><strong>Total</strong></td>
+                                <td></td>
+                                <td class="number total">{{balancetotal.debit_value.amount}}</td>
+                                <td class="number total">{{balancetotal.credit_value.amount}}</td>
+                                <td class="number total">{{balancetotal.value.amount}}</td>
+                            </tr>
                             {{#each lines}}
                                <tr data-journal-id="{{journal_entry}}">
                                    <td>{{date}}</td>
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
-                                   <td>{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
-                                   <td>{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
-                                   <td>{{balance}}</td>
+                                   <td class="number">{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
+                                   <td class="number">{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
+                                   <td class="number">{{balance}}</td>
                                </tr>
                             {{/each}}
 

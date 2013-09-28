@@ -16,7 +16,14 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                     $.each(lines, function(index, value){
                         lines[index].balance = balanceupdated.toFixed(2);
                         console.log(balanceupdated);
-                        balanceupdated = balanceupdated + parseFloat(value.value.amount);
+
+                        if(current.value.type === 'credit'){
+                            balanceupdated = balanceupdated + parseFloat(value.value.amount);
+                        } else {
+                            balanceupdated = balanceupdated - parseFloat(value.value.amount);
+                        }
+
+
                         console.log(balanceupdated, value.value.amount);
 
 

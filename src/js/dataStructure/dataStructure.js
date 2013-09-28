@@ -1041,11 +1041,16 @@ define([
             var balance = parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount);
             $.each(datedlines, function(index, current){
                 datedlines[index].balance = balance.toFixed(2);
-                balance = balance - parseFloat(current.value.amount);
+                if(current.value.type === 'credit'){
+                    balance = balance - parseFloat(current.value.amount);
+                } else {
+                    balance = balance + parseFloat(current.value.amount);
+                }
+
                 datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
             });
 
-
+            var balancetotal = Utils.parse(Account.all().get(accountid).balance());
 
             var result = {
                 id:accountid,
@@ -1053,6 +1058,7 @@ define([
                 ref: account.reference,
                 lines: datedlines,
                 book_id:book.id,
+                balancetotal: balancetotal[0],
                 balance: parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount)
             };
 
@@ -1090,6 +1096,7 @@ define([
                 if(current.value.type === 'credit'){
                     totaldebit = totaldebit + parseFloat(current.value.amount);
                 }
+                current.accountdesc = Utils.parse(Account.all().get(current.account)).description;
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
             });

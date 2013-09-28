@@ -250,6 +250,9 @@ body {
 
 	article,
 	.article{
+        header a{
+            border-bottom:0 none;
+        }
 		.model1,
 		.model2{
 			background-color: #fff;
@@ -450,6 +453,10 @@ table{
 			text-align: left;
 		}
 		th,td{padding:10px 0 10px 10px}
+        th:first-child,
+        td:first-child{
+            padding: 10px 28px 10px 28px;
+        }
 		tbody{
 			text-align: left;
 			color: #616367;
@@ -458,6 +465,14 @@ table{
 		tbody tr:nth-child(even){
 			background:url('../img/tablebg_07.jpg');
 		}
+        .total{
+            background-color: #d5e4e9;
+            border-bottom: 3px double #8e8e8f;
+        }
+        .number{
+            text-align: right;
+            padding: 10px 28px 10px 0;
+        }
 	}
 	&.source {
 		width: 100%;
