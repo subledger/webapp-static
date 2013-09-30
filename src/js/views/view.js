@@ -24,6 +24,7 @@ define([
     'hbs!template/journal',
     'hbs!template/accounts',
     'hbs!template/account',
+    'hbs!template/accountmorelines',
     'hbs!template/newaccount',
     'hbs!template/settings',
     'hbs!template/login',
@@ -31,7 +32,7 @@ define([
     'hbs!template/chart'
 
 ], function (Modernizr, $, _, Backbone, async, Utils, DataStructure, AppEvents, Forms, precompile, JSON,
-             Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, newAccountTemplate, settingsTemplate, loginTemplate, sourceTemplate, chartTemplate ) {
+             Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, accountMoreLinesTemplate, newAccountTemplate, settingsTemplate, loginTemplate, sourceTemplate, chartTemplate ) {
 
     'use strict';
 
@@ -78,6 +79,7 @@ define([
             _journal: JournalTemplate,
             _accounts: accountsTemplate,
             _account: accountTemplate,
+            _accountmorelines: accountMoreLinesTemplate,
             _newAccount: newAccountTemplate,
             _settings: settingsTemplate,
             _login: loginTemplate,

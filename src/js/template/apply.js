@@ -139,7 +139,7 @@ define([
             }
 
         },
-        bindTemplate: function($selector, fl){
+        bindTemplate: function($selector, fl, infiniteScoll){
             var _this = this;
             var firstLoad = false;
             if(fl !== undefined ){ firstLoad = fl; }
@@ -152,9 +152,12 @@ define([
 
             _this.bindEvents($selector);
 
-            if($selector.selector === "#subledgerapp"){
-                _this.bindInfiniteScroll(firstLoad);
+            if(infiniteScoll === undefined || infiniteScoll === true){
+                if($selector.selector === "#subledgerapp"){
+                    _this.bindInfiniteScroll(firstLoad);
+                }
             }
+
 
 
             //Add journal Entry
@@ -172,9 +175,20 @@ define([
               */
 
         },
-        applyTemplate: function(selector, template, data, add, fl, unwrap, addOntop){
+        applyTemplateInTable: function(selector, template, data){
+            $(selector).html(template(data));
+            $(selector).find("tr").css({"display":"none"});
+            if($(selector).find("tr").length < 25){
+                $(selector).next("tfoot").remove();
+            }
+            $(selector).css({"display":"table-row-group"});
+            $(selector).find("tr").slideDown(400);
+
+        },
+        applyTemplate: function(selector, template, data, add, fl, unwrap, addOntop, infiniteScoll){
             var _this = this;
 
+            console.log("infiniteScoll", infiniteScoll);
             //console.log("applyTemplate", selector, data, add, fl);
             var addToTemplate = false;
             if(add !== undefined ){ addToTemplate = add; }
@@ -228,7 +242,7 @@ define([
                         $(selector).html(template(data));
                     }
 
-                    _this.bindTemplate($(selector), firstLoad);
+                    _this.bindTemplate($(selector), firstLoad, infiniteScoll);
                 }
 
             } else {
@@ -330,6 +344,18 @@ define([
                             });
                         });
                         break;
+
+                    case 'moreaccountlines':
+                        var lastid = $(e.currentTarget).parents("tfoot").prev("tbody").find("tr").last().attr("data-line-id");
+                        var lastbalance = $(e.currentTarget).parents("tfoot").prev("tbody").find("tr").last().find("td.number").last().text();
+                        _this.DataStructure.getAccountMoreLines(book_id, id, lastid, function(lines){
+                            $(e.currentTarget).parents("tfoot").prev("tbody").after("<tbody style='display:none;'></tbody>");
+                            _this.applyTemplateInTable($(e.currentTarget).parents("tfoot").prev("tbody"), _this.AppView.templates._accountmorelines, _this.DataStructure.prepareMoreAccountLinesData(book_id, account_id, lastbalance, lines));
+
+                        });
+
+
+                        break;
                     case 'accountfromjeline':
                         _this.DataStructure.clearInterval();
                         _this.applyTemplate(_this.AppView.templateSelector.main, null, "");
@@ -405,6 +431,23 @@ define([
 
                         _this.AppView.logout();
                         break;
+                    case 'addToFavorite':
+
+                        console.log("addToFavorite",$(e.currentTarget));
+                        if( $(e.currentTarget).hasClass("star-plus") ){
+                            $(e.currentTarget).removeClass("star-plus").addClass("star-moins");
+                            _this.DataStructure.addToFavAccount(book_id, id);
+                        } else {
+                            if($(_this.AppView.templateSelector.main).hasClass("favorite-layout")){
+                                $(e.currentTarget).parents("article").remove();
+                            } else {
+                                $(e.currentTarget).removeClass("star-moins").addClass("star-plus");
+                            }
+
+                            _this.DataStructure.removeFromFavAccount(book_id, id);
+                        }
+                        break;
+
                 }
 
             });
@@ -427,14 +470,22 @@ define([
                 var book_id = $(_this.AppView.templateSelector.nav).find("select.book").val();
                 switch (action) {
                     case 'activity-stream':
+                        $(_this.AppView.templateSelector.main).removeClass("favorite-layout");
                         _this.DataStructure.clearInterval();
                         _this.DataStructure.loadActivityStream(book_id);
                         break;
                     case 'accounts':
+                        $(_this.AppView.templateSelector.main).removeClass("favorite-layout");
                         _this.DataStructure.clearInterval();
                         _this.DataStructure.loadAccounts(book_id);
                         break;
+                    case 'favaccounts':
+                        _this.DataStructure.clearInterval();
+                        $(_this.AppView.templateSelector.main).addClass("favorite-layout");
+                        _this.DataStructure.loadFavAccounts(book_id, _this.DataStructure.getFavAccounts(book_id));
+                        break;
                     case 'settings':
+                        $(_this.AppView.templateSelector.main).removeClass("favorite-layout");
                         $(_this.AppView.templateSelector.loading).hide();
                         _this.DataStructure.clearInterval();
                         _this.DataStructure.showSettings();

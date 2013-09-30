@@ -472,9 +472,27 @@ table{
 			color: #616367;
 			text-shadow: 0 1px 0 rgba(255,255,255,.75);
 		}
-		tbody tr:nth-child(even){
-			background:url('../img/tablebg_07.jpg');
-		}
+        tbody tr:nth-child(even){
+            background:url('../img/tablebg_07.jpg');
+        }
+        tbody + tbody + tbody tr:nth-child(even){
+            background:none;
+        }
+        tbody + tbody + tbody tr:nth-child(odd){
+            background:url('../img/tablebg_07.jpg');
+        }
+        tbody + tbody + tbody + tbody tr:nth-child(even){
+            background:url('../img/tablebg_07.jpg');
+        }
+        tbody + tbody + tbody + tbody tr:nth-child(odd){
+            background:none;
+        }
+        tbody + tbody + tbody + tbody + tbody tr:nth-child(even){
+            background:none;
+        }
+        tbody + tbody + tbody + tbody + tbody  tr:nth-child(odd){
+            background:url('../img/tablebg_07.jpg');
+        }
         .total{
             background-color: #d5e4e9;
             border-bottom: 3px double #8e8e8f;

@@ -25,24 +25,31 @@
                     </thead>
                     <tbody>
 
-                             <tr data-journal-id="{{journal_entry}}">
+                             <tr>
                                 <td><strong>Total</strong></td>
                                 <td></td>
                                 <td class="number total">{{balancetotal.debit_value.amount}}</td>
                                 <td class="number total">{{balancetotal.credit_value.amount}}</td>
-                                <td class="number total">{{balancetotal.value.amount}}</td>
+                                <td class="number total">{{#ifCond balancetotal.value.type "credit"}}cr{{/ifCond}}{{#ifCond balancetotal.value.type "debit"}}dr{{/ifCond}}  {{balancetotal.value.amount}}</td>
                             </tr>
                             {{#each lines}}
-                               <tr data-journal-id="{{journal_entry}}">
+                               <tr data-journal-id="{{journal_entry}}" data-line-id="{{id}}">
                                    <td>{{date}}</td>
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
                                    <td class="number">{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
                                    <td class="number">{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
-                                   <td class="number">{{balance}}</td>
+                                   <td class="number">{{#ifCond ../balancetotal.value.type "credit"}}cr{{/ifCond}}{{#ifCond ../balancetotal.value.type "debit"}}dr{{/ifCond}}  {{balance}}</td>
                                </tr>
                             {{/each}}
 
                     </tbody>
+                    {{#if more}}
+                        <tfoot>
+                           <tr data-journal-id="{{journal_entry}}">
+                                <td colspan="5" class="morelines"><a href="#" class="action" data-action="moreaccountlines">Get More lines</a></td>
+                           </tr>
+                        </tfoot>
+                    {{/if}}
 
                 </table>
             </section>

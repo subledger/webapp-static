@@ -78,6 +78,8 @@ define([
             window.loadstatus = this.loadstatus;
             window.loadnum = this.loadnum;
 
+            this.initFavAccount();
+
             Org.has().many('book', {
                 collection: BookCollection,
                 inverse: 'org'
@@ -384,13 +386,12 @@ define([
                 }
             });
         },
-        accountLinesFetch: function(org_id, book_id, account_id, cb, precedingLines){
+        accountLinesFetch: function(org_id, book_id, account_id, cb, lastid){
             var _this = this;
            // console.log("account_id", account_id);
             var last = null;
             var type = "accountline";
-            if(precedingLines !== undefined){
-                last = precedingLines[0].id;
+            if(lastid !== undefined){
                 type = "moreaccountline";
             }
             _this.journal_entrylinecollection.fetch({
@@ -399,28 +400,10 @@ define([
                 book_id: book_id,
                 account_id: account_id,
                 api: this.api,
-                following: last,
+                following: lastid,
                 success: function(resp) {
 
-
-                    var mergeResp = [];
-                    if(precedingLines !== undefined){
-                        mergeResp = precedingLines;
-
-                        $.each(Utils.parse(resp), function(index, value){
-                            mergeResp.push(value);
-                        });
-
-                    } else {
-                        mergeResp = Utils.parse(resp);
-                    }
-
-                    if(resp.length === 25 && mergeResp.length < 50){
-                        //_this.accountLinesFetch(org_id, book_id, account_id, cb, mergeResp);
-                        cb(null, mergeResp);
-                    } else {
-                        cb(null, mergeResp);
-                    }
+                    cb(null, resp);
 
                 },
                 error: function(error) {
@@ -747,6 +730,23 @@ define([
             this.accountLinesFetch(this.org_id, book_id, account_id, callback);
 
         },
+        getAccountMoreLines: function(book_id, account_id, lastid, cb){
+            var count = 0;
+
+            //console.log("*********************************");
+            // console.log("********** GET ACCOUNT LINES **************");
+            // console.log("*********************************");
+
+
+            //var book_id = Utils.parse(Account.all().get(account_id).book()).id;
+
+            var callback = function(err,resp){
+                cb(resp);
+            };
+
+            this.accountLinesFetch(this.org_id, book_id, account_id, callback, lastid);
+
+        },
         getAccountNewLines: function(account_id, cb, last_id){
             var count = 0;
 
@@ -802,6 +802,7 @@ define([
 
             return Utils.parse(Account.all().get(accountid));
         },
+
 
         /**********************************************/
         /****************** PREPARE *******************/
@@ -989,20 +990,26 @@ define([
                 var current = Utils.parse(Account.all().get(value));
                 var balance = Utils.parse(Account.all().get(value).balance());
 
-
                 var partial = {
                     id: current.id,
                     desc: current.description,
                     normal_balance: current.normal_balance,
                     balance: balance[0],
-                    balanceamount: parseFloat(balance[0].value.amount).toFixed(2)
+                    balanceamount: parseFloat(balance[0].value.amount).toFixed(2),
+                    balancetype:  balance[0].value.type,
+                    favorite: _this.isThisFavorite(bookid, current.id)
                 }
                 data.push(partial);
 
             });
 
 
-            var result = { accounts : data,  book_id: bookid, createBtn:createBtn, layout:"accounts" };
+            var result = {
+                accounts : data,
+                book_id: bookid,
+                createBtn:createBtn,
+                layout:"accounts"
+            };
 
             //console.log("test data", result);
 
@@ -1015,10 +1022,23 @@ define([
             return Utils.parse(lines);
         },
         prepareAccountData: function(accountid){
-
+            var _this = this;
             var account = Utils.parse(Account.all().get(accountid));
             var book = Utils.parse(Account.all().get(accountid).book());
             var lines = Utils.parse(Account.all().get(accountid).lines());
+
+            var normalbalance;
+            if(account.normal_balance === "credit"){
+                normalbalance = "cr";
+            } else {
+                normalbalance = "dr";
+            }
+
+            var balancetotal = Utils.parse(Account.all().get(accountid).balance());
+
+            balancetotal[0].value.amount = parseFloat(balancetotal[0].value.amount).toFixed(2);
+            balancetotal[0].credit_value.amount = parseFloat(balancetotal[0].credit_value.amount).toFixed(2);
+            balancetotal[0].debit_value.amount = parseFloat(balancetotal[0].debit_value.amount).toFixed(2);
 
             lines.sort(function(a, b) {
                 return new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime();
@@ -1032,7 +1052,7 @@ define([
                 var month = Utils.months[datetime.getMonth()-1];
 
                 var time = Utils.getTime(datetime, false);
-
+                current.id = current.id;
                 current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
                 datedlines.push(current);
             });
@@ -1041,16 +1061,29 @@ define([
             var balance = parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount);
             $.each(datedlines, function(index, current){
                 datedlines[index].balance = balance.toFixed(2);
-                if(current.value.type === 'credit'){
-                    balance = balance - parseFloat(current.value.amount);
+                if(account.normal_balance === "debit"){
+                    if(current.value.type === 'credit'){
+                        balance = balance + parseFloat(current.value.amount);
+                    } else {
+                        balance = balance - parseFloat(current.value.amount);
+                    }
                 } else {
-                    balance = balance + parseFloat(current.value.amount);
+                    if(current.value.type === 'credit'){
+                        balance = balance - parseFloat(current.value.amount);
+                    } else {
+                        balance = balance + parseFloat(current.value.amount);
+                    }
                 }
+
 
                 datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
             });
 
-            var balancetotal = Utils.parse(Account.all().get(accountid).balance());
+            var more = null;
+            if(datedlines.length === 25){
+                more = datedlines[24].id;
+            }
+
 
             var result = {
                 id:accountid,
@@ -1058,7 +1091,10 @@ define([
                 ref: account.reference,
                 lines: datedlines,
                 book_id:book.id,
+                normalbalance: normalbalance,
                 balancetotal: balancetotal[0],
+                more:more,
+                favorite: _this.isThisFavorite(book.id, accountid),
                 balance: parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount)
             };
 
@@ -1066,6 +1102,78 @@ define([
 
             return result;
 
+        },
+        prepareMoreAccountLinesData: function(book_id, account_id, lastbalance, lines){
+
+            var account = Utils.parse(Account.all().get(account_id));
+            var normalbalance;
+            if(account.normal_balance === "credit"){
+                normalbalance = "cr";
+            } else {
+                normalbalance = "dr";
+            }
+
+            console.log("lastbalance", lastbalance);
+            lastbalance = lastbalance.replace("cr","");
+            lastbalance = lastbalance.replace("dr","");
+            lastbalance = lastbalance.replace(" ","");
+            console.log("lastbalance", lastbalance);
+            lastbalance = parseFloat(lastbalance);
+            console.log("lastbalance", lastbalance);
+
+            lines = Utils.parse(lines);
+            lines.sort(function(a, b) {
+                return new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime();
+            });
+
+
+            var datedlines = [];
+            $.each(lines, function(index, current){
+                var datetime = new Date(current.posted_at);
+
+                var month = Utils.months[datetime.getMonth()-1];
+
+                var time = Utils.getTime(datetime, false);
+                current.id = current.id;
+                current.date = datetime.getDate()+" "+month+" "+datetime.getFullYear() + " - " + time;
+                datedlines.push(current);
+            });
+
+
+            var balance = lastbalance;
+            $.each(datedlines, function(index, current){
+
+                if(account.normal_balance === "debit"){
+                    if(current.value.type === 'credit'){
+                        balance = balance + parseFloat(current.value.amount);
+                    } else {
+                        balance = balance - parseFloat(current.value.amount);
+                    }
+                } else {
+                    if(current.value.type === 'credit'){
+                        balance = balance - parseFloat(current.value.amount);
+                    } else {
+                        balance = balance + parseFloat(current.value.amount);
+                    }
+                }
+                datedlines[index].balance = balance.toFixed(2);
+
+                datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
+            });
+
+            var more = null;
+            if(datedlines.length === 25){
+                more = datedlines[24].id;
+            }
+
+            var result = {
+                lines: datedlines,
+                normalbalance: normalbalance,
+                more:more
+
+            };
+
+            return result;
         },
         prepareSourceData: function(bookid, account, journal, lines){
 
@@ -1124,6 +1232,7 @@ define([
         /**********************************************/
         /******************* ACTIONS ******************/
         /**********************************************/
+
         showSettings: function(){
 
 
@@ -1252,6 +1361,7 @@ define([
 
             _this.Templates.applyTemplate(_this.AppView.templateSelector.main, null, "");
             $(_this.AppView.templateSelector.loading).show();
+
             _this.getNextAccounts({book: book_id},function(accounts){
                 _this.getAccountsBalance({book: book_id, accounts: accounts},function(bookid){
                     $(_this.AppView.templateSelector.loading).hide();
@@ -1259,6 +1369,43 @@ define([
                     _this.Templates.setNavActiveItem("accounts");
                 });
             });
+
+        },
+        loadFavAccounts: function(book_id, accounts){
+            var _this = this;
+            window.clearInterval(_this.journalInterval);
+            $("#content").unbind("scroll");
+            window.DataStructure.loadstatus = false;
+            $(_this.AppView.templateSelector.main).removeClass("journals-layout").removeClass("accounts-layout");
+
+            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, null, "", false, true, null, null, false);
+            $(_this.AppView.templateSelector.loading).show();
+
+            var count = 0;
+            $.each(accounts, function(index, value){
+                var options = {};
+                options.book = book_id;
+                options.current = value;
+                _this.getOneAccount( options, function(accountid){
+                    _this.getAccountsBalance({book: book_id, accounts: accountid},function(bookid){
+                        count++;
+                        if(count ===  accounts.length){
+                            console.log("fav Accounts", accountid, accounts.length, index, count);
+                            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, _this.prepareAccountsData(bookid, accounts, false), false, true, null, null, false);
+                            _this.Templates.setNavActiveItem("favaccounts");
+
+
+                            setTimeout(function(){
+                                $("#content").unbind("scroll");
+                                $(_this.AppView.templateSelector.loading).hide();
+                            }, 2000);
+                        }
+
+                    });
+                });
+            });
+
+
         },
         loadstatus:false,
         loadMoreJournals: function(book_id, callback, lastid){
@@ -1484,6 +1631,97 @@ define([
         clearInterval:function(){
 
             window.clearInterval(this.journalInterval);
+        },
+
+        /**********************************************/
+        /************ FAVORITES ACCOUNTS **************/
+        /**********************************************/
+
+        initFavAccount: function(){
+            var _this = this;
+            _this.favaccountArray = [];
+            console.log(localStorage.favaccount);
+            if(localStorage.favaccount){
+                console.log(JSON.parse(localStorage.favaccount));
+                var favaccountJson = JSON.parse(localStorage.favaccount);
+                $.each(favaccountJson, function(index, current){
+
+
+                    var accountArray = current.accounts.split(",");
+                    console.log(accountArray);
+                    _this.favaccountArray.push({
+                        bookid: current.bookid,
+                        accounts: accountArray
+                    })
+                });
+            }
+
+        },
+        saveFavAccount: function(){
+            var _this = this;
+
+            var favaccount = [];
+            $.each( _this.favaccountArray, function(index, current){
+
+                var accountString = "";
+                $.each(current.accounts, function(i, value){
+                    accountString = accountString + value +",";
+                });
+                accountString = accountString.substring(0, accountString.length-1);
+                favaccount.push({bookid:current.bookid, accounts: accountString });
+            });
+
+            localStorage.setItem("favaccount", JSON.stringify(favaccount) );
+        },
+        isThisFavorite: function(bookid, accountid){
+            var _this = this;
+            var string = "plus";
+            $.each( _this.favaccountArray, function(index, current){
+
+                    if(current.bookid === bookid){
+                        if ($.inArray(accountid, current.accounts) > -1) {
+                            string = "moins";
+                        }
+                    }
+            });
+            return string;
+        },
+        addToFavAccount: function(bookid, accountid){
+            var _this = this;
+            var bookExist = false;
+            $.each( _this.favaccountArray, function(index, current){
+                if(current.bookid === bookid){
+                    _this.favaccountArray[index].accounts.push(accountid);
+                    bookExist = true;
+                }
+            });
+            if(!bookExist){
+                _this.favaccountArray.push({bookid:bookid, accounts:[accountid]})
+            }
+            _this.saveFavAccount();
+        },
+        removeFromFavAccount: function(bookid, accountid){
+            var _this = this;
+            $.each( _this.favaccountArray, function(index, current){
+                if(current.bookid === bookid){
+
+                    if (_this.favaccountArray[index].accounts.indexOf(accountid) > -1) {
+                        _this.favaccountArray[index].accounts.splice(_this.favaccountArray[index].accounts.indexOf(accountid), 1);
+                    }
+                }
+            });
+
+            _this.saveFavAccount();
+        },
+        getFavAccounts: function(bookid){
+            var _this = this;
+            var accounts;
+            $.each( _this.favaccountArray, function(index, current){
+                if(current.bookid === bookid){
+                    accounts = _this.favaccountArray[index].accounts;
+                }
+            });
+            return accounts
         }
     };
 

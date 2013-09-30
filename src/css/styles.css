@@ -6532,6 +6532,35 @@ strong {
   padding-right: 5%;
   content: url('../img/icon-money-small.png');
 }
+.icon.star:before {
+  position: relative;
+  left: -5%;
+  width: 21px;
+  height: 21px;
+  top: 5px;
+  padding-right: 5%;
+  content: url('../img/icon-star-small.png');
+}
+.icon.star-plus {
+  text-indent: -555000px;
+  position: relative;
+  left: 5%;
+  width: 25px;
+  height: 25px;
+  top: 5px;
+  content: url('../img/icon-star-plus.png');
+  margin-right: 5%;
+}
+.icon.star-moins {
+  text-indent: -555000px;
+  position: relative;
+  left: 5%;
+  width: 25px;
+  height: 25px;
+  top: 5px;
+  content: url('../img/icon-star-moins.png');
+  margin-right: 5%;
+}
 .icon.stream:before {
   position: relative;
   left: -5%;
@@ -7283,6 +7312,24 @@ table.account tbody {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 table.account tbody tr:nth-child(even) {
+  background: url('../img/tablebg_07.jpg');
+}
+table.account tbody + tbody + tbody tr:nth-child(even) {
+  background: none;
+}
+table.account tbody + tbody + tbody tr:nth-child(odd) {
+  background: url('../img/tablebg_07.jpg');
+}
+table.account tbody + tbody + tbody + tbody tr:nth-child(even) {
+  background: url('../img/tablebg_07.jpg');
+}
+table.account tbody + tbody + tbody + tbody tr:nth-child(odd) {
+  background: none;
+}
+table.account tbody + tbody + tbody + tbody + tbody tr:nth-child(even) {
+  background: none;
+}
+table.account tbody + tbody + tbody + tbody + tbody tr:nth-child(odd) {
   background: url('../img/tablebg_07.jpg');
 }
 table.account .total {
