@@ -1382,28 +1382,33 @@ define([
             $(_this.AppView.templateSelector.loading).show();
 
             var count = 0;
-            $.each(accounts, function(index, value){
-                var options = {};
-                options.book = book_id;
-                options.current = value;
-                _this.getOneAccount( options, function(accountid){
-                    _this.getAccountsBalance({book: book_id, accounts: accountid},function(bookid){
-                        count++;
-                        if(count ===  accounts.length){
-                            console.log("fav Accounts", accountid, accounts.length, index, count);
-                            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, _this.prepareAccountsData(bookid, accounts, false), false, true, null, null, false);
-                            _this.Templates.setNavActiveItem("favaccounts");
+            if(accounts !== undefined){
+                $.each(accounts, function(index, value){
+                    var options = {};
+                    options.book = book_id;
+                    options.current = value;
+                    _this.getOneAccount( options, function(accountid){
+                        _this.getAccountsBalance({book: book_id, accounts: accountid},function(bookid){
+                            count++;
+                            if(count ===  accounts.length){
+                                console.log("fav Accounts", accountid, accounts.length, index, count);
+                                _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._accounts, _this.prepareAccountsData(bookid, accounts, false), false, true, null, null, false);
+                                _this.Templates.setNavActiveItem("favaccounts");
 
 
-                            setTimeout(function(){
-                                $("#content").unbind("scroll");
-                                $(_this.AppView.templateSelector.loading).hide();
-                            }, 2000);
-                        }
+                                setTimeout(function(){
+                                    $("#content").unbind("scroll");
+                                    $(_this.AppView.templateSelector.loading).hide();
+                                }, 2000);
+                            }
 
+                        });
                     });
                 });
-            });
+            } else {
+                _this.Templates.applyTemplate(_this.AppView.templateSelector.main, null, "You have no Favorite Accounts", false, true, null, null, false);
+            }
+
 
 
         },
@@ -1642,7 +1647,7 @@ define([
             _this.favaccountArray = [];
             console.log(localStorage.favaccount);
             if(localStorage.favaccount){
-                console.log(JSON.parse(localStorage.favaccount));
+                //console.log(JSON.parse(localStorage.favaccount));
                 var favaccountJson = JSON.parse(localStorage.favaccount);
                 $.each(favaccountJson, function(index, current){
 
@@ -1716,11 +1721,14 @@ define([
         getFavAccounts: function(bookid){
             var _this = this;
             var accounts;
-            $.each( _this.favaccountArray, function(index, current){
-                if(current.bookid === bookid){
-                    accounts = _this.favaccountArray[index].accounts;
-                }
-            });
+            if(_this.favaccountArray !== undefined){
+                $.each( _this.favaccountArray, function(index, current){
+                    if(current.bookid === bookid){
+                        accounts = _this.favaccountArray[index].accounts;
+                    }
+                });
+            }
+
             return accounts
         }
     };

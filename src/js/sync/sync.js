@@ -230,7 +230,8 @@ define([
                         options.api.organization(options.org_id).book(options.book_id).account().get(params, function(e,d){ cb(e, d.active_accounts); });
                         break;
                     case 'oneaccount':
-                        options.api.organization(options.org_id).book(options.book_id).account(options.current).get(function(e,d){ cb(e, d.active_account); });
+                        console.log("options.current", options.current);
+                        options.api.organization(options.org_id).book(options.book_id).account(options.current).get( function(e,d){ cb(e, d.active_account); });
                         break;
 
                     case 'accountbalance':

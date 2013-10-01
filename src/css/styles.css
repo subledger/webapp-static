@@ -6868,6 +6868,11 @@ body {
 #content a.article {
   display: block;
 }
+#content header .star-plus,
+#content header .star-moins {
+  display: inline-block;
+  margin-top: -10px;
+}
 #content article header a,
 #content .article header a {
   border-bottom: 0 none;
@@ -7017,6 +7022,10 @@ body {
 #content article .model2 .header:after,
 #content .article .model2 .header:after {
   clear: both;
+}
+#content article .model2 .header .left,
+#content .article .model2 .header .left {
+  width: 60%;
 }
 #content article .model2 .block1,
 #content .article .model2 .block1 {
