@@ -117,7 +117,7 @@ define(['jquery','highcharts','highchartsmodule1'] , function ($, Highcharts) {
                 },
                 xAxis: {
                     type: 'datetime',
-                    maxZoom: 3600000,
+                    maxZoom: 36000,
                     title: {
                         text: null
                     }

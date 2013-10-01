@@ -1049,7 +1049,7 @@ define([
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
 
-                var month = Utils.months[datetime.getMonth()-1];
+                var month = Utils.months[datetime.getMonth()];
 
                 var time = Utils.getTime(datetime, false);
                 current.id = current.id;
@@ -1074,7 +1074,16 @@ define([
                         balance = balance + parseFloat(current.value.amount);
                     }
                 }
+                datedlines[index].linebalance = normalbalance;
 
+                if(datedlines[index].balance < 0){
+                    datedlines[index].balance = 0 - datedlines[index].balance;
+                    if(normalbalance === "cr"){
+                        datedlines[index].linebalance = "dr";
+                    } else {
+                        datedlines[index].linebalance = "cr";
+                    }
+                }
 
                 datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
             });
@@ -1248,38 +1257,42 @@ define([
         bindLoadNewActivityStream: function(book_id, $first){
             var _this = this;
             $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").click(function(){
-                var $cloneLoading = $(window.AppView.templateSelector.loading).clone();
-                $cloneLoading.appendTo($(_this.AppView.templateSelector.main).find(".noticePreviousJournals"));
-                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).css("margin-top", "15px");
-                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).css("padding-bottom", "35px");
-                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).show();
+                var nb = $(this).attr("data-new-nb");
+                if(nb > 25){
+                    _this.loadActivityStream(book_id);
+                } else {
+                    var $cloneLoading = $(window.AppView.templateSelector.loading).clone();
+                    $cloneLoading.appendTo($(_this.AppView.templateSelector.main).find(".noticePreviousJournals"));
+                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).css("margin-top", "15px");
+                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).css("padding-bottom", "35px");
+                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals "+window.AppView.templateSelector.loading).show();
 
-                window.clearInterval(_this.journalInterval);
+                    window.clearInterval(_this.journalInterval);
 
-                _this.getPreviousJournals({book: book_id, following: $first.attr("data-id")}, function(journalsId){
-                    //console.log("preceding journals", journalsId);
+                    _this.getPreviousJournals({book: book_id, following: $first.attr("data-id")}, function(journalsId){
+                        //console.log("preceding journals", journalsId);
 
-                    _this.getJournalsBalance({book: book_id, journals:journalsId},function(bookid){
-                        if($("#content").find('article[data-id="'+journalsId[0]+'"]').length === 0 ){
-                            if($("#subledgerapp").hasClass("journals-layout")){
+                        _this.getJournalsBalance({book: book_id, journals:journalsId},function(bookid){
+                            if($("#content").find('article[data-id="'+journalsId[0]+'"]').length === 0 ){
+                                if($("#subledgerapp").hasClass("journals-layout")){
 
-                                setTimeout(function(){
-                                    $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideUp(400, function(){
-                                        $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").remove();
-                                    });
-                                }, 500);
+                                    setTimeout(function(){
+                                        $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideUp(400, function(){
+                                            $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").remove();
+                                        });
+                                    }, 500);
 
 
-                                _this.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journalsId), true, null, null, true);
-                                _this.bindActivityStreamNotice(book_id);
+                                    _this.Templates.applyTemplate(window.AppView.templateSelector.main, window.AppView.templates._draftJournals, window.DataStructure.prepareJournalsEntryData(book_id, journalsId), true, null, null, true);
+                                    _this.bindActivityStreamNotice(book_id);
+                                }
                             }
-                        }
 
-                        $(window.AppView.templateSelector.loading).hide();
+                            $(window.AppView.templateSelector.loading).hide();
 
+                        });
                     });
-                });
-
+                }
             });
         },
         bindActivityStreamNotice: function(book_id){
@@ -1303,13 +1316,17 @@ define([
                             if(journalsId.length > 0){
                                 if($(_this.AppView.templateSelector.main).find(".noticePreviousJournals").length > 0){
                                     $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").text(journalsId.length+" new Journals Entries");
+
                                 } else {
 
-                                    $first.before("<div class='noticePreviousJournals' style='display:none;'>"+journalsId.length+" new Journals Entries</div>");
+                                    $first.before("<div class='noticePreviousJournals' style='display:none;'>"+journalsId.length+" new Journal Entry</div>");
                                     $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").slideDown();
                                     _this.bindLoadNewActivityStream(book_id, $first);
+
+
                                 }
 
+                                $(_this.AppView.templateSelector.main).find(".noticePreviousJournals").attr("data-new-nb", journalsId.length);
                             }
                         }
 

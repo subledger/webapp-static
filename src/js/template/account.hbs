@@ -38,7 +38,7 @@
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
                                    <td class="number">{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
                                    <td class="number">{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
-                                   <td class="number">{{#ifCond ../balancetotal.value.type "credit"}}cr{{/ifCond}}{{#ifCond ../balancetotal.value.type "debit"}}dr{{/ifCond}}  {{balance}}</td>
+                                   <td class="number">{{linebalance}} {{balance}}</td>
                                </tr>
                             {{/each}}
 
