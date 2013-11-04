@@ -136,8 +136,8 @@ define([
                        break;
 
                    default:
-                       DataStructure.loadReports("MKscbFJDlyd8dX6gAaTNv7");
-                        //DataStructure.loadActivityStream(book_id);
+                       //DataStructure.loadReports("MKscbFJDlyd8dX6gAaTNv7");
+                       DataStructure.loadActivityStream(book_id);
                        break;
                }
 

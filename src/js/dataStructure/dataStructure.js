@@ -1679,7 +1679,7 @@ define([
         initFavAccount: function(){
             var _this = this;
             _this.favaccountArray = [];
-            console.log(localStorage.favaccount);
+            //console.log(localStorage.favaccount);
             if(localStorage.favaccount){
                 //console.log(JSON.parse(localStorage.favaccount));
                 var favaccountJson = JSON.parse(localStorage.favaccount);
@@ -1687,7 +1687,7 @@ define([
 
 
                     var accountArray = current.accounts.split(",");
-                    console.log(accountArray);
+                    //console.log(accountArray);
                     _this.favaccountArray.push({
                         bookid: current.bookid,
                         accounts: accountArray

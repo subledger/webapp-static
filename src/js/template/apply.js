@@ -214,7 +214,7 @@ define([
         applyTemplate: function(selector, template, data, add, fl, unwrap, addOntop, infiniteScoll){
             var _this = this;
 
-            console.log("infiniteScoll", infiniteScoll);
+            //console.log("infiniteScoll", infiniteScoll);
             //console.log("applyTemplate", selector, data, add, fl);
             var addToTemplate = false;
             if(add !== undefined ){ addToTemplate = add; }
