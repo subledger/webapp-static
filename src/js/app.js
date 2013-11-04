@@ -23,8 +23,8 @@ require.config({
         forms                 : 'forms/forms',
         selectyze             : 'libs/selectyze/jquery/Selectyze.jquery',
         timepicker            : 'libs/jt.timepicker/jquery.timepicker',
-		highcharts            : 'libs/highcharts.com/js/highcharts.src',
-		highchartsmodule1     : 'libs/highcharts.com/js/modules/exporting.src',
+		    highcharts            : 'libs/highcharts.com/js/highcharts.src',
+    		highchartsmodule1     : 'libs/highcharts.com/js/modules/exporting.src',
         jqueryui              : 'libs/jquery-ui-1.10.3.custom'
     },
     shim : {

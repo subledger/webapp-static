@@ -9,8 +9,10 @@ define([
     'models/balancejournal',
     'models/journal_entryline',
     'models/account_line',
-    'models/posted_journal_entryline'
-], function ($, Backbone, Utils, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line, Posted_Journal_entryline) {
+    'models/posted_journal_entryline',
+    'models/report',
+    'models/report_rendering'
+], function ($, Backbone, Utils, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line, Posted_Journal_entryline, Report, ReportRendering) {
 
 
     Backbone.sync = function(method, model, options) {
@@ -96,7 +98,23 @@ define([
                                     $.each(Utils.parse(data), function(index, current){
                                         Posted_Journal_entryline.create(current);
                                     });
-                            }
+
+                                case 'report':
+                                    switch(options.action) {
+                                      case 'render':
+                                        ReportRendering.create(Utils.parse(data));
+                                        break;
+
+                                      default:
+                                        $.each(Utils.parse(data), function(index, current){
+                                          Report.create(current);
+                                        });
+                                        break;
+                                    }
+                                case 'reportrendering':
+                                    ReportRendering.create(Utils.parse(data));
+                                    break;
+                              }
                             break;
 
                     }
@@ -151,8 +169,20 @@ define([
                         options.api.organization(options.org_id).book( options.book_id ).account().create( Utils.parse(model), function(e,d){ cb(e,d) });
                         break;
                     case 'journalentry':
-                            options.api.organization(options.org_id).book( options.book_id ).journalEntry().createAndPost( Utils.parse(model), function(e,d){ cb(e,d) });
-
+                        options.api.organization(options.org_id).book( options.book_id ).journalEntry().createAndPost( Utils.parse(model), function(e,d){ cb(e,d) });
+                        break;
+                    case 'report':
+                        switch (options.action) {
+                            case 'render':
+                                options.api.organization(options.org_id).book( options.book_id ).report( options.report_id ).render({at: options.at}, function(e,d){
+                                  if (d.completed_report_rendering) {
+                                    cb(e, d.completed_report_rendering);
+                                  } else {
+                                    cb(e, d.building_report_rendering);
+                                  }
+                                });
+                                break;
+                        }
 
                         break;
                 }
@@ -261,6 +291,19 @@ define([
                         break;
                     case 'postedentryline':
                         options.api.organization(options.org_id).book(options.book_id).journalEntry(options.journal_id).line().get({action:options.action, state:options.state},function(e,d){ cb(e, d.posted_lines); });
+                        break;
+                    case 'report':
+                        options.api.organization(options.org_id).book(options.book_id).report().get(function(e,d){ cb(e, d.active_reports); });
+                        break;
+
+                    case 'reportrendering':
+                        options.api.organization(options.org_id).book(options.book_id).report_rendering(options.report_rendering_id).get(function(e,d){
+                          if (d.completed_report_rendering) {
+                            cb(e, d.completed_report_rendering);
+                          } else {
+                            cb(e, d.building_report_rendering);
+                          }
+                        });
                         break;
                 }
                 break;

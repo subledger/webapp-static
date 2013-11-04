@@ -19,6 +19,8 @@ define([
     'collection/journal_entrylinecollection',
     'collection/account_linecollection',
     'collection/posted_journal_entrylinecollection',
+    'collection/reportcollection',
+    'collection/report_renderingcollection',
 
     'models/identity',
     'models/org',
@@ -30,13 +32,15 @@ define([
     'models/journal_entryline',
     'models/account_line',
     'models/posted_journal_entryline',
+    'models/report',
+    'models/report_rendering',
 
     'subledger'
 
 
 ], function ($, _, Backbone, async, Utils, AppEvents,
-             IdentityCollection, OrgCollection, BookCollection, AccountCollection, Journal_entryCollection, BalanceAccountCollection, BalanceJournalCollection, Journal_entrylineCollection, Account_lineCollection, Posted_Journal_entrylineCollection,
-             Identity, Org, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line, Posted_Journal_entryline){
+             IdentityCollection, OrgCollection, BookCollection, AccountCollection, Journal_entryCollection, BalanceAccountCollection, BalanceJournalCollection, Journal_entrylineCollection, Account_lineCollection, Posted_Journal_entrylineCollection, ReportCollection, Report_renderingCollection,
+             Identity, Org, Book, Account, Journal_entry, BalanceAccount, BalanceJournal, Journal_entryline, Account_line, Posted_Journal_entryline, Report, Report_rendering){
 
     'use strict';
 
@@ -155,6 +159,15 @@ define([
                 inverse: 'posted_lines'
             });
 
+            Book.has().many('reports', {
+                collection: ReportCollection,
+                inverse: 'book'
+            });
+
+            Report.has().many('report_renderings', {
+                collection: Report_renderingCollection,
+                inverse: 'report'
+            });
 
             this.identitycollection = new IdentityCollection;
             this.orgcollection = new OrgCollection;
@@ -165,6 +178,8 @@ define([
             this.balancejournalcollection = new BalanceJournalCollection;
             this.journal_entrylinecollection = new Journal_entrylineCollection;
             this.posted_journal_entrylinecollection = new Posted_Journal_entrylineCollection;
+            this.reportcollection = new ReportCollection;
+            this.report_renderingcollection = new Report_renderingCollection;
         },
         clearData: function(){
             Identity.reset();
@@ -177,6 +192,8 @@ define([
             BalanceJournal.reset();
             Journal_entryline.reset();
             Posted_Journal_entryline.reset();
+            Report.reset();
+            Report_rendering.reset();
         },
         nodata: function(message){
             AppEvents.trigger("nodata", message)
@@ -1747,7 +1764,172 @@ define([
             }
 
             return accounts
-        }
+        },
+
+        loadReports: function(book_id){
+          var _this = this;
+
+          window.clearInterval(_this.journalInterval);
+          window.DataStructure.loadstatus = false;
+
+          $(_this.AppView.templateSelector.main).removeClass("journals-layout").addClass("reports-layout");
+          _this.Templates.applyTemplate(_this.AppView.templateSelector.main, null, "");
+          $(_this.AppView.templateSelector.loading).show();
+
+          _this.getNextReports({book: book_id}, function(reports){
+            $(_this.AppView.templateSelector.loading).hide();
+            _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._reports, _this.prepareReportsData(book_id, reports), false, true);
+            _this.Templates.setNavActiveItem("reports");
+          });
+        },
+
+        getNextReports: function(options, cb){
+          var book_id = options.book;
+          var last_id = options.following;
+
+          var callback = function(err, data){
+            if(err === null){
+              var reports = [];
+              $.each(Utils.parse(data), function(index, value){
+                reports.push(value.id);
+              });
+              cb(reports);
+            } else {
+              cb(null);
+            }
+          };
+
+          this.reportFetch(this.org_id, book_id, last_id, null, callback);
+        },
+
+        reportFetch: function(org_id, book_id, last_id, current, cb){
+          var type = "report";
+
+          if(current !== null && current !== undefined){
+            type = "onereport";
+          }
+
+          this.reportcollection.fetch({
+            type: type,
+            org_id: org_id,
+            book_id: book_id,
+            api: this.api,
+            last_id: last_id,
+            current: current,
+            success: function(resp) {
+              cb(null, resp);
+            },
+            error: function(error) {
+              cb(error);
+            }
+          });
+        },
+
+        prepareReportsData: function(bookid, reports){
+          var data = [];
+          var reportsIdsArray = reports;
+          var _this = this;
+
+          $.each(reportsIdsArray, function(index, value){
+            var current = Utils.parse(Report.all().get(value));
+
+            var partial = {
+              id: current.id,
+              description: current.description,
+              reference: current.reference,
+              version: current.version
+            }
+
+            data.push(partial);
+          });
+
+          var result = {
+            reports : data,
+            book_id: bookid,
+            layout: "reports"
+          };
+
+          return result;
+        },
+
+        renderReport: function(book_id, report_id, date) {
+          var _this = this;
+
+          var at = null;
+          if (date) {
+            at = date.toISOString();
+          }
+
+          _this.report_renderingcollection.create({}, {
+            type: "report",
+            action: "render",
+            org_id: _this.org_id,
+            book_id: book_id,
+            report_id: report_id,
+            at: at,
+            api: _this.api,
+            success: function(report_rendering) {
+              _this.updateReportRendering(book_id, report_rendering);
+            }
+          });
+        },
+
+        updateReportRendering: function(book_id, report_rendering) {
+          var _this = this;
+          var report_id = report_rendering.get('report');
+
+          $("article[data-id='" + report_id + "'] .progress-bar").css("width", 0);
+          $("article[data-id='" + report_id + "'] .progress").show();
+
+          var intervalHandler = setInterval(function() {
+            _this.fetchReportRendering(book_id, report_rendering, function(data) {
+              var percentage = data.get('progress').percentage;
+
+              if (percentage === 100) {
+                clearInterval(intervalHandler);
+                $("article[data-id='" + report_id + "'] .progress-bar").css("width", "100%");
+
+                console.log(data);
+
+                setTimeout(function() {
+                  _this.Templates.applyTemplate(_this.AppView.templateSelector.main, _this.AppView.templates._reportRendering,  _this.prepareReportRenderingData(book_id, data) );
+                }, 500);
+
+              } else {
+                $("article[data-id='" + report_id + "'] .progress-bar").css("width", percentage + "%");
+              }
+            });
+          }, 1000);
+        },
+
+        fetchReportRendering: function(book_id, report_rendering, callback) {
+          var _this = this;
+
+          report_rendering.fetch({
+            type: "reportrendering",
+            action: "get",
+            org_id: _this.org_id,
+            book_id: book_id,
+            report_rendering_id: report_rendering.id,
+            api: _this.api,
+            success: function(data) {
+              if (callback !== undefined) {
+                callback(data);
+              }
+            }
+          });
+        },
+
+        prepareReportRenderingData: function(book_id, report_rendering){
+          var result = {
+            report_rendering: report_rendering,
+            categories : report_rendering.get('categories'),
+            book_id: book_id,
+            layout: "reportsrendering"
+          };
+
+          return result;
+        },
     };
 
     return DataStructure;

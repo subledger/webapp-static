@@ -1,0 +1,61 @@
+<a href="#" class="action" data-action="reportsList" data-book-id="{{book_id}}">&#60; Back to List</a>
+<br/><br/>
+
+{{#if categories}}
+  {{#each categories}}
+		<article class="reportRendering">
+      <header>
+        <div class="row">
+          <div class="col-md-10 description">
+            {{description}}
+          </div>
+
+          <div class="col-md-2 balance">
+            {{balance.value.amount}}
+          </div>
+        </div>
+      </header>
+
+      {{#if categories}}
+        <article class="reportRenderingSub">
+
+          {{#each categories}}
+            <header>
+              <div class="row">
+                <div class="col-md-10 description">
+                  {{description}}
+                </div>
+
+                <div class="col-md-2 balance">
+                  {{balance.value.amount}}
+                </div>
+              </div>
+            </header>
+
+            {{#if categories}}
+              <article class="reportRenderingSubSub">
+                {{#each categories}}
+                  <header>
+                    <div class="row">
+                      <div class="col-md-10 description">
+                        {{description}}
+                      </div>
+
+                      <div class="col-md-2 balance">
+                        {{balance.value.amount}}
+                      </div>
+                    </div>
+                  </header>
+                {{/each}}        
+              </article>
+            {{/if}}
+          {{/each}}
+
+        </article>
+      {{/if}}
+
+		</article>
+  {{/each}}
+{{else}}
+  Report has no Categories
+{{/if}}

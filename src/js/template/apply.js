@@ -57,6 +57,30 @@ define([
             });
 
         },
+
+        bindDateTimePicker: function($selector) {
+          $(".datetimepicker", $selector).each(function() {
+            var datePickerEl = $(this);
+            var handlerEl = $(datePickerEl.data('handler'));
+
+            datePickerEl.datepicker({
+              dateFormat: "d MM y",
+              gotoCurrent: true,
+              showButtonPanel: true,
+              closeText: "Set",
+              onSelect: function () {
+                handlerEl.html(datePickerEl.val());
+              }
+            });
+
+            datePickerEl.hide();
+
+            handlerEl.on("click", function() {
+              datePickerEl.datepicker("show");
+            });
+          });
+        },
+
         bindPrettySelect: function($selector){
             var _this = this;
 
@@ -149,6 +173,8 @@ define([
             _this.bindTimePicker($selector);
 
             _this.bindDatePicker($selector);
+
+            _this.bindDateTimePicker($selector);
 
             _this.bindEvents($selector);
 
@@ -448,6 +474,16 @@ define([
                         }
                         break;
 
+                    case 'renderReport':
+                        var date = $(".report[data-id='" + id + "'] .datetimepicker").datepicker("getDate");
+                        _this.DataStructure.renderReport(book_id, id, date);
+                        break;
+
+                    case 'reportsList':
+                        $(_this.AppView.templateSelector.main).removeClass("favorite-layout");
+                        _this.DataStructure.clearInterval();
+                        _this.DataStructure.loadReports(book_id);
+                        break;
                 }
 
             });
@@ -489,6 +525,11 @@ define([
                         $(_this.AppView.templateSelector.loading).hide();
                         _this.DataStructure.clearInterval();
                         _this.DataStructure.showSettings();
+                        break;
+                    case 'reports':
+                        $(_this.AppView.templateSelector.main).removeClass("favorite-layout");
+                        _this.DataStructure.clearInterval();
+                        _this.DataStructure.loadReports(book_id);
                         break;
                 }
             });

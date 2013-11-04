@@ -29,10 +29,12 @@ define([
     'hbs!template/settings',
     'hbs!template/login',
     'hbs!template/source',
-    'hbs!template/chart'
+    'hbs!template/chart',
+    'hbs!template/reports',
+    'hbs!template/reportrendering'
 
 ], function (Modernizr, $, _, Backbone, async, Utils, DataStructure, AppEvents, Forms, precompile, JSON,
-             Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, accountMoreLinesTemplate, newAccountTemplate, settingsTemplate, loginTemplate, sourceTemplate, chartTemplate ) {
+             Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, accountMoreLinesTemplate, newAccountTemplate, settingsTemplate, loginTemplate, sourceTemplate, chartTemplate, reportsTemplate, reportRenderingTemplate ) {
 
     'use strict';
 
@@ -84,7 +86,9 @@ define([
             _settings: settingsTemplate,
             _login: loginTemplate,
             _source: sourceTemplate,
-            _chart: chartTemplate
+            _chart: chartTemplate,
+            _reports: reportsTemplate,
+            _reportRendering: reportRenderingTemplate
         },
 
 
@@ -120,14 +124,20 @@ define([
                //if we want to do deek linkings
                switch(_this.currentPage){
                    case 'activity-stream':
-
                        DataStructure.loadActivityStream(book_id);
                        break;
+
                    case 'accounts':
                        DataStructure.loadAccounts(book_id);
                        break;
+
+                   case 'reports':
+                       DataStructure.loadReports(book_id);
+                       break;
+
                    default:
-                       DataStructure.loadActivityStream(book_id);
+                       DataStructure.loadReports("MKscbFJDlyd8dX6gAaTNv7");
+                        //DataStructure.loadActivityStream(book_id);
                        break;
                }
 
