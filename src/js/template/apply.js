@@ -3,12 +3,13 @@ define([
     'handlebars',
     'template/helpers/ifCond',
     'template/helpers/formatAmount',
+    'template/helpers/formatBalance',
     'utils',
     'chart/chart',
     'selectyze',
     'jqueryui',
     'timepicker'
-], function ($, Handlebars, ifCond, formatAmount, Utils, Chart) {
+], function ($, Handlebars, ifCond, formatAmount, formatBalance, Utils, Chart) {
     var Template = {
 
         prepareTemplate: function(AppView, DataStructure){

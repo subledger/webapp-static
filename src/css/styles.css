@@ -6921,6 +6921,7 @@ body {
 #content article .model1.small .col2,
 #content .article .model1.small .col2 {
   width: 65%;
+  overflow: hidden;
 }
 #content article .model1.transparent,
 #content .article .model1.transparent {
@@ -7323,6 +7324,7 @@ table.account td {
 table.account th:first-child,
 table.account td:first-child {
   padding: 10px 28px 10px 28px;
+  width: 230px;
 }
 table.account tbody {
   text-align: left;

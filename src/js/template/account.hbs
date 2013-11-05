@@ -30,7 +30,7 @@
                                 <td></td>
                                 <td class="number total">{{formatAmount account balancetotal.debit_value}}</td>
                                 <td class="number total">{{formatAmount account balancetotal.credit_value}}</td>
-                                <td class="number total">{{formatAmount account balancetotal.value}}</td>
+                                <td class="number total">{{formatBalance account balancetotal.value}}</td>
                             </tr>
                             {{#each lines}}
                                <tr data-journal-id="{{journal_entry}}" data-line-id="{{id}}">
@@ -38,7 +38,7 @@
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
                                    <td class="number">{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{formatAmount ../../account value}}</a>{{/ifCond}}</td>
                                    <td class="number">{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{formatAmount ../../account value}}</a>{{/ifCond}}</td>
-                                   <td class="number">{{formatAmount ../../account balance.value}}</td>
+                                   <td class="number">{{formatBalance ../../account balance.value}}</td>
                                </tr>
                             {{/each}}
 
@@ -46,7 +46,7 @@
                     {{#if more}}
                         <tfoot>
                            <tr data-journal-id="{{journal_entry}}">
-                                <td colspan="5" class="morelines"><a href="#" class="action" data-action="moreaccountlines">Get More lines</a></td>
+                               <td colspan="5" class="morelines"><a href="#" class="action" data-action="moreaccountlines" data-id="{{account.id}}">Get More lines</a></td>
                            </tr>
                         </tfoot>
                     {{/if}}
