@@ -28,17 +28,17 @@
                              <tr>
                                 <td><strong>Total</strong></td>
                                 <td></td>
-                                <td class="number total">{{balancetotal.debit_value.amount}}</td>
-                                <td class="number total">{{balancetotal.credit_value.amount}}</td>
-                                <td class="number total">{{#ifCond balancetotal.value.type "credit"}}cr{{/ifCond}}{{#ifCond balancetotal.value.type "debit"}}dr{{/ifCond}}  {{balancetotal.value.amount}}</td>
+                                <td class="number total">{{formatAmount account balancetotal.debit_value}}</td>
+                                <td class="number total">{{formatAmount account balancetotal.credit_value}}</td>
+                                <td class="number total">{{formatAmount account balancetotal.value}}</td>
                             </tr>
                             {{#each lines}}
                                <tr data-journal-id="{{journal_entry}}" data-line-id="{{id}}">
                                    <td>{{date}}</td>
                                    <td><a href="{{reference}}" target="_blank">{{description}}</a></td>
-                                   <td class="number">{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
-                                   <td class="number">{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{amount}}</a>{{/ifCond}}</td>
-                                   <td class="number">{{linebalance}} {{balance}}</td>
+                                   <td class="number">{{#ifCond value.type "debit"}}<a href="#" class="action" data-action="source">{{formatAmount ../../account value}}</a>{{/ifCond}}</td>
+                                   <td class="number">{{#ifCond value.type "credit"}}<a href="#" class="action" data-action="source">{{formatAmount ../../account value}}</a>{{/ifCond}}</td>
+                                   <td class="number">{{formatAmount ../../account balance.value}}</td>
                                </tr>
                             {{/each}}
 

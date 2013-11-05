@@ -1044,24 +1044,13 @@ define([
             var book = Utils.parse(Account.all().get(accountid).book());
             var lines = Utils.parse(Account.all().get(accountid).lines());
 
-            var normalbalance;
-            if(account.normal_balance === "credit"){
-                normalbalance = "cr";
-            } else {
-                normalbalance = "dr";
-            }
-
             var balancetotal = Utils.parse(Account.all().get(accountid).balance());
-
-            balancetotal[0].value.amount = parseFloat(balancetotal[0].value.amount).toFixed(2);
-            balancetotal[0].credit_value.amount = parseFloat(balancetotal[0].credit_value.amount).toFixed(2);
-            balancetotal[0].debit_value.amount = parseFloat(balancetotal[0].debit_value.amount).toFixed(2);
 
             lines.sort(function(a, b) {
                 return new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime();
             });
 
-
+            // XXX use a handlebar helper to format date
             var datedlines = [];
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
@@ -1074,54 +1063,21 @@ define([
                 datedlines.push(current);
             });
 
-
-            var balance = parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount);
-            $.each(datedlines, function(index, current){
-                datedlines[index].balance = balance.toFixed(2);
-                if(account.normal_balance === "debit"){
-                    if(current.value.type === 'credit'){
-                        balance = balance + parseFloat(current.value.amount);
-                    } else {
-                        balance = balance - parseFloat(current.value.amount);
-                    }
-                } else {
-                    if(current.value.type === 'credit'){
-                        balance = balance - parseFloat(current.value.amount);
-                    } else {
-                        balance = balance + parseFloat(current.value.amount);
-                    }
-                }
-                datedlines[index].linebalance = normalbalance;
-
-                if(datedlines[index].balance < 0){
-                    datedlines[index].balance = 0 - datedlines[index].balance;
-                    if(normalbalance === "cr"){
-                        datedlines[index].linebalance = "dr";
-                    } else {
-                        datedlines[index].linebalance = "cr";
-                    }
-                }
-
-                datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
-            });
-
             var more = null;
             if(datedlines.length === 25){
                 more = datedlines[24].id;
             }
 
-
             var result = {
                 id:accountid,
+                account: account,
                 desc: account.description,
                 ref: account.reference,
                 lines: datedlines,
                 book_id:book.id,
-                normalbalance: normalbalance,
                 balancetotal: balancetotal[0],
                 more:more,
                 favorite: _this.isThisFavorite(book.id, accountid),
-                balance: parseFloat(Utils.parse(Account.all().get(accountid).balance())[0].value.amount)
             };
 
             //console.log("test data", result);
@@ -1132,27 +1088,13 @@ define([
         prepareMoreAccountLinesData: function(book_id, account_id, lastbalance, lines){
 
             var account = Utils.parse(Account.all().get(account_id));
-            var normalbalance;
-            if(account.normal_balance === "credit"){
-                normalbalance = "cr";
-            } else {
-                normalbalance = "dr";
-            }
-
-            console.log("lastbalance", lastbalance);
-            lastbalance = lastbalance.replace("cr","");
-            lastbalance = lastbalance.replace("dr","");
-            lastbalance = lastbalance.replace(" ","");
-            console.log("lastbalance", lastbalance);
-            lastbalance = parseFloat(lastbalance);
-            console.log("lastbalance", lastbalance);
 
             lines = Utils.parse(lines);
             lines.sort(function(a, b) {
                 return new Date(b.posted_at).getTime() - new Date(a.posted_at).getTime();
             });
 
-
+            // XXX use a handlebars helper to format date
             var datedlines = [];
             $.each(lines, function(index, current){
                 var datetime = new Date(current.posted_at);
@@ -1165,38 +1107,15 @@ define([
                 datedlines.push(current);
             });
 
-
-            var balance = lastbalance;
-            $.each(datedlines, function(index, current){
-
-                if(account.normal_balance === "debit"){
-                    if(current.value.type === 'credit'){
-                        balance = balance + parseFloat(current.value.amount);
-                    } else {
-                        balance = balance - parseFloat(current.value.amount);
-                    }
-                } else {
-                    if(current.value.type === 'credit'){
-                        balance = balance - parseFloat(current.value.amount);
-                    } else {
-                        balance = balance + parseFloat(current.value.amount);
-                    }
-                }
-                datedlines[index].balance = balance.toFixed(2);
-
-                datedlines[index].amount = parseFloat(current.value.amount).toFixed(2);
-            });
-
             var more = null;
             if(datedlines.length === 25){
                 more = datedlines[24].id;
             }
 
             var result = {
+                account: account,
                 lines: datedlines,
-                normalbalance: normalbalance,
                 more:more
-
             };
 
             return result;
