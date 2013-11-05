@@ -13,6 +13,7 @@
     "supermodel": "git://github.com/pathable/supermodel/",
     "selectyze": "git://github.com/alpixel/Selectyze",
     "jt.timepicker": "git://github.com/jonthornton/jquery-timepicker",
-    "highcharts.com": "~3.0.5"
+    "highcharts.com": "git@github.com:highslide-software/highcharts.com.git",
+    "purl": "git@github.com:allmarkedup/purl.git"
   }
 }

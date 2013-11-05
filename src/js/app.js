@@ -25,7 +25,8 @@ require.config({
         timepicker            : 'libs/jt.timepicker/jquery.timepicker',
 		    highcharts            : 'libs/highcharts.com/js/highcharts.src',
     		highchartsmodule1     : 'libs/highcharts.com/js/modules/exporting.src',
-        jqueryui              : 'libs/jquery-ui-1.10.3.custom'
+        jqueryui              : 'libs/jquery-ui-1.10.3.custom',
+        purl                  : 'libs/purl/purl'
     },
     shim : {
         underscore : {
@@ -66,6 +67,10 @@ require.config({
         },
         'highchartsmodule1' : {
             deps: ['highcharts']
+        },
+        'purl': {
+          deps: ['jquery'],
+          exports: 'jQuery.fn.url'
         }
     }
 

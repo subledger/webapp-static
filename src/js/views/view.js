@@ -13,6 +13,7 @@ define([
     'forms',
     'i18nprecompile',
     'json2',
+    'purl',
 
     'applytemplates',
     'hbs!template/layout/header',
@@ -33,7 +34,7 @@ define([
     'hbs!template/reports',
     'hbs!template/reportrendering'
 
-], function (Modernizr, $, _, Backbone, async, Utils, DataStructure, AppEvents, Forms, precompile, JSON,
+], function (Modernizr, $, _, Backbone, async, Utils, DataStructure, AppEvents, Forms, precompile, JSON, purl,
              Templates, headerTemplate, navTemplate, newBookTemplate, booksTemplate, newJournalTemplate, draftsJournalsTemplate, JournalTemplate, accountsTemplate, accountTemplate, accountMoreLinesTemplate, newAccountTemplate, settingsTemplate, loginTemplate, sourceTemplate, chartTemplate, reportsTemplate, reportRenderingTemplate ) {
 
     'use strict';
@@ -119,10 +120,15 @@ define([
             AppEvents.bind("ready", function(){
                 Templates.applyTemplate(_this.templateSelector.main, null, "");
                 $(_this.templateSelector.loading).hide();
+
+                if (_this.settings.book) {
+                  $(_this.templateSelector.nav).find("select.book").val(_this.settings.book);
+                }
+
                 var book_id = $(_this.templateSelector.nav).find("select.book").val();
 
                //if we want to do deek linkings
-               switch(_this.currentPage){
+               switch(_this.settings.currentPage){
                    case 'activity-stream':
                        DataStructure.loadActivityStream(book_id);
                        break;
@@ -136,7 +142,6 @@ define([
                        break;
 
                    default:
-                       //DataStructure.loadReports("MKscbFJDlyd8dX6gAaTNv7");
                        DataStructure.loadActivityStream(book_id);
                        break;
                }
@@ -178,12 +183,27 @@ define([
 
             Forms.setSelector(this.formSelector);
 
+            var url = $.url();
+            var key = url.param('key');
+            var secret = url.param('secret');
+            var org = url.param('org');
+
             if (Modernizr.localstorage) {
                 if (sessionStorage.subledgerKey && sessionStorage.subledgerSecret && sessionStorage.subledgerOrg){
                     settings = {
                         key: sessionStorage.subledgerKey,
                         secret: sessionStorage.subledgerSecret,
                         org: sessionStorage.subledgerOrg
+                    };
+                    _this.startApp(settings);
+
+                } else if (key && secret && org) {
+                    settings = {
+                        key: key, 
+                        secret: secret,
+                        org: org,
+                        book: url.param('book'),
+                        currentPage: url.param('currentPage')
                     };
                     _this.startApp(settings);
 
