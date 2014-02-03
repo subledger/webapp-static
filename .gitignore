@@ -6,5 +6,6 @@ dist/*.*
 *.idea
 .idea
 .idea/*.*
+ec2.sh
 
 src/js/libs/*/
