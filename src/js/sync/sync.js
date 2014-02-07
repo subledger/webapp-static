@@ -254,7 +254,7 @@ define([
                         options.api.organization(options.org_id).get(function(e,d){ cb(e, d.active_org); });
                         break;
                     case 'book':
-                        options.api.organization(options.org_id).book().get(function(e,d){ cb(e, d.active_books); });
+                        options.api.organization(options.org_id).book().get({action: "after", description: "0"}, function(e,d){ cb(e, d.active_books); });
                         break;
                     case 'account':
                         options.api.organization(options.org_id).book(options.book_id).account().get(params, function(e,d){ cb(e, d.active_accounts); });
