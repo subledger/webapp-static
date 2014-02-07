@@ -293,7 +293,7 @@ define([
                         options.api.organization(options.org_id).book(options.book_id).journalEntry(options.journal_id).line().get({action:options.action, state:options.state},function(e,d){ cb(e, d.posted_lines); });
                         break;
                     case 'report':
-                        options.api.organization(options.org_id).book(options.book_id).report().get(function(e,d){ cb(e, d.active_reports); });
+                        options.api.organization(options.org_id).book(options.book_id).report().get({action: "after", description: "0"}, function(e,d){ cb(e, d.active_reports); });
                         break;
 
                     case 'reportrendering':
