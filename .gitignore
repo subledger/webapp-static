@@ -7,5 +7,6 @@ dist/*.*
 .idea
 .idea/*.*
 ec2.sh
+*.DS_Store
 
 src/js/libs/*/
