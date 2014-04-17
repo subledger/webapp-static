@@ -1,4 +1,5 @@
 import Resolver from 'ember/resolver';
+import loadInitializers from 'ember/load-initializers';
 
 var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
@@ -7,8 +8,10 @@ var App = Ember.Application.extend({
   LOG_TRANSITIONS_INTERNAL: true,
   LOG_VIEW_LOOKUPS: true,
   modulePrefix: 'subledger-app',
-  Resolver: Resolver['default']
+  Resolver: Resolver
 });
+
+loadInitializers(App, 'subledger-app');
 
 Ember.Application.initializer({
   name: "authentication",

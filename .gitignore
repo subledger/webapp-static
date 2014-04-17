@@ -16,5 +16,6 @@
 /connect.lock
 /libpeerconnection.log
 .DS_Store
-Thumbs.db
+Tumbs.db
 /coverage/*
+*.log

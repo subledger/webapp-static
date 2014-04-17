@@ -1,12 +1,10 @@
 ## Require NodeJS and NPM installed
 ##To start (in command line):
 
-### > npm install
-### > npm install -g node-static
 ### > npm install -g grunt-cli
 ### > npm install -g bower
+### > npm install
 
-### > bower install
 ### > grunt build (or 'grunt server' for development)
 
 Then open browser at http://localhost:8000/
