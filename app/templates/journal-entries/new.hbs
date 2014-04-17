@@ -1,0 +1,91 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <form role="form">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <div class='input-group date effective-at'>
+              {{input type="text" value=view.effectiveAt class="form-control"}}
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel-body">
+    <form role="form">
+      <div class="form-group">
+        {{input type="text" value=view.description class="form-control" placeholder="Description"}}
+      </div>
+
+      <div class="form-group">
+        {{input type="url" value=view.reference class="form-control" placeholder="Reference"}}
+      </div>
+    </form>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-8">
+            Entries
+          </div>
+
+          <div class="col-md-2">
+            Debit
+          </div>
+
+          <div class="col-md-2">
+            Credit
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <form role="form" id="lines">
+          {{view view.linesView}}
+        </form>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-md-8">
+            <span class="pull-right">
+              Totals
+            </span>
+          </div>
+
+          <div class="col-md-2">
+            0,00
+          </div>
+
+          <div class="col-md-2">
+            0,00
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="text-right">
+            Add new line
+            <button type="button" class="btn btn-warning" {{action "addLine" target="view"}}>
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-footer">
+    <button type="button" class="btn btn-primary">Clear all</button>
+
+    <div class="pull-right">
+      <button type="button" class="btn btn-success" {{action "post" target="view"}}>Post</button>
+    </div>
+  </div>
+</div>

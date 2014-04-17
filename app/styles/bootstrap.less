@@ -1,0 +1,62 @@
+@import "variables.less";
+@import "/vendor/bootstrap/less/bootstrap.less";
+
+// Customize Scaffolding
+@body-bg: #e2e4e7;
+
+// Customize Colors
+@gray-dark: #626468;
+@brand-primary: #1e7c98;
+
+// Customize Typography
+@font-size-base: 12px;
+@font-size-h3: @font-size-base;
+@font-family-sans-serif: 'PT Sans', sans-serif;
+@headings-font-weight: 700;
+
+// Customize Navbar
+@navbar-default-bg: @brand-primary;
+@navbar-margin-bottom: 0;
+@navbar-default-link-color: @white;
+@navbar-default-link-hover-color: @navbar-default-link-color;
+
+// Customize Panel
+@panel-bg: @less-white;
+@panel-default-heading-bg: @white;
+@panel-default-border: @default-border-color;
+.panel {
+  box-shadow: @default-box-shadow;
+  margin-bottom: @default-margin;
+  background-image: @background-light;
+}
+.panel-heading {
+  padding: 30px 17px;
+  background-image: none;
+
+  h1, h2, h3, h4, h5 {
+    margin: 0;
+  }
+}
+.panel-body {
+  &.panel-body-white {
+    background-color: @white;
+    background-image: none;
+    border-radius: @border-radius-large;
+  }
+}
+
+// Customize Tables
+@table-cell-padding: 12px 0 10px 17px;
+table.table-striped {
+  &> thead > tr > th {
+    border-bottom: 0;
+  }
+
+  &> thead > tr:nth-child(odd) > th {
+    background-image: @background-darker;
+  }
+
+  &> tbody > tr:nth-child(odd) > td {
+    background-image: @background-dark;
+  }
+}

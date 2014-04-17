@@ -1,0 +1,34 @@
+<div class="line">
+  <div class="row">
+    <div class="col-md-2">
+      {{view Ember.Select contentBinding="controller.accounts"
+                          optionLabelPath="content.description"
+                          optionValuePath="content.id"
+                          prompt="Choose an account:"
+                          value=view.accountId
+                          class="form-control"}}
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        {{input type="text" value=view.description class="form-control" placeholder="Description"}}
+      </div>
+
+      <div class="form-group">
+        {{input type="url" value=view.reference class="form-control" placeholder="Reference"}}
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        {{input type="number" value=view.debitAmount class="form-control"}}
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        {{input type="number" value=view.creditAmount class="form-control"}}
+      </div>
+    </div>
+  </div>
+</div>

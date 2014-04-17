@@ -1,0 +1,58 @@
+<div class="navbar navbar-default navbar-fixed-top app-menu" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="assets/logo.png" alt="Subledger Logo" class="app-logo"></img>
+        <span class="label label-info">Beta</span>
+      </a>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li>{{#link-to 'login'}}Settings{{/link-to}}</li>
+        <li><a href="#logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row app-all-content">
+    <div class="col-sm-12 col-md-3 app-main-nav">
+      <ul class="nav nav-sidebar">
+        <li>
+          <select name="select" class="form-control">
+            {{#each book in App.credentials.allBooks}}
+              <option value="{{book.id}}">{{book.description}}</option>
+            {{/each}}
+          </select>
+        </li>
+        <li>{{#link-to 'index'}}Activity Stream{{/link-to}}</li>
+        <li>{{#link-to 'reports'}}Reports{{/link-to}}</li>
+        <li>{{#link-to 'journal-entries.new'}}Journal Entry{{/link-to}}</li>
+      </ul>
+    </div>
+
+    <div class="col-sm-12 col-md-9 app-main-content">
+      {{outlet}}
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-default navbar-fixed-bottom app-footer" role="navigation">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li><a href="//subledger.com">About</a></li>
+      <li><a href="//subledger.com/blog">Blog</a></li>
+      <li><a href="//subledger.com/#team">Jobs</a></li>
+      <li><a href="//subledger.com/term">Terms of service</a></li>
+    </ul>
+
+    <p class="navbar-text navbar-right">Subledger Inc 2013</p>
+  </div>
+</nav>

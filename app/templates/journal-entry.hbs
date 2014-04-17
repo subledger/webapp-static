@@ -1,0 +1,59 @@
+{{#if expanded}}
+  <div class="panel panel-default">
+    <div class="panel-heading clickable">{{description}}</div>
+    <div class="panel-body">
+      {{format-date effectiveAt 'full'}}
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Debit</th>
+          <th>Credit</th>
+        </tr>
+      </thead>
+        <tbody>
+          {{#each line in lines}}
+            <tr>
+              <td>
+                {{#link-to 'lines.index' line.account.id}}
+                  {{line.account.description}}
+                {{/link-to}}
+              </td>
+              <td>{{format-value line.value 'debit'}}</td>
+              <td>{{format-value line.value 'credit'}}</td>
+            </tr>
+          {{/each}}
+          {{#if loadingLines}}
+            <tr>
+              <td colspan="3">Loading...</td>
+            </tr>
+          {{/if}}
+        </tobdy>
+        <tfoot>
+          <tr>
+            <th class="pull-right">Total</th>
+            <th>{{format-amount totalDebit.amount}}</th>
+            <th>{{format-amount totalCredit.amount}}</th>
+          </tr>
+        </tfoot>
+    </table>
+  </div>
+{{else}}
+  <div class="panel panel-default">
+    <div class="panel-body panel-body-white clickable">
+      <div class="row">
+        <div class="col-md-2">
+          {{time-ago effectiveAt}}
+        </div>
+        <div class="col-md-9">
+          {{description}}
+        </div>
+        <div class="col-md-1 pull-right">
+          POSTED {{#if expanded}}EXPANDED{{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}

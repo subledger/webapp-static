@@ -1,78 +1,256 @@
+// jshint node:true
 
-var grunt = require("grunt");
+module.exports = function(grunt) {
+  // To support Coffeescript, SASS, LESS and others, just install
+  // the appropriate grunt package and it will be automatically included
+  // in the build process:
+  //
+  // * for Coffeescript, run `npm install --save-dev grunt-contrib-coffee`
+  //
+  // * for SCSS (without SASS), run `npm install --save-dev grunt-sass`
+  // * for SCSS/SASS support (may be slower), run
+  //   `npm install --save-dev grunt-contrib-sass`
+  //   This depends on the ruby sass gem, which can be installed with
+  //   `gem install sass`
+  // * for Compass, run `npm install --save-dev grunt-contrib-compass`
+  //   This depends on the ruby compass gem, which can be installed with
+  //   `gem install compass`
+  //   You should not install SASS if you have installed Compass.
+  //
+  // * for LESS, run `npm install --save-dev grunt-contrib-less`
+  //
+  // * for Stylus/Nib, `npm install --save-dev grunt-contrib-stylus`
+  //
+  // * for Emblem, run the following commands:
+  //   `npm uninstall --save-dev grunt-ember-templates`
+  //   `npm install --save-dev grunt-emblem`
+  //   `bower install emblem.js --save`
+  //
+  // * For EmberScript, run `npm install --save-dev grunt-ember-script`
+  //
+  // * for LiveReload, `npm install --save-dev connect-livereload`
+  //
+  // * for YUIDoc support, `npm install --save-dev grunt-contrib-yuidoc`
+  //   It is also nice to use a theme other than default. For example,
+  //   simply do: `npm install yuidoc-theme-blue`
+  //   Currently, only the `app` directory is used for generating docs.
+  //   When installed, visit: http[s]://[host:port]/docs
+  //
+  // * for displaying the execution time of the grunt tasks,
+  //   `npm install --save-dev time-grunt`
+  //
+  // * for minimizing the index.html at the end of the dist task
+  //   `npm install --save-dev grunt-contrib-htmlmin`
+  //
+  // * for minimizing images in the dist task
+  //   `npm install --save-dev grunt-contrib-imagemin`
+  //
+  // * for using images based CSS sprites (http://youtu.be/xD8DW6IQ6r0)
+  //   `npm install --save-dev grunt-fancy-sprites`
+  //   `bower install --save fancy-sprites-scss`
+  //
+  // * for automatically adding CSS vendor prefixes (autoprefixer)
+  //   `npm install --save-dev grunt-autoprefixer`
+  //
+  // * for package import validations
+  //   `npm install --save-dev grunt-es6-import-validate`
+  //
 
-grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    requirejs: {
-        compile: {
-            options: {
-                baseUrl: "src/js/",
-                mainConfigFile: "src/js/app.js",
-                out: "dist/js/app.js",
-                name: "app",
-                useStrict: false
-            }
-        }
-    },
-    copy: {
-        imgs: {
-            files: [
+  var Helpers = require('./tasks/helpers'),
+      filterAvailable = Helpers.filterAvailableTasks,
+      _ = grunt.util._,
+      path = require('path');
 
-                {expand: true, cwd: 'src/', src: ['img/**'], dest: 'dist/'}, // makes all src relative to cwd
-                {src: 'src/js/libs/modernizr.custom.19922.min.js', dest: 'dist/js/libs/modernizr.custom.19922.min.js'},
-                {src: 'src/js/libs/requirejs/require.js', dest: 'dist/js/libs/requirejs/require.js'}
-            ]
+  Helpers.pkg = require("./package.json");
 
-        }   /*   ,
-        html: {
-            src: 'src/index.html',
-            dest: 'dist/index.html'
-        },     */
+  if (Helpers.isPackageAvailable("time-grunt")) {
+    require("time-grunt")(grunt);
+  }
 
-    },
-    cssmin: {
-        combine: {
-            files: {
-                'dist/css/styles.css': ['src/css/jquery-ui.min.css',  'src/css/jquery.timepicker.css', 'src/css/styles.css']
-            }
-        }
-    },
-    htmlbuild: {
-        dist: {
-            src: 'src/index.html',
-            dest: 'dist/index.html',
-            options: {
-                beautify: true
-            }
-        }
+  // Loads task options from `tasks/options/` and `tasks/custom-options`
+  // and loads tasks defined in `package.json`
+  var config = _.extend({},
+    require('load-grunt-config')(grunt, {
+        configPath: path.join(__dirname, 'tasks/options'),
+        loadGruntTasks: false,
+        init: false
+      }),
+    require('load-grunt-config')(grunt, { // Custom options have precedence
+        configPath: path.join(__dirname, 'tasks/custom-options'),
+        init: false
+      })
+  );
 
-    },
-    less: {
-        development: {
-            options: {
-                paths: ["src/less"]
-            },
-            files: {
-                "src/css/styles.css": "src/less/styles.less"
-            }
-        }
-    },
-    watch: {
-        css: {
-            files: 'src/less/*.less',
-            tasks: ['less']
-        }
+  grunt.loadTasks('tasks'); // Loads tasks in `tasks/` folder
+
+  config.env = process.env;
+
+
+  // App Kit's Main Tasks
+  // ====================
+
+
+  // Generate the production version
+  // ------------------
+  grunt.registerTask('dist', "Build a minified & production-ready version of your app.", [
+                     'clean:dist',
+                     'build:dist',
+                     'copy:assemble',
+                     'createDistVersion'
+                     ]);
+
+
+  // Default Task
+  // ------------------
+  grunt.registerTask('default', "Build (in debug mode) & test your application.", ['test']);
+
+
+  // Servers
+  // -------------------
+  grunt.registerTask('server', "Run your server in development mode, auto-rebuilding when files change.", function(proxyMethod) {
+    var expressServerTask = 'expressServer:debug';
+    if (proxyMethod) {
+      expressServerTask += ':' + proxyMethod;
     }
-});
 
-// Load the plugin that provides the "uglify" task.
-grunt.loadNpmTasks('grunt-contrib-requirejs');
-grunt.loadNpmTasks('grunt-contrib-copy');
-grunt.loadNpmTasks('grunt-contrib-cssmin');
-grunt.loadNpmTasks('grunt-html-build');
-grunt.loadNpmTasks('grunt-contrib-less');
-grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.task.run(['clean:debug',
+                    'build:debug',
+                    expressServerTask,
+                    'watch'
+                    ]);
+  });
+
+  grunt.registerTask('server:dist', "Build and preview a minified & production-ready version of your app.", [
+                     'dist',
+                     'expressServer:dist:keepalive'
+                     ]);
 
 
-grunt.registerTask('dev', ['less', 'watch']);
-grunt.registerTask('build', ['less', 'requirejs', 'cssmin', 'copy', 'htmlbuild']);
+  // Testing
+  // -------
+  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default.", [
+                     'clean:debug', 'build:debug', 'testem:ci:basic' ]);
+
+  grunt.registerTask('test:ci', "Run your app's tests in PhantomJS. For use in continuous integration (i.e. Travis CI).", [
+                     'clean:debug', 'build:debug', 'testem:ci:basic' ]);
+
+  grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/testem.js for configuration).", [
+                     'clean:debug', 'build:debug', 'testem:ci:browsers' ]);
+
+  grunt.registerTask('test:server', "Alias to `testem:run:basic`. Be sure to install testem first using `npm install -g testem`", [
+                     'testem:run:basic' ]);
+
+  // Worker tasks
+  // =================================
+
+  grunt.registerTask('build:dist', filterAvailable([
+                     'createResultDirectory', // Create directoy beforehand, fixes race condition
+                     'fancySprites:create',
+                     'concurrent:buildDist', // Executed in parallel, see config below
+                     ]));
+
+  grunt.registerTask('build:debug', filterAvailable([
+                     'jshint:tooling',
+                     'createResultDirectory', // Create directoy beforehand, fixes race condition
+                     'fancySprites:create',
+                     'concurrent:buildDebug', // Executed in parallel, see config below
+                     ]));
+
+  grunt.registerTask('createDistVersion', filterAvailable([
+                     'useminPrepare', // Configures concat, cssmin and uglify
+                     'concat', // Combines css and javascript files
+
+                     'cssmin', // Minifies css
+                     'uglify', // Minifies javascript
+                     'imagemin', // Optimizes image compression
+                     // 'svgmin',
+                     'copy:dist', // Copies files not covered by concat and imagemin
+
+                     'rev', // Appends 8 char hash value to filenames
+                     'usemin', // Replaces file references
+                     'htmlmin:dist' // Removes comments and whitespace
+                     ]));
+
+  // Documentation
+  // -------
+  grunt.registerTask('docs', "Build YUIDoc documentation.", [
+                     'buildDocs',
+                     'server:debug'
+                     ]);
+
+
+  // Parallelize most of the build process
+  _.merge(config, {
+    concurrent: {
+      buildDist: [
+        "buildTemplates:dist",
+        "buildScripts",
+        "buildStyles",
+        "buildIndexHTML:dist"
+      ],
+      buildDebug: [
+        "buildTemplates:debug",
+        "buildScripts",
+        "buildStyles",
+        "buildIndexHTML:debug"
+      ]
+    }
+  });
+
+  // Templates
+  grunt.registerTask('buildTemplates:dist', filterAvailable([
+                     'emblem:compile',
+                     'emberTemplates:dist'
+                     ]));
+
+  grunt.registerTask('buildTemplates:debug', filterAvailable([
+                     'emblem:compile',
+                     'emberTemplates:debug'
+                     ]));
+
+  // Scripts
+  grunt.registerTask('buildScripts', filterAvailable([
+                     'jshint:app',
+                     'jshint:tests',
+                     'validate-imports:app',
+                     'validate-imports:tests',
+                     'coffee',
+                     'emberscript',
+                     'copy:javascriptToTmp',
+                     'transpile',
+                     'buildDocs',
+                     'concat_sourcemap'
+                     ]));
+
+  // Styles
+  grunt.registerTask('buildStyles', filterAvailable([
+                     'compass:compile',
+                     'sass:compile',
+                     'less:compile',
+                     'stylus:compile',
+                     'copy:cssToResult',
+                     'autoprefixer:app'
+                     ]));
+
+  // Documentation
+  grunt.registerTask('buildDocs', filterAvailable([
+                     'yuidoc:debug',
+                     ]));
+
+  // Index HTML
+  grunt.registerTask('buildIndexHTML:dist', [
+                     'preprocess:indexHTMLDistApp',
+                     'preprocess:indexHTMLDistTests'
+                     ]);
+
+  grunt.registerTask('buildIndexHTML:debug', [
+                     'preprocess:indexHTMLDebugApp',
+                     'preprocess:indexHTMLDebugTests'
+                     ]);
+
+  grunt.registerTask('createResultDirectory', function() {
+    grunt.file.mkdir('tmp/result');
+  });
+
+  grunt.initConfig(config);
+};

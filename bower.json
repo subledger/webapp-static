@@ -1,19 +1,24 @@
 {
-  "name": "subledger",
-  "version": "0.0.1",
+  "name": "subledger-app",
   "dependencies": {
-    "backbone": "~1.0.0",
-    "underscore": "~1.4.4",
-    "jquery": "~1.9.1",
-    "requirejs": "~2.1.5",
-    "async": "~0.1.23",
-    "handlebars.js": "1.0.0",
-    "bootstrap": "~3.0.0",
-    "hbs": "git://github.com/SlexAxton/require-handlebars-plugin",
-    "supermodel": "git://github.com/pathable/supermodel/",
-    "selectyze": "git://github.com/alpixel/Selectyze",
-    "jt.timepicker": "git://github.com/jonthornton/jquery-timepicker",
-    "highcharts.com": "git@github.com:highslide-software/highcharts.com.git",
-    "purl": "git@github.com:allmarkedup/purl.git"
+    "handlebars": "~1.1.2",
+    "jquery": "~1.10.2",
+    "qunit": "~1.12.0",
+    "ember-qunit": "https://github.com/rpflorence/ember-qunit.git#master",
+    "ember": "~1.4.0",
+    "ember-data": "~1.0.0-beta.7",
+    "ember-resolver": "git://github.com/stefanpenner/ember-jj-abrams-resolver.git#master",
+    "ic-ajax": "~0.3.0",
+    "ember-testing-httpRespond": "~0.1.1",
+    "loader.js": "git://github.com/stefanpenner/loader.js",
+
+    "moment": "~2.5.1",
+    "jquery-visible": "https://github.com/teamdf/jquery-visible.git#1.1.0",
+    "bootstrap": "~3.1.1",
+    "eonasdan-bootstrap-datetimepicker": "~3.0.0",
+    "subledger-js-library": "git@github.com:subledger/Subledger_JS_Library.git#master"
+  },
+  "resolutions": {
+    "ember": "~1.4.0"
   }
 }

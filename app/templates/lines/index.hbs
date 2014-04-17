@@ -1,0 +1,48 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Debit</th>
+      <th>Credit</th>
+      <th>Balance</th>
+      <th>Reference</th>
+      <th>Journal entry</th>
+    </tr>
+    <tr>
+      <th>Total</th>
+      <th>&nbsp;</th>
+      <th>{{format-value balance.debit_value 'debit'}}</th>
+      <th>{{format-value balance.credit_value 'credit'}}</th>
+      <th>{{format-balance balance.value account.normalBalance}}</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each line in controller}}
+      <tr>
+        <td>{{format-date line.effectiveAt 'big'}}</td>
+        <td>{{line.description}}</td>
+        <td>{{format-value line.value 'debit'}}</td>
+        <td>{{format-value line.value 'credit'}}</td>
+        <td>{{format-balance line.balance.value normalBalance}}</td>
+        <td>
+          <a {{bind-attr href=line.reference}}>
+            <img src="assets/reference.png"></img>
+          </a>
+        </td>
+        <td>
+          {{#link-to "journal-entry" line.journalEntry}}
+            <img src="assets/journal_entry.png"></img>
+          {{/link-to}}
+        </td>
+      </tr>
+    {{/each}}
+    {{#if loading}}
+      <tr>
+        <td colspan="5" class="loading-more">Loading More...</td>
+      </tr>
+    {{/if}}
+  </tobdy>
+</table>

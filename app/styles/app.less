@@ -1,0 +1,59 @@
+@import "/vendor/bootstrap/less/bootstrap.less";
+@import "/vendor/eonasdan-bootstrap-datetimepicker/src/less/bootstrap-datetimepicker.less";
+@import "variables.less";
+@import "bootstrap.less";
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+	padding-top: 50px;
+	padding-bottom: 70px;
+}
+
+.container-fluid {
+  height: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.app-logo {
+  width: 173px;
+  height: 21px;
+}
+
+.app-all-content {
+  height: 100%;
+}
+
+.app-main-nav {
+  padding-top: @default-padding;
+
+  a {
+    font-weight: 700;
+    font-family: 'PT Sans', sans-serif;
+  }
+}
+
+.app-main-content {
+  height: 100%;
+  padding: @default-padding @default-padding 0 @default-padding;
+  overflow-y: scroll;
+  background-image: @background;
+  border: 1px solid @default-border-color;
+  box-shadow: @default-box-shadow;
+}
+
+.app-footer {
+  border-top: 0;
+  background-color: transparent;
+}
+
