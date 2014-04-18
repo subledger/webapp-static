@@ -11,7 +11,15 @@ export default Ember.Controller.extend({
         journalEntryData
       );
 
-      journalEntry.save();
+      journalEntry.save().then(
+        $.proxy(function(savedJournalEntry) {
+          alert('Journal Entry Posted Successfully');
+        }, this),
+
+        $.proxy(function(e) {
+          alert('Something Went Wrong');
+        }, this)
+      );
     }
   },
 

@@ -32,9 +32,26 @@
             {{/each}}
           </select>
         </li>
-        <li>{{#link-to 'index'}}Activity Stream{{/link-to}}</li>
-        <li>{{#link-to 'reports'}}Reports{{/link-to}}</li>
-        <li>{{#link-to 'journal-entries.new'}}Journal Entry{{/link-to}}</li>
+        <li class="active">
+          {{#link-to 'index'}}
+            <img src="assets/icon-stream.png" class="left" />
+            Activity Stream
+            <img src="assets/arrow.png" class="right" />
+          {{/link-to}}
+        </li>
+        <li>
+          {{#link-to 'reports'}}
+            <img src="assets/icon-report.png" class="left" />
+            Reports
+            <img src="assets/arrow.png" class="right" />
+          {{/link-to}}</li>
+        <li>
+          {{#link-to 'journal-entries.new'}}
+            <img src="assets/icon-new.png" class="left" />
+            Journal Entry
+            <img src="assets/arrow.png" class="right" />
+          {{/link-to}}
+        </li>
       </ul>
     </div>
 

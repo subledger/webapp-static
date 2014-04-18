@@ -36,10 +36,57 @@ body {
 
 .app-main-nav {
   padding-top: @default-padding;
+  padding-left: 0;
+  padding-right: 0;
 
-  a {
-    font-weight: 700;
-    font-family: 'PT Sans', sans-serif;
+  .nav > li {
+    box-shadow: 0px 1px 1px 0px @white;
+    border-bottom: 1px solid @default-border-color;
+
+    &:first-child {
+      padding-left: @default-padding;
+      padding-right: @default-padding;
+      padding-bottom: @default-padding;
+    }
+
+    &.active > a {
+      color: #1b6f8b;
+      background-color: @background-color-selected;
+
+      img.right {
+        z-index: 1000;
+        margin-right: -1px;
+        position: relative;
+      }
+    }
+
+    &> a {
+      color: #5e5e5e;
+      font-weight: 700;
+      font-family: 'PT Sans', sans-serif;
+      line-height: 42px;
+      padding: 0 0 0 @default-padding;
+      text-shadow: @white 0 1px;
+      
+      img.left {
+        margin-right: 22px;
+      }
+
+      img.right {
+        float: right;
+        margin-right: -20px;
+        transition: margin-right, .4s;
+      }
+
+      &:hover {
+        color: #1b6f8b;
+        background-color: @background-color-selected;
+
+        img.right {
+          margin-right: -1px;
+        }
+      }
+    }
   }
 }
 
@@ -56,4 +103,3 @@ body {
   border-top: 0;
   background-color: transparent;
 }
-

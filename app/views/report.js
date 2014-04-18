@@ -44,8 +44,7 @@ export default Ember.View.extend({
   },
 
   viewClicked: function(e) {
-    e.stopPropagation();
+    e.preventDefault();
     this.get('controller').send('show');
-  },
-
+  }
 });
