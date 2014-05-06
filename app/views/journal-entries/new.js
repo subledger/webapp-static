@@ -60,10 +60,12 @@ export default Ember.View.extend({
 
       // add first line
       this.addLine();
+
+      // add a seconds line
+      this.addLine();
     }    
 
   }.observes("controller.loadingAccounts"),
-
 
   actions: {
     addLine: function() {
@@ -76,7 +78,7 @@ export default Ember.View.extend({
       journalEntry.set('effectiveAt', this.getEffectiveAt());
 
       // get account ids and amounts for each line
-      this.get('childViews').get('lastObject').get('childViews').forEach(
+      this.get('linesView').get('childViews').forEach(
         function(item, index, enumerable) {
           // get the line
           var line = item.get('model');
