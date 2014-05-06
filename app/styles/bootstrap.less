@@ -36,12 +36,32 @@
   h1, h2, h3, h4, h5 {
     margin: 0;
   }
+
+  .form-group {
+    margin-bottom: 0;
+  }
 }
 .panel-body {
   &.panel-body-white {
     background-color: @white;
     background-image: none;
     border-radius: @border-radius-large;
+  }
+}
+// Customize Sub Panels
+.panel-body > .panel {
+  .panel-heading {
+    padding: 20px 17px;
+  }
+
+  .panel-footer {
+    border-top: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-top: 21px;
+    padding-bottom: 15px;
+    text-shadow: @white-text-shadow;
+    background-image: @background-brown;
   }
 }
 

@@ -1,38 +1,35 @@
-export default Ember.Controller.extend({
-  setCreds: function() {
-    var credentials = window.App.get('credentials');
-
-    this.key    = credentials.get('key');
-    this.secret = credentials.get('secret');
-    this.org    = credentials.get('org');
-  },
-
+export default Ember.ObjectController.extend({
   actions: {
     login: function() {
-      var credentials = window.App.get('credentials');
+      var credentials = this.get('model');
+      credentials.set('book', '');
 
-      // update credential values
-      credentials.setProperties({
-        key: this.key,
-        secret: this.secret,
-        org: this.org
-      });
+      // save it
+      credentials.save().then(
+        $.proxy(function() {
 
-      credentials.loadBooks().then(
-        $.proxy(function(books) {
-          // set first book as current
-          credentials.set('book', books.get('firstObject').get('id'));
+          // load books
+          credentials.loadBooks().then(
+            $.proxy(function(books) {
 
-          // save it
-          credentials.save();
+              // set first book as current
+              credentials.set('book', books.get('firstObject').get('id'));
 
-          // transition to index
-          this.transitionToRoute('index');
+              // save it
+              credentials.save().then(
+                $.proxy(function() {
 
-        }, this),
+                  // transition to index
+                  this.transitionToRoute('index');
 
-        $.proxy(function(reason) {
-          console.log(reason);
+                }, this)
+              );
+            }, this),
+
+            $.proxy(function(reason) {
+              console.log(reason);
+            }, this)
+          );
         }, this)
       );
     }

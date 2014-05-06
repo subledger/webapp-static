@@ -7,16 +7,13 @@ export default Ember.View.extend({
     this.set('progressStyle', "width: " + progress + "%;");
 
     if (progress === 100) {
-      this.$().find('.report-view').show();
+      this.$().find('.report-view').prop('disabled', false);
     }
   }.observes('controller.progress'),
 
   didInsertElement: function() {
-    // configure datepicker for from
-    this.$().find('.date-from').datetimepicker({});
-
-    // configure datepicker for to
-    this.$().find('.date-to').datetimepicker({});
+    // configure datepicker for atm
+    this.$().find('.date-at').datetimepicker({});
 
     // hide progressbar and view button
     this.$().find('.progress').hide();
@@ -27,20 +24,19 @@ export default Ember.View.extend({
   },
 
   submit: function(e) {
+    e.preventDefault();
     e.stopPropagation();
 
     // show progress bar and hide go button
     this.$().find('.progress').show();
     this.$().find('.report-go').hide();
+    this.$().find('.report-view').prop('disabled', true).show();
 
-    // get from date
-    var from = this.$().find('.date-from').data('DateTimePicker').getDate();
-
-    // get to date
-    var to = this.$().find('.date-to').data('DateTimePicker').getDate();
+    // get from at
+    var at = this.$().find('.date-at').data('DateTimePicker').getDate();
 
     // call render method on controller
-    this.get('controller').send('render', from.toDate(), to.toDate());
+    this.get('controller').send('render', at.toDate());
   },
 
   viewClicked: function(e) {

@@ -1,3 +1,3 @@
 export default Ember.View.extend({
-  classNames: ['full-height']
+  classNames: ['full-height'],
 });

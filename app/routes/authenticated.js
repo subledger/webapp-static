@@ -1,12 +1,22 @@
 export default Ember.Route.extend({
   beforeModel: function(transition) {
-    this.store.find('credential', 1).then(
+    // get and set credential in shared memory
+    return this.store.find('credential', 1).then(
       $.proxy(function(credential) {
-        window.App.set('credentials', credential);
 
-        if (!credential.isPresent()) {
-          this.redirectToLogin(transition);
-        }
+        console.log(credential);
+
+        return window.App.set('credentials', credential).then(          
+          $.proxy(function() {
+
+            if (!credential.isPresent()) {
+              this.redirectToLogin(transition);
+            }
+
+          }, this)
+
+        );
+
       }, this),
 
       $.proxy(function(reason) {

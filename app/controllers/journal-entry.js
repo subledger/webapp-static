@@ -34,13 +34,14 @@ export default Ember.ObjectController.extend({
     }
   },
 
-  loadAllLinesPages: function(nextPageId) {
+  loadAllLinesPages: function(nextPageId, perPage) {
+    perPage = perPage || 25;
     this.set('loadingLines', true);
 
     var journalEntry = this.get('model');
 
     var query = {
-      limit: 5,
+      limit: perPage,
       pageId: nextPageId
     };
 

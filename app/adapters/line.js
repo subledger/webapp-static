@@ -6,11 +6,11 @@ export default ApplicationAdapter.extend({
       return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
         var config = this.criteria().limit(query.limit || 25).posted();
 
-        if (query.pageId === undefined) {
-          config = config.after();
+        if (query.pageId) {
+          config = config.following().id(query.pageId);
 
         } else {
-          config = config.following().id(query.pageId);
+          config = config.after();
         }
 
         var apiLine = this.getSelectedBook().journalEntry(query.journalEntry.id).line();
@@ -27,13 +27,28 @@ export default ApplicationAdapter.extend({
 
     } else if (query.account !== undefined) {
       return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+        var date = query.date;
         var config = this.criteria().limit(query.limit || 25);
 
-        if (query.pageId === undefined) {
-          config = config.before().effectiveAt();
+        if (query.order === "desc") {
+          date = date || new Date().toISOString();
+
+          if (query.pageId) {
+            config = config.preceding().id(query.pageId);
+
+          } else {
+            config = config.before().effectiveAt(date);
+          }
 
         } else {
-          config = config.preceding().id(query.pageId);
+          date = date || new Date(Date.UTC(1970, 0)).toISOString();
+
+          if (query.pageId) {
+            config = config.following().id(query.pageId);
+
+          } else {
+            config = config.starting().effectiveAt(date);
+          }
         }
 
         var apiLine = this.getSelectedBook().account(query.account.id).line();

@@ -1,39 +1,90 @@
 import NewLinesView from 'subledger-app/views/journal-entries/new-lines';
 
 export default Ember.View.extend({
-  linesView: NewLinesView,
-
-  description: "",
-  reference: "",
+  linesView: NewLinesView.create(),
 
   init: function() {
     this._super();
   },
 
+  totalDebit: function() {
+    var total = 0;
+
+    this.get('linesView').get('childViews').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('debitAmount'));
+    }, this);
+
+    return total;
+
+  }.property('linesView.@each.debitAmount'),  
+
+  totalCredit: function() {
+    var total = 0;
+
+    this.get('linesView').get('childViews').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('creditAmount'));
+    }, this);
+
+    return total;
+
+  }.property('linesView.@each.creditAmount'),
+
+  accountsLoaded: function() {
+    console.log("accountsLoaded observed");
+    
+    if (this.get("controller.loadingAccounts") === false) {
+      // get accounts from controller
+      var accounts = this.controller.get("accounts");
+
+      // instantiate and configure suggestion engine
+      var accountsDataset = new Bloodhound({
+        name: "accountsDataset",
+        local: $.map(accounts, function(account) {
+          return {
+            id: account.get("id"),
+            description: account.get("description"),
+            normalBalance: account.get("normalBalance")
+          };
+        }),
+        datumTokenizer: function(d) {
+          return Bloodhound.tokenizers.whitespace(d.description);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+      });
+
+      // initialize it
+      accountsDataset.initialize();
+
+      // set the suggestion engine
+      this.set("accountsDataset", accountsDataset);
+
+      // add first line
+      this.addLine();
+    }    
+
+  }.observes("controller.loadingAccounts"),
+
+
   actions: {
     addLine: function() {
-      this.get('childViews').get('lastObject').addLine();
+      this.addLine();
     },
 
     post: function() {
-      // TODO validation
+      // get effectiveAt
+      var journalEntry = this.get('controller').get('model');      
+      journalEntry.set('effectiveAt', this.getEffectiveAt());
 
-      // create journal entry object
-      var journalEntryData = {};
-      journalEntryData["effectiveAt"] = this.getEffectiveAt().toDate();
-      journalEntryData["description"] = this.get('description');
-      journalEntryData["reference"] = this.get('reference');
-
-      // create lines
-      var lines = [];
-
+      // get account ids and amounts for each line
       this.get('childViews').get('lastObject').get('childViews').forEach(
         function(item, index, enumerable) {
-          var line = {};
-          line["account"] = item.get('accountId');
-          line["description"] = item.get('description');
-          line["reference"] = item.get('reference');
+          // get the line
+          var line = item.get('model');
 
+          // get amd set the account id
+          line.set("account", item.get("accountId"));
+
+          // get the amount
           var value = {
             type: "debit",
             amount: item.get('debitAmount')
@@ -45,31 +96,38 @@ export default Ember.View.extend({
             value["amount"] = creditAmount;
           }
 
-          line["value"] = value;
-
-          // add too lines
-          lines.push(line);
+          // set the amount
+          line.set("value", value);
         }, this
       );
 
-      // set lines on journal entry
-      journalEntryData["lines"] = lines;
-
       // call post on controller
-      this.controller.send('post', journalEntryData);
+      this.controller.send('post');
     }
   },
 
   didInsertElement: function() {
     // configure datepicker for at
-    this.$().find(".effective-at").datetimepicker({});
+    this.$().find(".effective-at").datetimepicker({
+      useCurrent: false
+    });
   },
 
   willDestroyElement: function() {
   },
 
+  addLine: function() {
+    this.controller.send('addLine');
+    var line = this.controller.get('lines').get('lastObject');
+    var journalEntry = this.controller.get('model');
+    var accountsDataset = this.get('accountsDataset');
+
+    this.get('childViews').get('lastObject').addLine(line, journalEntry, accountsDataset);
+  },
+
   getEffectiveAt: function() {
-    return this.$().find(".effective-at").data('DateTimePicker').getDate();
+    var date = moment(this.$("#effectiveAt").val());
+    return date.isValid() ? date.toDate() : null;
   }
 
 });

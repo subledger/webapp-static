@@ -1,23 +1,29 @@
 export default Ember.Controller.extend({
+  lines: Ember.A(),
   accounts: Ember.A(),
   loadingAccounts: true,
   hasNextAccountsPage: true,
   loadingAccountPage: false,
 
   actions: {
+    addLine: function() {
+      var line = this.store.createRecord('line');
+      this.get('lines').pushObject(line);
+    },
+
     post: function(journalEntryData) {
-      var journalEntry = this.store.createRecord(
-        'journal-entry',
-        journalEntryData
-      );
+      var journalEntry = this.get('model');
+
+      // set the lines
+      journalEntry.set('lines', this.get('lines'));
 
       journalEntry.save().then(
         $.proxy(function(savedJournalEntry) {
           alert('Journal Entry Posted Successfully');
+          this.transitionTo('journal-entries.index');
         }, this),
 
-        $.proxy(function(e) {
-          alert('Something Went Wrong');
+        $.proxy(function() {
         }, this)
       );
     }
@@ -50,16 +56,20 @@ export default Ember.Controller.extend({
 
   loadAllAccounts: function(pageId, perPage) {
     perPage = perPage || 25;
-    console.log('here');
+    console.log('Loading accounts...');
 
     return this.loadAccountsPage(pageId, perPage).then(
       $.proxy(function(accounts) {
+        console.log("Loaded " + accounts.content.length + " accounts so far");
+        
         if (accounts.content.length === perPage) {
           this.loadAllAccounts(this.get('accounts').get('lastObject').get('id'), perPage);
 
         } else {
+          console.log("Total of " + accounts.content.length + " accounts loaded");
           this.set('loadingAccounts', false);
-          return this.get('accounts').get('content');
+
+          return this.get('accounts');
         }
       }, this)
     );

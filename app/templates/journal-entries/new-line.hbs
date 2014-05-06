@@ -1,34 +1,39 @@
-<div class="line">
-  <div class="row">
-    <div class="col-md-2">
-      {{view Ember.Select contentBinding="controller.accounts"
-                          optionLabelPath="content.description"
-                          optionValuePath="content.id"
-                          prompt="Choose an account:"
-                          value=view.accountId
-                          class="form-control"}}
+<div class="row">
+  <div class="col-md-8">
+    <div {{bind-attr class=':form-group view.model.errors.account:has-error'}}>
+      <input class="account form-control" type="text" placeholder="Account" {{bind-attr tabindex=view.tabIndex1}} />
+      {{#each error in view.model.errors.account}}
+        <span class="help-block">{{error.message}}</span>
+      {{/each}}        
     </div>
 
-    <div class="col-md-6">
-      <div class="form-group">
-        {{input type="text" value=view.description class="form-control" placeholder="Description"}}
-      </div>
-
-      <div class="form-group">
-        {{input type="url" value=view.reference class="form-control" placeholder="Reference"}}
-      </div>
+    <div {{bind-attr class=':form-group view.model.errors.description:has-error'}}>
+      {{input type="text" value=view.model.description class="form-control description muted" placeholder="Description" tabindex=view.tabIndex2}}
+      {{#each error in view.model.errors.description}}
+        <span class="help-block">{{error.message}}</span>
+      {{/each}}
     </div>
 
-    <div class="col-md-2">
-      <div class="form-group">
-        {{input type="number" value=view.debitAmount class="form-control"}}
-      </div>
+    <div {{bind-attr class=':form-group view.model.errors.reference:has-error'}}>
+      {{input type="url" value=view.model.reference class="form-control reference muted" placeholder="Reference" tabindex=view.tabIndex2}}
+      {{#each error in view.model.errors.reference}}
+        <span class="help-block">{{error.message}}</span>
+      {{/each}}        
     </div>
+  </div>
 
-    <div class="col-md-2">
-      <div class="form-group">
-        {{input type="number" value=view.creditAmount class="form-control"}}
-      </div>
+  <div class="col-md-2">
+    <div {{bind-attr class=':form-group :debit view.model.errors.value:has-error'}}>
+      {{input type="text" value=view.debitAmount class="form-control currency" placeholder="Debit" tabindex=view.tabIndex1 disabled="disabled"}}
+      {{#each error in view.model.errors.value}}
+        <span class="help-block">{{error.message}}</span>
+      {{/each}}  
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <div {{bind-attr class=':form-group :credit view.model.errors.value:has-error'}}>
+      {{input type="text" value=view.creditAmount class="form-control currency" placeholder="Credit" tabindex=view.tabIndex1 disabled="disabled"}}
     </div>
   </div>
 </div>

@@ -31,13 +31,11 @@ export default {
       return "";
     }
 
-    var amount = parseFloat(value.amount).toFixed(2);
-    return amount + "";
+    return accounting.formatMoney(value.amount, "");
   },
 
   formatAmount: function(amount) {
-    amount = parseFloat(amount).toFixed(2);
-    return amount + "";
+    return accounting.formatMoney(amount, "");
   },
 
   formatBalance: function(value, normalBalance) {
@@ -45,13 +43,6 @@ export default {
       return "";
     }
 
-    var amount = parseFloat(value.amount).toFixed(2);
-
-    if (normalBalance === value.type) {
-      return amount + "";
-
-    } else {
-      return "(" + amount + ")";
-    }
+    return accounting.formatMoney(value.amount, "");
   }
 };

@@ -4,8 +4,8 @@ export default Ember.ObjectController.extend({
   reportRendering: null,
 
   actions: {
-    render: function(from, to) {
-      this.renderProgress(from, to);
+    render: function(at) {
+      this.renderProgress(at);
     },
 
     show: function() {
@@ -13,17 +13,16 @@ export default Ember.ObjectController.extend({
     }
   },
 
-  renderProgress: function(from, to, renderingId) {
+  renderProgress: function(at, renderingId) {
     this.set('rendering', true);
 
     var query = {
-      from: from,
-      to: to,
+      at: at,
       reportId: this.get('id'),
       id: renderingId
     };
 
-    this.store.find('reportRendering', query).then($.proxy(function(reportRenderings) {
+    return this.store.find('reportRendering', query).then($.proxy(function(reportRenderings) {
       var reportRendering = reportRenderings.get('firstObject');
 
       this.set('progress', reportRendering.get('progress').percentage);
@@ -33,7 +32,7 @@ export default Ember.ObjectController.extend({
         this.set('reportRendering', reportRendering);
 
       } else {
-        this.renderProgress(from, to, reportRendering.get('id'));
+        return this.renderProgress(at, reportRendering.get('id'));
       }
     }, this));
   }

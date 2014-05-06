@@ -6,17 +6,8 @@
       <th>Debit</th>
       <th>Credit</th>
       <th>Balance</th>
-      <th>Reference</th>
-      <th>Journal entry</th>
-    </tr>
-    <tr>
-      <th>Total</th>
-      <th>&nbsp;</th>
-      <th>{{format-value balance.debit_value 'debit'}}</th>
-      <th>{{format-value balance.credit_value 'credit'}}</th>
-      <th>{{format-balance balance.value account.normalBalance}}</th>
-      <th></th>
-      <th></th>
+      <th class="text-center">Reference</th>
+      <th class="text-center">Journal entry</th>
     </tr>
   </thead>
   <tbody>
@@ -27,22 +18,35 @@
         <td>{{format-value line.value 'debit'}}</td>
         <td>{{format-value line.value 'credit'}}</td>
         <td>{{format-balance line.balance.value normalBalance}}</td>
-        <td>
-          <a {{bind-attr href=line.reference}}>
-            <img src="assets/icon-reference.png"></img>
-          </a>
+        <td class="text-center">
+          {{#if line.reference}}
+            <a {{bind-attr href=line.reference}} target="_blank">
+              <img src="assets/icon-reference.png"></img>
+            </a>
+          {{/if}}
         </td>
-        <td>
+        <td class="text-center">
           {{#link-to "journal-entry" line.journalEntry}}
             <img src="assets/icon-journal-entry.png"></img>
           {{/link-to}}
         </td>
       </tr>
     {{/each}}
-    {{#if loading}}
-      <tr>
-        <td colspan="5" class="loading-more">Loading More...</td>
-      </tr>
-    {{/if}}
-  </tobdy>
+    <tr>
+      <td colspan="7" class="loading-more" id="accountLinesLoader">
+        {{partial "loading"}}
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Total</th>
+      <th>&nbsp;</th>
+      <th>{{format-value balance.debit_value 'debit'}}</th>
+      <th>{{format-value balance.credit_value 'credit'}}</th>
+      <th>{{format-balance balance.value account.normalBalance}}</th>
+      <th></th>
+      <th></th>
+    </tr>  
+  </tfoot>
 </table>

@@ -10,8 +10,12 @@ export default DS.Model.extend({
   book:     DS.attr('string'),
 
   allBooks: function() {
-    return this.loadBooks();
-  }.property('books'),
+    if (this.isPresent()) {
+      return this.loadBooks();
+    } else {
+      return Ember.A();
+    }
+  }.property('key', 'secret', 'org'),
 
   isPresent: function() {
     return !Ember.isEmpty(this.get('key'))    &&

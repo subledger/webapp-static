@@ -7,7 +7,8 @@ export default Ember.View.extend({
     Ember.run.once($.proxy(function() {
       this.loadNextPage();
     }, this));
-  }.observes('controller.content.@each'),
+
+  }.observes('controller.content.@each').on("init"),
 
   loadNextPage: function() {
     if ($(".loading-more")[0] !== undefined && $(".loading-more").visible()) {
@@ -16,13 +17,13 @@ export default Ember.View.extend({
   },
 
   didInsertElement: function() {
-    $(".main-content").on('scroll', $.proxy(function() {
+    $(".app-main-content").on('scroll', $.proxy(function() {
       this.set('loadingFirstPage', false);
       this.loadNextPage();
     }, this));
   },
 
   willDestroyElement: function() {
-    $(".main-content").off('scroll');
+    $(".app-main-content").off('scroll');
   }
 });

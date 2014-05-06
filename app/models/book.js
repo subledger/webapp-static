@@ -4,6 +4,6 @@ export default DS.Model.extend({
   reference:      DS.attr('string'),
   version:        DS.attr('number'),
 
-  accounts:       DS.hasMany('account'),
-  journalEntries: DS.hasMany('journalEntry')
+  // accounts:       DS.hasMany('account'),
+  // journalEntries: DS.hasMany('journalEntry')
 });

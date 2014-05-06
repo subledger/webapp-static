@@ -1,49 +1,9 @@
-{{#link-to 'reports'}}Back to List{{/link-to}}
+<div class="row">
+  <div class="col-md-12 link-back">
+    {{#link-to 'reports'}}&lt; Back to List{{/link-to}}      
+  </div>
+</div>
 
 {{#each category in categories}}
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="row">
-        <div class="col-md-10">
-          {{category.description}}
-        </div>
-
-        <div class="col-md-2">
-          {{category.balance.value.amount}}
-        </div>
-      </div>
-    </div>
-
-    {{#if category.categories}}
-      <div class="panel-body">
-        <table class="table table-bordered table-striped">
-          <tbody>
-            {{#each subCategory in category.categories}}
-              <tr>
-                <td>{{subCategory.description}}</td>
-                <td>{{subCategory.balance.value.amount}}</td>
-              </tr>
-
-              {{#if subCategory.categories}}
-                <tr>
-                  <td colspan="2">
-                    <table class="table table-condensed table-striped">
-                      <tbody>
-                        {{#each subsubCategory in subCategory.categories}}
-                          <tr>
-                            <td>{{subsubCategory.description}}</td>
-                            <td>{{subsubCategory.balance.value.amount}}</td>
-                          </tr>
-                          {{/each}}
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-              {{/if}}
-            {{/each}}
-          </tbody>
-        </table>
-      </div>
-    {{/if}}
-  </div>
+  {{render "report-rendering-category" category}}
 {{/each}}

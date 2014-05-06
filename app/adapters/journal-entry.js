@@ -5,15 +5,21 @@ export default ApplicationAdapter.extend({
     var data = this.serialize(record, { includeId: true });
 
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
-      this.getSelectedBook().journalEntry().createAndPost(data, function(e, result) {
-        if (e !== null) {
-          Ember.run(null, reject, e);
-          return;
-        }
+      if (record.isValid()) {
+          this.getSelectedBook().journalEntry().createAndPost(data, function(e, result) {
+            if (e !== null) {
+              Ember.run(null, reject, e);
+              return;
+            }
 
-        Ember.run(null, resolve, result);
-      });
+            Ember.run(null, resolve, result);
+          });
+
+      } else {
+        reject(new DS.InvalidError());
+      }
     }, this));
+
   },
 
   find: function(store, type, id) {
@@ -32,30 +38,28 @@ export default ApplicationAdapter.extend({
   // possilble parameters are order, date, nextPageId, perPage
   findQuery: function(store, type, query) {
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+      var date = query.date;
       var config = this.criteria().limit(query.limit || 25).posted();
 
       // calculate the query criterias
       if (query.order === "desc") {
-        if (query.date !== undefined) {
-          config = config.ending().effectiveAt();
+        date = date || new Date().toISOString();
 
-        } else if (query.pageId !== undefined) {
-          config = config.preceding().id(query.pageId);
-
+        if (query.pageId) {
+          config = config.preceding().id(query.pageId); 
+                   
         } else {
-          config = config.ending().effectiveAt();
+          config = config.ending().effectiveAt(date);          
         }
 
       } else {
-        var date = query.date || new Date(Date.UTC(1970, 0));
-        if (query.date !== undefined) {
-          config = config.starting().effectiveAt(date);
+        date = date || new Date(Date.UTC(1970, 0)).toISOString();
 
-        } else if (query.pageId !== undefined) {
+        if (query.pageId) {
           config = config.following().id(query.pageId);
 
         } else {
-          config = config.ending().effectiveAt(date);
+          config = config.starting().effectiveAt(date);
         }
       }
 

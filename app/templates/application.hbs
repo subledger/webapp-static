@@ -13,9 +13,22 @@
       </a>
     </div>
     <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li>{{#link-to 'login'}}Settings{{/link-to}}</li>
-        <li><a href="#logout">Logout</a></li>
+      <ul class="nav navbar-nav navbar-right app-account-nav">
+        <li>
+          {{#link-to 'login'}}
+            <img src="assets/icon-settings.png" class="left" />
+            <span class="text">Settings</span>
+            <span class="separator">
+              <img src="assets/separator.png" class="vertical-line" />
+            </span>
+          {{/link-to}}
+        </li>
+        <li>
+          {{#link-to 'logout'}}
+            <img src="assets/icon-logout.png" class="left" />
+            <span class="text">Logout</span>
+          {{/link-to}}
+        </li>
       </ul>
     </div>
   </div>
@@ -23,53 +36,51 @@
 
 <div class="container-fluid">
   <div class="row app-all-content">
-    <div class="col-sm-12 col-md-3 app-main-nav">
+    <div class="col-sm-4 col-md-3 col-lg-2 app-main-nav">
       <ul class="nav nav-sidebar">
         <li>
-          <select name="select" class="form-control">
-            {{#each book in App.credentials.allBooks}}
-              <option value="{{book.id}}">{{book.description}}</option>
-            {{/each}}
-          </select>
+          {{view Ember.Select content=App.credentials.allBooks optionValuePath="content.id" optionLabelPath="content.description" class="form-control"}}
         </li>
-        <li class="active">
-          {{#link-to 'index'}}
-            <img src="assets/icon-stream.png" class="left" />
-            Activity Stream
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}
-        </li>
-        <li>
-          {{#link-to 'reports'}}
-            <img src="assets/icon-report.png" class="left" />
-            Reports
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}</li>
-        <li>
-          {{#link-to 'journal-entries.new'}}
-            <img src="assets/icon-new.png" class="left" />
-            Journal Entry
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}
-        </li>
+
+        {{#link-to 'journal-entries.index' tagName="li" class="nav-link"}}
+          <img src="assets/icon-stream.png" class="left" />
+          Activity Stream
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}
+
+        {{#link-to 'reports' tagName="li" class="nav-link"}}
+          <img src="assets/icon-report.png" class="left" />
+          Reports
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}
+
+        {{#link-to 'journal-entries.new' tagName="li" class="nav-link"}}
+          <img src="assets/icon-new.png" class="left" />
+          Manual Journal Entry
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}
       </ul>
     </div>
 
-    <div class="col-sm-12 col-md-9 app-main-content">
+    <div class="col-sm-8 col-md-9 col-lg-10 app-main-content">
       {{outlet}}
     </div>
   </div>
 </div>
 
-<nav class="navbar navbar-default navbar-fixed-bottom app-footer" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-bottom hidden-xs app-footer" role="navigation">
   <div class="container-fluid">
     <ul class="nav navbar-nav">
-      <li><a href="//subledger.com">About</a></li>
-      <li><a href="//subledger.com/blog">Blog</a></li>
-      <li><a href="//subledger.com/#team">Jobs</a></li>
+      <li><a href="//subledger.com" target="_blank">About</a></li>
+      <li><a href="//subledger.com/blog" target="_blank">Blog</a></li>
+      <li><a href="//subledger.com/#team" target="_blank">Jobs</a></li>
+      <!--
       <li><a href="//subledger.com/term">Terms of service</a></li>
+      -->
     </ul>
 
-    <p class="navbar-text navbar-right">Subledger Inc 2013</p>
+    <p class="navbar-text navbar-right">
+      <a href="//subledger.com" target="_blank">&copy; Subledger Inc 2013</a>
+    </p>
   </div>
 </nav>

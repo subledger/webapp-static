@@ -1,0 +1,21 @@
+<div class="panel panel-default report-rendering">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-10">
+        {{description}}
+      </div>
+
+      <div class="col-xs-2 text-right">
+        {{format-amount balance.value.amount}}
+      </div>
+    </div>
+  </div>
+
+  {{#if categories}}        
+    <div class="panel-body">
+      {{#each subCategory in categories}}
+        {{render "report-rendering-category" subCategory}}
+      {{/each}}
+    </div>
+  {{/if}}
+</div>

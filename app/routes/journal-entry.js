@@ -1,5 +1,4 @@
 import AuthenticatedRoute from "subledger-app/routes/authenticated";
-import notFoundHandler from 'subledger-app/utils/not-found-handler';
 
 export default AuthenticatedRoute.extend({
   model: function(params) {
@@ -15,9 +14,8 @@ export default AuthenticatedRoute.extend({
   setupController: function(controller, model) {
     controller.set('model', model);
     controller.set('expanded', true);
+    controller.set('linesAlreadyLoaded', false);
 
-    if (!controller.get('linesAlreadyLoaded') && !controller.get('loadingLines')) {
-      controller.loadAllLinesPages();
-    }
+    controller.loadAllLinesPages();
   }
 });

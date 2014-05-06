@@ -28,7 +28,7 @@ export default ApplicationAdapter.extend({
 
       } else {
         // need to request the report rendering
-        var config = this.criteria().at(query.to.toISOString());
+        var config = this.criteria().at(query.at.toISOString());
 
         this.getSelectedBook().report(reportId).render(config.get(), function(e, result) {
           if (e !== null) {

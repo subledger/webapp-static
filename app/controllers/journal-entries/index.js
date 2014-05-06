@@ -27,7 +27,7 @@ export default JournalEntriesController.extend({
     perPage = perPage || 25;
 
     var query = {
-      order: "desc",
+      order: "asc",
       limit: perPage,
       pageId: pageId
     };

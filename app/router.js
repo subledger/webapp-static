@@ -2,6 +2,7 @@ var Router = Ember.Router.extend();
 
 Router.map(function() {
   this.resource('login');
+  this.resource('logout');
 
   this.resource('journal-entries', function() {
     this.route('new');

@@ -1,7 +1,26 @@
 @import "/vendor/bootstrap/less/bootstrap.less";
 @import "/vendor/eonasdan-bootstrap-datetimepicker/src/less/bootstrap-datetimepicker.less";
+@import "/vendor/typeahead.js-bootstrap3.less/typeahead.less";
 @import "variables.less";
 @import "bootstrap.less";
+
+.placeholder-color(@color: @white) {
+  &::-webkit-input-placeholder {
+     color: @color;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+     color: @color;  
+  }
+
+  &::-moz-placeholder {  /* Firefox 19+ */
+     color: @color;  
+  }
+
+  &:-ms-input-placeholder {  
+     color: @color;  
+  }
+}
 
 html {
   height: 100%;
@@ -9,9 +28,24 @@ html {
 
 body {
   height: 100%;
-	padding-top: 50px;
-	padding-bottom: 70px;
+  padding-top: 50px;
+  padding-bottom: 60px;
 }
+
+@media (min-width: 768px) {
+  .container > .navbar-header,
+  .container-fluid > .navbar-header,
+  .container > .navbar-collapse,
+  .container-fluid > .navbar-collapse {
+    margin-right: 30px;
+    margin-left: 15px;
+  }
+
+  .navbar-nav.navbar-right:last-child {
+    margin-right: 0;
+  }
+}
+
 
 .container-fluid {
   height: 100%;
@@ -25,13 +59,58 @@ body {
   cursor: pointer;
 }
 
-.app-logo {
-  width: 173px;
-  height: 21px;
+.text-bold {
+  font-weight: bold;
+}
+
+.navbar-brand {
+  .app-logo {
+    width: 173px;
+    height: 21px;
+  }
+
+  .label-info {
+    margin-left: 5px;
+    font-weight: initial;
+  }
+}
+
+.link-back {
+  margin-bottom: 15px;
 }
 
 .app-all-content {
   height: 100%;
+}
+
+.app-menu {
+  .separator {
+    margin-left: 15px;
+    .shadow {
+      margin-right: -3px;
+      vertical-align: bottom;
+    }
+  }
+}
+
+.app-account-nav {
+  &.nav > li {
+    a {
+      padding: 0 0 0 15px;
+      line-height: 51px;
+      text-shadow: black 0 1px;
+
+      img.left {
+        margin-right: 10px;
+      }
+
+      &:hover {
+        span.text {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
 .app-main-nav {
@@ -40,7 +119,7 @@ body {
   padding-right: 0;
 
   .nav > li {
-    box-shadow: 0px 1px 1px 0px @white;
+    box-shadow: 0 1px 1px 0 @white;
     border-bottom: 1px solid @default-border-color;
 
     &:first-child {
@@ -49,18 +128,8 @@ body {
       padding-bottom: @default-padding;
     }
 
-    &.active > a {
-      color: #1b6f8b;
-      background-color: @background-color-selected;
-
-      img.right {
-        z-index: 1000;
-        margin-right: -1px;
-        position: relative;
-      }
-    }
-
-    &> a {
+    &.nav-link {
+      cursor: pointer;
       color: #5e5e5e;
       font-weight: 700;
       font-family: 'PT Sans', sans-serif;
@@ -75,15 +144,28 @@ body {
       img.right {
         float: right;
         margin-right: -20px;
-        transition: margin-right, .4s;
+        position: initial;
+        transition: margin-right .4s;
       }
 
       &:hover {
         color: #1b6f8b;
+        text-decoration: underline;
         background-color: @background-color-selected;
 
         img.right {
           margin-right: -1px;
+        }
+      }
+
+      &.active {
+        color: #1b6f8b;
+        background-color: @background-color-selected;
+
+        img.right {
+          z-index: 1000;
+          margin-right: -1px;
+          position: relative;
         }
       }
     }
@@ -101,5 +183,135 @@ body {
 
 .app-footer {
   border-top: 0;
+  line-height: 20px;
   background-color: transparent;
+
+  &.navbar-default .navbar-nav > li > a {
+    font-weight: bold;
+    color: @gray-dark;
+    text-shadow: @white-text-shadow;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .navbar-text > a {
+    font-weight: bold;
+    color: @gray-dark;
+    text-shadow: @white-text-shadow;
+  }
+}
+
+.items-actions {
+  text-align: right;
+  margin: 22px 17px;
+
+  .action {
+    .action-text {
+      font-weight: bold;
+      margin-right: 13px;
+    }
+  }
+}
+
+.journal-entry {
+  &.hover-highlight:hover {
+    box-shadow: 0 0 10px @brand-info;
+    border: 1px solid @brand-info;
+    transition: box-shadow 0.5s;
+  }
+}
+
+.report {
+  text-transform: uppercase;
+
+  .panel-body {
+    padding: 22px 10px 26px 12px;
+
+    .inputs {
+      padding-right: 0;
+
+      .input-group-addon {
+        border-radius: 0;
+        border-right: 0; 
+      }
+    }
+
+    .actions {
+      padding-left: 0;
+
+      button {
+        border-left: 0;
+        margin: 0;
+        margin-left: -2px;
+        border-radius: 0 4px 4px 0;
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  .progress {
+    height: 5px;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+}
+
+.report-rendering {
+  .panel-body  {
+    padding: 0 0 0 15px;
+
+    &> .panel {
+      border: 0;
+      margin: 0;
+      box-shadow: none;
+
+      .panel-heading {
+        border-bottom: 0;
+        padding-left: 15px;
+        background-color:  transparent;
+      }
+    }
+  }
+}
+
+.manual-journal-entry {
+  #lines {
+    .line {
+      &:nth-of-type(n+2) {
+        margin-top: 10px;
+        padding-top: 15px;
+        border-top: 1px dashed @default-border-color;
+      }
+
+      input.muted {
+        background-color: @gray-lighter;
+      }
+
+      .debit, .credit {
+        &.has-success, &.has-error {
+          input {
+            color: @white;
+            .placeholder-color(@white);
+          }
+        }
+
+        &.has-success input {
+          background-color: lighten(@brand-success, 10%);
+        }
+
+        &.has-error input {
+          background-color: lighten(@brand-danger, 10%);
+        }
+      }
+
+      .form-group {
+        margin-bottom: 5px;
+      }
+    }
+  }
 }

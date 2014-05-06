@@ -1,15 +1,19 @@
-<div class="panel panel-default">
+<div class="panel panel-default manual-journal-entry">
   <div class="panel-heading">
     <form role="form">
       <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
+        <div class="col-md-2">
+          <div {{bind-attr class=':form-group model.errors.effectiveAt:has-error'}}>
             <div class='input-group date effective-at'>
-              {{input type="text" value=view.effectiveAt class="form-control"}}
+              {{input type="text" value=model.effectiveAt class="form-control" id="effectiveAt" autofocus="autofocus" tabindex="1"}}
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
               </span>
             </div>
+
+            {{#each error in model.errors.effectiveAt}}
+              <span class="help-block">{{error.message}}</span>
+            {{/each}}
           </div>
         </div>
       </div>
@@ -18,12 +22,18 @@
 
   <div class="panel-body">
     <form role="form">
-      <div class="form-group">
-        {{input type="text" value=view.description class="form-control" placeholder="Description"}}
+      <div {{bind-attr class=':form-group model.errors.description:has-error'}}>
+        {{input type="text" value=model.description class="form-control" placeholder="Description" tabindex="1"}}
+        {{#each error in model.errors.description}}
+          <span class="help-block">{{error.message}}</span>
+        {{/each}}
       </div>
 
-      <div class="form-group">
-        {{input type="url" value=view.reference class="form-control" placeholder="Reference"}}
+      <div {{bind-attr class=':form-group model.errors.reference:has-error'}}>
+        {{input type="url" value=model.reference class="form-control" placeholder="Reference" tabindex="1"}}
+        {{#each error in model.errors.reference}}
+          <span class="help-block">{{error.message}}</span>
+        {{/each}}
       </div>
     </form>
 
@@ -31,14 +41,16 @@
       <div class="panel-heading">
         <div class="row">
           <div class="col-md-8">
-            Entries
+            <div class="text-left text-bold">
+              Entries
+            </div>
           </div>
 
-          <div class="col-md-2">
+          <div class="col-md-2 hidden-xs text-center">
             Debit
           </div>
 
-          <div class="col-md-2">
+          <div class="col-md-2 hidden-xs text-center">
             Credit
           </div>
         </div>
@@ -52,29 +64,29 @@
 
       <div class="panel-footer">
         <div class="row">
-          <div class="col-md-8">
-            <span class="pull-right">
-              Totals
-            </span>
+          <div class="col-md-8 text-right">
+            Totals
           </div>
 
-          <div class="col-md-2">
-            0,00
+          <div class="col-md-2 text-right">
+            {{format-amount view.totalDebit}}
           </div>
 
-          <div class="col-md-2">
-            0,00
+          <div class="col-md-2 text-right">
+            {{format-amount view.totalCredit}}
           </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12">
-          <div class="text-right">
-            Add new line
-            <button type="button" class="btn btn-warning" {{action "addLine" target="view"}}>
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
+          <div class="items-actions">
+            <span class="action">
+              <span class="action-text">Add a new line</span>
+              <button type="button" class="btn btn-warning" {{action "addLine" target="view"}} tabindex="10000">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </span>
           </div>
         </div>
       </div>
@@ -82,10 +94,10 @@
   </div>
 
   <div class="panel-footer">
-    <button type="button" class="btn btn-primary">Clear all</button>
+    <button type="button" class="btn btn-primary" tabindex="10002">Clear all</button>
 
     <div class="pull-right">
-      <button type="button" class="btn btn-success" {{action "post" target="view"}}>Post</button>
+      <button type="button" class="btn btn-success" {{action "post" target="view"}} tabindex="10001">Post</button>
     </div>
   </div>
 </div>
