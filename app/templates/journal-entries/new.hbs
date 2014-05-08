@@ -1,71 +1,57 @@
-<div class="panel panel-default manual-journal-entry">
-  <div class="panel-heading">
-    <form role="form">
-      <div class="row">
-        <div class="col-md-2">
-          <div {{bind-attr class=':form-group model.errors.effectiveAt:has-error'}}>
-            <div class='input-group date effective-at'>
-              {{input type="text" value=model.effectiveAt class="form-control" id="effectiveAt" autofocus="autofocus" tabindex="1"}}
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-              </span>
-            </div>
-
-            {{#each error in model.errors.effectiveAt}}
-              <span class="help-block">{{error.message}}</span>
-            {{/each}}
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="panel-body">
-    <form role="form">
-      <div {{bind-attr class=':form-group model.errors.description:has-error'}}>
-        {{input type="text" value=model.description class="form-control" placeholder="Description" tabindex="1"}}
-        {{#each error in model.errors.description}}
-          <span class="help-block">{{error.message}}</span>
-        {{/each}}
-      </div>
-
-      <div {{bind-attr class=':form-group model.errors.reference:has-error'}}>
-        {{input type="url" value=model.reference class="form-control" placeholder="Reference" tabindex="1"}}
-        {{#each error in model.errors.reference}}
-          <span class="help-block">{{error.message}}</span>
-        {{/each}}
-      </div>
-    </form>
-
+  <form role="form" class="manual-journal-entry" {{action "post" target="view" on="submit"}}>
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div class="panel-body">
+      
         <div class="row">
-          <div class="col-md-8">
-            <div class="text-left text-bold">
-              Entries
+          <div class="col-md-3">
+            <div {{bind-attr class=':form-group model.errors.effectiveAt:has-error'}}>
+              <div class='input-group date effective-at'>
+                {{input type="text" class="form-control" id="effectiveAt" tabindex="1"}}
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+
+              {{#each error in model.errors.effectiveAt}}
+                <span class="help-block">{{error.message}}</span>
+              {{/each}}            
             </div>
           </div>
 
-          <div class="col-md-2 hidden-xs text-center">
-            Debit
-          </div>
+          <div class="col-md-9">
+            <div {{bind-attr class=':form-group model.errors.description:has-error'}}>
+              {{input type="text" value=model.description class="form-control" placeholder="Description" autofocus="autofocus" tabindex="1"}}
+              {{#each error in model.errors.description}}
+                <span class="help-block">{{error.message}}</span>
+              {{/each}}
+            </div>
 
-          <div class="col-md-2 hidden-xs text-center">
-            Credit
+            <div {{bind-attr class=':form-group model.errors.reference:has-error'}}>
+              {{input type="text" value=model.reference class="form-control" placeholder="Reference" tabindex="1"}}
+              {{#each error in model.errors.reference}}
+                <span class="help-block">{{error.message}}</span>
+              {{/each}}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="panel-body">
-        <form role="form" id="lines">
-          {{view view.linesView}}
-        </form>
-      </div>
+        <div class="separator"></div>
 
-      <div class="panel-footer">
         <div class="row">
+          <div class="col-md-12">        
+            <div id="lines" >
+              {{view view.linesView}}
+            </div>
+          </div>
+        </div>
+
+        <div class="row totals">
           <div class="col-md-8 text-right">
             Totals
+
+            {{#each error in model.errors.lines}}
+              <p class="text-danger">{{error.message}}</p>
+            {{/each}}            
           </div>
 
           <div class="col-md-2 text-right">
@@ -78,26 +64,13 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="items-actions">
-            <span class="action">
-              <span class="action-text">Add a new line</span>
-              <button type="button" class="btn btn-warning" {{action "addLine" target="view"}} tabindex="10000">
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </span>
-          </div>
+      <div class="panel-footer">
+        <button type="button" class="btn btn-primary" tabindex="10002" {{action 'clear' target="view"}}>Clear all</button>
+
+        <div class="pull-right">
+          <button type="submit" class="btn btn-success" tabindex="10001">Post</button>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="panel-footer">
-    <button type="button" class="btn btn-primary" tabindex="10002">Clear all</button>
-
-    <div class="pull-right">
-      <button type="button" class="btn btn-success" {{action "post" target="view"}} tabindex="10001">Post</button>
-    </div>
-  </div>
-</div>
+</form>

@@ -3,16 +3,42 @@ export default Ember.View.extend({
   classNames: 'line',  
   templateName: 'journal-entries/new-line',
 
-  debitAmount: "",
-  creditAmount: "",
-  accountId: null,
   accountDescription: null,
+
+  debitAmount: function(key, value, previousValue) {
+    if (arguments.length > 1) {
+      this.get('model').set('debitAmount', value);
+    }
+
+    return this.get('model').get('debitAmount');
+  }.property('model.debitAmount'),
+
+  creditAmount: function(key, value, previousValue) {
+    if (arguments.length > 1) {
+      this.get('model').set('creditAmount', value);
+    }
+
+    return this.get('model').get('creditAmount');
+  }.property('model.creditAmount'),
+
+  addNewLineObserver: function() {
+    var parentView = this.get('parentView');
+
+    if (parentView.get('lastObject') === this) {
+      // add new line
+      this.get('parentView').get('parentView').addLine();
+
+      // enable delete button on this view
+      this.$(".remove").removeAttr('disabled');
+    }   
+
+  }.observes('accountDescription'),
 
   synchInputWithRecordField: function($input, record, field) {
     var self = this;
 
     var observer = function() {
-      $input.val(record.get(field));
+      self.get('model').set(field, record.get(field));
     };
 
     // initially, call the observer function once, and bind it
@@ -29,17 +55,17 @@ export default Ember.View.extend({
         record.removeObserver(field, self, observer);
 
         // remove muted class
-        $input.removeClass("muted");
+        $input.removeClass("synch");
       }
 
     }).on('change', function() {
       // if input content was deleted
       if (Ember.isEmpty($input.val())) {
         // copy back from record
-        $input.val(record.get(field));
+        self.get('model').set(field, record.get(field));
 
         // add muted class
-        $input.addClass('muted');
+        $input.addClass('synch');
 
         // rebind observer
         record.addObserver(field, self, observer);
@@ -47,13 +73,28 @@ export default Ember.View.extend({
     });
   },
 
+  actions: {
+    removeLine: function() {
+      this.$(".removeAction").addClass("hidden");
+      this.$(".removeConfirmation").removeClass("hidden");
+    },
+
+    confirmRemoveLine: function() {
+      this.get('parentView').get('parentView').removeLine(this);
+    },
+
+    cancelRemoveLine: function() {
+      this.$(".removeConfirmation").addClass("hidden");
+      this.$(".removeAction").removeClass("hidden");      
+    }
+  },
+
   didInsertElement: function() {
     var self = this;
 
     // mask money fields
     this.$().find(".currency").maskMoney({
-      allowNegative: true,
-      thousands: ''
+      allowNegative: false
     });
 
     // accounts typeahead
@@ -73,28 +114,28 @@ export default Ember.View.extend({
       // clear the account fields if a suggestion was not used
       if (self.get("accountDescription") !== $(this).typeahead('val')) {
         $(this).typeahead('val', '');
-        self.set("accountId", null);
+        self.get("model").set("account", null);
         self.set("accountDescription", null);
 
-        self.$(".debit, .credit").removeClass("has-success has-error");
+        self.$(".debit, .credit").removeClass("sameNormalBalanceType invertedNormalBalanceType");
         self.$(".debit input, .credit input").val("").attr("disabled", "disabled");
       }
       
     }).on("typeahead:selected", function(e, suggestion, datasetName) {
       // save selected suggestion
-      self.set("accountId", suggestion.id);
+      self.get("model").set("account", suggestion.id);
       self.set("accountDescription", suggestion.description);
       self.$(".debit input, .credit input").removeAttr("disabled");
 
       if (suggestion.normalBalance === 'debit') {
-        self.$(".debit").removeClass("has-error").addClass("has-success");
-        self.$(".credit").removeClass("has-success").addClass("has-error");
+        self.$(".debit").removeClass("invertedNormalBalanceType").addClass("sameNormalBalanceType");
+        self.$(".credit").removeClass("sameNormalBalanceType").addClass("invertedNormalBalanceType");
 
         self.$(".debit input").focus();
 
       } else {
-        self.$(".debit").removeClass("has-success").addClass("has-error");
-        self.$(".credit").removeClass("has-error").addClass("has-success");
+        self.$(".debit").removeClass("sameNormalBalanceType").addClass("invertedNormalBalanceType");
+        self.$(".credit").removeClass("invertedNormalBalanceType").addClass("sameNormalBalanceType");
 
         self.$(".credit input").focus();
       }

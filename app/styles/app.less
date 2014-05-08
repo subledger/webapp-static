@@ -215,6 +215,26 @@ body {
   }
 }
 
+.sameNormalBalanceType {
+  .has-success;
+}
+
+.invertedNormalBalanceType {
+  .has-error;
+}
+
+.totals {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: 10px;
+  text-shadow: @white-text-shadow;
+  background-image: @background-brown;
+}
+
+.currency {
+  text-align: right;
+}
+
 .journal-entry {
   &.hover-highlight:hover {
     box-shadow: 0 0 10px @brand-info;
@@ -280,37 +300,48 @@ body {
 }
 
 .manual-journal-entry {
+  .form-group {
+    margin-bottom: 5px;
+  }
+
+  .separator {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed @default-border-color;
+  }
+
   #lines {
     .line {
       &:nth-of-type(n+2) {
         margin-top: 10px;
         padding-top: 15px;
-        border-top: 1px dashed @default-border-color;
+        border-top: 1px dotted @default-border-color;
       }
 
-      input.muted {
+      input.synch {
+        font-style: italic;
         background-color: @gray-lighter;
       }
 
       .debit, .credit {
-        &.has-success, &.has-error {
+        &.sameNormalBalanceType, &.invertedNormalBalanceType {
           input {
             color: @white;
             .placeholder-color(@white);
           }
         }
 
-        &.has-success input {
+        &.sameNormalBalanceType input {
           background-color: lighten(@brand-success, 10%);
         }
 
-        &.has-error input {
+        &.invertedNormalBalanceType input {
           background-color: lighten(@brand-danger, 10%);
         }
       }
 
-      .form-group {
-        margin-bottom: 5px;
+      .remove {
+        margin-top: 16px;
       }
     }
   }

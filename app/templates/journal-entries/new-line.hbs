@@ -1,21 +1,23 @@
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-3">
     <div {{bind-attr class=':form-group view.model.errors.account:has-error'}}>
       <input class="account form-control" type="text" placeholder="Account" {{bind-attr tabindex=view.tabIndex1}} />
       {{#each error in view.model.errors.account}}
         <span class="help-block">{{error.message}}</span>
       {{/each}}        
     </div>
+   </div>
 
+   <div class="col-md-5">
     <div {{bind-attr class=':form-group view.model.errors.description:has-error'}}>
-      {{input type="text" value=view.model.description class="form-control description muted" placeholder="Description" tabindex=view.tabIndex2}}
+      {{input type="text" value=view.model.description class="form-control description synch" placeholder="Description" tabindex=view.tabIndex2}}
       {{#each error in view.model.errors.description}}
         <span class="help-block">{{error.message}}</span>
       {{/each}}
     </div>
 
     <div {{bind-attr class=':form-group view.model.errors.reference:has-error'}}>
-      {{input type="url" value=view.model.reference class="form-control reference muted" placeholder="Reference" tabindex=view.tabIndex2}}
+      {{input type="text" value=view.model.reference class="form-control reference synch" placeholder="Reference" tabindex=view.tabIndex2}}
       {{#each error in view.model.errors.reference}}
         <span class="help-block">{{error.message}}</span>
       {{/each}}        
@@ -34,6 +36,21 @@
   <div class="col-md-2">
     <div {{bind-attr class=':form-group :credit view.model.errors.value:has-error'}}>
       {{input type="text" value=view.creditAmount class="form-control currency" placeholder="Credit" tabindex=view.tabIndex1 disabled="disabled"}}
+    </div>
+
+
+    <button type="button" class="btn btn-xs btn-link pull-right remove removeAction" disabled="disabled" {{action 'removeLine' target='view'}}>
+      <span class="glyphicon glyphicon-trash"></span> Remove line
+    </button>
+
+    <div class="btn-group pull-right hidden removeConfirmation">
+      <button type="button" class="btn btn-xs btn-link remove" disabled="disabled" {{action 'confirmRemoveLine' target='view'}}>
+        <span class="glyphicon glyphicon-ok"></span> I'm sure, remove it
+      </button>
+
+      <button type="button" class="btn btn-xs btn-link remove" disabled="disabled" {{action 'cancelRemoveLine' target='view'}}>
+        <span class="glyphicon glyphicon-remove"></span> Cancel
+      </button>      
     </div>
   </div>
 </div>

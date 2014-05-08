@@ -8,21 +8,36 @@ export default DS.Model.extend({
 
   isValid: function() {
     var hasErrors = false;
+    var urlregex = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
 
     if (Ember.isEmpty(this.get('effectiveAt'))) {
       hasErrors = true;
       this.get('errors').add('effectiveAt', 'Must not be blank');
-    }    
+    }
 
     if (Ember.isEmpty(this.get('description'))) {
       hasErrors = true;
-      this.get('errors').add('description', 'Must no be blank');
+      this.get('errors').add('description', 'Must not be blank');
     }
 
     if (Ember.isEmpty(this.get('reference'))) {
       hasErrors = true;
       this.get('errors').add('reference', 'Must not be blank');
+
+    } else {
+      if (!urlregex.test(this.get('reference'))) {
+        hasErrors = true;
+        this.get('errors').add('reference', 'Must be valid URI');
+      }
     }
+
+    if (this.get('lines').length < 1) {
+      hasErrors = true;
+      this.get('errors').add('lines', 'You need at least one line');
+    }
+
+    var totalCredit = 0;
+    var totalDebit = 0;
 
     this.get('lines').forEach(function(line, index, enumerable) {
       if (Ember.isEmpty(line.get('account'))) {
@@ -38,14 +53,31 @@ export default DS.Model.extend({
       if (Ember.isEmpty(line.get('reference'))) {
         hasErrors = true;
         line.get('errors').add('reference', 'Must not be blank');
+      } else {
+        if (!urlregex.test(line.get('reference'))) {
+          hasErrors = true;
+          line.get('errors').add('reference', 'Must be valid URI');
+        }        
       }
 
       if (Ember.isEmpty(line.get('value')) || Ember.isEmpty(line.get('value')['amount'])) {
         hasErrors = true;
         line.get('errors').add('value', 'Must not be blank');
-      }      
 
+      } else {
+        if (line.get('value')['type'] === 'credit') {
+          totalCredit += accounting.unformat(line.get('value')['amount']);
+          
+        } else if (line.get('value')['type'] === 'debit') {
+          totalDebit += accounting.unformat(line.get('value')['amount']);
+        }
+      }
     }, this);
+
+    if (totalCredit !== totalDebit) {
+      hasErrors = true;
+      this.get('errors').add('lines', 'Total credit must match total debit');
+    }
 
     return !hasErrors;
   },

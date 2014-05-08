@@ -1,28 +1,31 @@
 import NewLinesView from 'subledger-app/views/journal-entries/new-lines';
 
 export default Ember.View.extend({
-  linesView: NewLinesView.create(),
+  linesView: null,
+
+  effectiveAtInterval: null,
 
   init: function() {
     this._super();
+    this.set('linesView', NewLinesView.create());
   },
 
   totalDebit: function() {
     var total = 0;
 
-    this.get('linesView').get('childViews').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('debitAmount'));
+    this.get('linesView').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('model').get('debitAmount'));
     }, this);
 
     return total;
 
-  }.property('linesView.@each.debitAmount'),  
+  }.property('linesView.@each.debitAmount'),
 
   totalCredit: function() {
     var total = 0;
 
-    this.get('linesView').get('childViews').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('creditAmount'));
+    this.get('linesView').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('model').get('creditAmount'));
     }, this);
 
     return total;
@@ -60,12 +63,31 @@ export default Ember.View.extend({
 
       // add first line
       this.addLine();
-
-      // add a seconds line
-      this.addLine();
     }    
 
   }.observes("controller.loadingAccounts"),
+
+  addLine: function() {
+    this.controller.send('addLine');
+    var line = this.controller.get('lines').get('lastObject');
+    var journalEntry = this.controller.get('model');
+    var accountsDataset = this.get('accountsDataset');
+
+    this.get('linesView').addLine(line, journalEntry, accountsDataset);
+  },
+
+  removeLine: function(lineView) {
+    if (this.get('linesView').get('childViews').length <= 1) return;
+    if (lineView === this.get('linesView').get('lastObject')) return;
+
+    this.get('linesView').removeObject(lineView);
+    this.controller.send('removeLine', lineView.get('model'));
+  },
+
+  getEffectiveAt: function() {
+    var date = moment(this.$("#effectiveAt").val());
+    return date.isValid() ? date.toDate() : null;
+  },  
 
   actions: {
     addLine: function() {
@@ -77,59 +99,37 @@ export default Ember.View.extend({
       var journalEntry = this.get('controller').get('model');      
       journalEntry.set('effectiveAt', this.getEffectiveAt());
 
-      // get account ids and amounts for each line
-      this.get('linesView').get('childViews').forEach(
-        function(item, index, enumerable) {
-          // get the line
-          var line = item.get('model');
-
-          // get amd set the account id
-          line.set("account", item.get("accountId"));
-
-          // get the amount
-          var value = {
-            type: "debit",
-            amount: item.get('debitAmount')
-          };
-
-          var creditAmount = item.get('creditAmount');
-          if (creditAmount) {
-            value["type"] = "credit";
-            value["amount"] = creditAmount;
-          }
-
-          // set the amount
-          line.set("value", value);
-        }, this
-      );
-
       // call post on controller
       this.controller.send('post');
+    },
+
+    clear: function() {
+      this.get('linesView').reset();
+      this.controller.send('clear');
+      this.$().find(".effective-at").data("DateTimePicker").setDate(new Date());
+      this.addLine();
     }
   },
 
   didInsertElement: function() {
     // configure datepicker for at
     this.$().find(".effective-at").datetimepicker({
-      useCurrent: false
-    });
+      useCurrent: true,
+      defaultDate: new Date()
+
+    }).on('dp.show', $.proxy(function() {
+      clearInterval(this.get('effectiveAtInterval'));
+    }, this));
+
+    var intervalHandler = setInterval($.proxy(function() {
+      this.$().find(".effective-at").data("DateTimePicker").setDate(new Date());
+    }, this), 1000);
+
+    this.set('effectiveAtInterval', intervalHandler);
   },
 
   willDestroyElement: function() {
-  },
-
-  addLine: function() {
-    this.controller.send('addLine');
-    var line = this.controller.get('lines').get('lastObject');
-    var journalEntry = this.controller.get('model');
-    var accountsDataset = this.get('accountsDataset');
-
-    this.get('childViews').get('lastObject').addLine(line, journalEntry, accountsDataset);
-  },
-
-  getEffectiveAt: function() {
-    var date = moment(this.$("#effectiveAt").val());
-    return date.isValid() ? date.toDate() : null;
+    clearInterval(this.get('effectiveAtInterval'));
   }
 
 });
