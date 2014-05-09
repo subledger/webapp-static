@@ -32,21 +32,10 @@
         </td>
       </tr>
     {{/each}}
-    <tr>
+    <tr {{bind-attr class="view.loaderRunning::hidden"}}>
       <td colspan="7" class="loading-more" id="accountLinesLoader">
         {{partial "loading"}}
       </td>
     </tr>
   </tbody>
-  <tfoot>
-    <tr>
-      <th>Total</th>
-      <th>&nbsp;</th>
-      <th>{{format-value balance.debit_value 'debit'}}</th>
-      <th>{{format-value balance.credit_value 'credit'}}</th>
-      <th>{{format-balance balance.value account.normalBalance}}</th>
-      <th></th>
-      <th></th>
-    </tr>  
-  </tfoot>
 </table>

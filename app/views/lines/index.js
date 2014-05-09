@@ -2,17 +2,11 @@ export default Ember.View.extend({
 	loaderRunning: false,
 	loaderInterval: null,
 
-	didInsertElement: function() {
-		if (this.controller.get("content").length === 0) {
-			this.loadPage();	
+	loaderStopper: function() {
+		if (!this.get('controller').get('hasNextPage')) {
+			this.stopLoader();
 		}
-		
-		this.startLoader();
-	},
-
-	willDestroyElement: function() {
-		this.stopLoader();
-	},
+	}.observes('controller.hasNextPage'),
 
 	startLoader: function() {
 		if (this.get('loaderRunning')) return;
@@ -37,5 +31,17 @@ export default Ember.View.extend({
 		if (this.$("#accountLinesLoader").visible()) {
 			this.controller.send("loadPage");
 		}
+	},
+
+	didInsertElement: function() {
+		if (this.controller.get("content").length === 0) {
+			this.loadPage();	
+		}
+		
+		this.startLoader();
+	},
+
+	willDestroyElement: function() {
+		this.stopLoader();
 	}
 });

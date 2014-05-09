@@ -9,7 +9,6 @@ export default AuthenticatedRoute.extend({
   setupController: function(controller, model) {
     controller.set('model', model);
 
-    controller.get("lines").clear();
     controller.get("accounts").clear();
     controller.set("loadingAccounts", true);
     controller.set("hasNextAccountsPage", true);

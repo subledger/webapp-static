@@ -3,15 +3,7 @@ export default Ember.ArrayController.extend({
   account: Ember.computed.alias("controllers.account"),
 
   loading: false,
-
-  keepTrackOfBalance: function() {
-    var line = this.get('lastObject');
-
-    if (line !== undefined) {
-      this.set('balance', line.get('balance'));
-    }
-
-  }.observes('content.@each'),
+  hasNextPage: true,
 
   actions: {
     loadPage: function() {
@@ -35,8 +27,20 @@ export default Ember.ArrayController.extend({
 
     return this.get('account').get('model').loadLines(query).then(
       $.proxy(function(lines) {
-        this.addObjects(lines.content);
-        this.set('loading', false);
+        this.unshiftObjects(lines.content);
+
+        if (lines.content.length === query.perPage) {
+          this.setProperties({
+            'loading': false,
+            'hasNextPage': true
+          });
+
+        } else {
+          this.setProperties({
+            'loading': false,
+            'hasNextPage': false
+          });
+        }
         return lines;
       }, this)
     );

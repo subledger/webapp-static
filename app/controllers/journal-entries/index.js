@@ -1,25 +1,25 @@
-import JournalEntriesController from "subledger-app/controllers/journal-entries";
-
-export default JournalEntriesController.extend({
+export default Ember.ArrayController.extend({
   itemController: 'JournalEntry',
 
   hasNextPage: true,
   loadingPage: false,
 
   actions: {
-    nextPage: function() {
+    nextPage: function(defer) {
       if (this.get('loadingPage') === true) return;
 
-      var lastObject = this.get('lastObject');
+      var object = this.get('firstObject');
       var nextPageId = null;
 
       this.set('loadingPage', true);
 
-      if (lastObject !== undefined) {
-        nextPageId = this.get('lastObject').get('id');
+      if (object !== undefined) {
+        nextPageId = object.get('id');
       }
 
-      this.loadPage(nextPageId);
+      this.loadPage(nextPageId).then(function() {
+        defer.resolve();
+      });
     }
   },
 
@@ -27,14 +27,13 @@ export default JournalEntriesController.extend({
     perPage = perPage || 25;
 
     var query = {
-      order: "asc",
       limit: perPage,
       pageId: pageId
     };
 
     return this.store.find('journalEntry', query).then(
       $.proxy(function(journalEntries) {
-        this.addObjects(journalEntries.content);
+        this.unshiftObjects(journalEntries.content);
 
         if (journalEntries.content.length === perPage) {
           this.set('hasNextPage', true);

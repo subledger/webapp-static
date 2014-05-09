@@ -3,6 +3,7 @@
 @import "/vendor/typeahead.js-bootstrap3.less/typeahead.less";
 @import "variables.less";
 @import "bootstrap.less";
+@import "growl.less";
 
 .placeholder-color(@color: @white) {
   &::-webkit-input-placeholder {
@@ -45,7 +46,6 @@ body {
     margin-right: 0;
   }
 }
-
 
 .container-fluid {
   height: 100%;
@@ -203,6 +203,10 @@ body {
   }
 }
 
+.loading-more {
+  margin-bottom: 30px;
+}
+
 .items-actions {
   text-align: right;
   margin: 22px 17px;
@@ -213,14 +217,6 @@ body {
       margin-right: 13px;
     }
   }
-}
-
-.sameNormalBalanceType {
-  .has-success;
-}
-
-.invertedNormalBalanceType {
-  .has-error;
 }
 
 .totals {
@@ -323,26 +319,58 @@ body {
         background-color: @gray-lighter;
       }
 
-      .debit, .credit {
-        &.sameNormalBalanceType, &.invertedNormalBalanceType {
-          input {
-            color: @white;
-            .placeholder-color(@white);
+      .currency-container {
+
+        input:not([disabled]).currency {
+          color: @white;
+          .placeholder-color(@white);
+        }
+
+        &.match {
+          .has-success;
+
+          input.currency {
+            background-color: lighten(@brand-success, 10%);
           }
         }
 
-        &.sameNormalBalanceType input {
-          background-color: lighten(@brand-success, 10%);
-        }
+        &.no-match {
+          .has-error;  
 
-        &.invertedNormalBalanceType input {
-          background-color: lighten(@brand-danger, 10%);
+          input.currency {
+            background-color: lighten(@brand-danger, 10%);
+          }
         }
       }
 
-      .remove {
+      p.warning {
+        margin: 9px 0 10px 0;
+      }
+
+      .actions {
         margin-top: 16px;
+
+        opacity: 0;
+        filter: alpha(opacity=0);
+
+        transition: all .4s;
       }
+
+      &:hover {
+        .actions {
+          opacity: 100;
+          filter: alpha(opacity=100);
+        }
+      }
+    }
+  }
+
+  .postProgress {
+    width: 100%;
+    margin-top: 7px;
+
+    .progress {
+      margin-bottom: 0;
     }
   }
 }

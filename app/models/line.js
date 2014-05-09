@@ -11,12 +11,24 @@ export default DS.Model.extend({
   value:        DS.attr(),
   balance:      DS.attr(),
 
+  amount: function() {
+    return this.get('value') ? this.get('value')['amount'] : null;
+  }.property('value'),
+
+  type: function() {
+    return this.get('value') ? this.get('value')['type'] : null;
+  }.property('type'),
+
   debitAmount: function(key, value, previousValue) {
-    if (arguments.length > 1 && value && value !== '0.00') {
-      this.set('value', {
-        type: 'debit',
-        amount: value
-      });
+    if (arguments.length > 1) {
+      if (value && value !== '0.00') {
+        this.set('value', {
+          type: 'debit',
+          amount: value
+        });
+      } else if (((value && value === '0.00') || !value) && previousValue) {
+        this.set('value', null);
+      }
     }
 
     var val = this.get('value');
@@ -29,11 +41,15 @@ export default DS.Model.extend({
   }.property('value'),
 
   creditAmount: function(key, value, previousValue) {
-    if (arguments.length > 1 && value && value !== '0.00') {
-      this.set('value', {
-        type: 'credit',
-        amount: value
-      });
+    if (arguments.length > 1) {
+      if (value && value !== '0.00') {
+        this.set('value', {
+          type: 'credit',
+          amount: value
+        });
+      } else if (((value && value === '0.00') || !value) && previousValue) {
+        this.set('value', null);
+      }
     }
 
     var val = this.get('value');

@@ -1,5 +1,4 @@
 export default Ember.Controller.extend({
-  lines: Ember.A(),
   accounts: Ember.A(),
   loadingAccounts: true,
   hasNextAccountsPage: true,
@@ -8,11 +7,22 @@ export default Ember.Controller.extend({
   actions: {
     addLine: function() {
       var line = this.store.createRecord('line');
-      this.get('lines').pushObject(line);
+      this.get('model').get('lines').pushObject(line);
     },
 
     removeLine: function(lineModel) {
-      this.get('lines').removeObject(lineModel);
+      this.get('model').get('lines').removeObject(lineModel);
+    },
+
+    toogleZeroLine: function(lineModel) {
+      if (lineModel.get('type') !== 'zero') {
+        lineModel.set('value', {
+          type: 'zero',
+          amount: '0.00'
+        });
+      } else {
+        lineModel.set('value', null);
+      }
     },
 
     post: function(journalEntryData) {
@@ -21,28 +31,26 @@ export default Ember.Controller.extend({
       // clear previous error messages
       journalEntry.get('errors').clear();
 
-      this.get('lines').forEach(function(item, index, enumerable) {
+      this.get('model').get('lines').forEach(function(item, index, enumerable) {
         item.get('errors').clear();
       }, this);
 
       // remove last line (will re-add if post fails)
       var line = null;
-      if (this.get('lines').length > 1) {
-        line = this.get('lines').get('lastObject');
-        this.get('lines').removeObject(line);
+      if (this.get('model').get('lines').toArray().length > 1) {
+        line = this.get('model').get('lines').get('lastObject');
+        this.get('model').get('lines').removeObject(line);
       }
-
-      // set the lines
-      journalEntry.set('lines', this.get('lines'));
 
       journalEntry.save().then(
         $.proxy(function(savedJournalEntry) {
-          this.transitionToRoute('journal-entries.new');
         }, this),
 
-        $.proxy(function() {
+        $.proxy(function(e) {
+          console.log(e);
+          
           if (line) {
-            this.get('lines').pushObject(line);
+            this.get('model').get('lines').pushObject(line);
           }
         }, this)
       );
@@ -50,7 +58,6 @@ export default Ember.Controller.extend({
 
     clear: function() {
       this.set('model', this.store.createRecord('journal-entry'));
-      this.get('lines').clear();
     }
   },
 

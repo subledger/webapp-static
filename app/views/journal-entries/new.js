@@ -10,31 +10,36 @@ export default Ember.View.extend({
     this.set('linesView', NewLinesView.create());
   },
 
-  totalDebit: function() {
-    var total = 0;
+  autobalancer: function() {
+    Ember.run.next(this, function() {
+      if (this.controller.get('model').get('lines').toArray().length < 2) return;
 
-    this.get('linesView').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('model').get('debitAmount'));
-    }, this);
+      // at this point, debits and credits already consider the last line
+      var debits = this.controller.get('model').get('totalDebit');
+      var credits = this.controller.get('model').get('totalCredit');
 
-    return total;
+      // so if it balances, return
+      if (debits === credits) return;
 
-  }.property('linesView.@each.debitAmount'),
+      // get last line
+      var lastLineModel = this.controller.get('model').get('lines').get('lastObject');
+      var lastLineDebitAmount = accounting.unformat(lastLineModel.get('debitAmount'));
+      var lastLineCreditAmount = accounting.unformat(lastLineModel.get('creditAmount'));
 
-  totalCredit: function() {
-    var total = 0;
+      // always subtract last line values from totals
+      debits -= lastLineDebitAmount;
+      credits -= lastLineCreditAmount;
 
-    this.get('linesView').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('model').get('creditAmount'));
-    }, this);
+      if (debits > credits) {
+        lastLineModel.set('creditAmount', accounting.formatMoney(debits - credits, ""));
 
-    return total;
-
-  }.property('linesView.@each.creditAmount'),
+      } else {
+        lastLineModel.set('debitAmount', accounting.formatMoney(credits - debits, ""));
+      }
+    });
+  }.observes('controller.model.totalCredit'),
 
   accountsLoaded: function() {
-    console.log("accountsLoaded observed");
-    
     if (this.get("controller.loadingAccounts") === false) {
       // get accounts from controller
       var accounts = this.controller.get("accounts");
@@ -69,7 +74,7 @@ export default Ember.View.extend({
 
   addLine: function() {
     this.controller.send('addLine');
-    var line = this.controller.get('lines').get('lastObject');
+    var line = this.controller.get('model').get('lines').get('lastObject');
     var journalEntry = this.controller.get('model');
     var accountsDataset = this.get('accountsDataset');
 
@@ -84,10 +89,59 @@ export default Ember.View.extend({
     this.controller.send('removeLine', lineView.get('model'));
   },
 
-  getEffectiveAt: function() {
-    var date = moment(this.$("#effectiveAt").val());
-    return date.isValid() ? date.toDate() : null;
-  },  
+  clear: function() {
+    // remove lines
+    this.get('linesView').reset();
+
+    // reset controler
+    this.controller.send('clear');
+
+    // bind post handlers to new model
+    this.bindJournalEntryStatesHandlers();
+    this.bindCalendarInterval();
+
+    // add a new initial line
+    this.addLine();
+  },
+
+  postSuccessHandler: function() {
+    $.growl.notice({
+      title: "",
+      message: "Journal Entry Posted Successfully!",
+      duration: 5000
+    });
+
+    // clear, to allow entering a new journal entry
+    this.clear();
+
+    this.$(".journal-entry-description").focus();
+  },
+
+  postErrorHandler: function() {
+  },
+
+  bindJournalEntryStatesHandlers: function() {
+    // configure post outcome handlers
+    this.controller.get('model')
+      .on('becameInvalid', $.proxy(this.postErrorHandler, this))
+      .on('becameError', $.proxy(this.postErrorHandler, this))
+      .on('didCreate', $.proxy(this.postSuccessHandler, this));
+  },
+
+  bindCalendarInterval: function() {
+    if (!this.get('effectiveAtInterval')) {
+      // configure effectiveAt interval
+      var intervalHandler = setInterval($.proxy(function() {
+        this.$().find(".effective-at").data("DateTimePicker").setDate(new Date());
+      }, this), 1000);
+
+      this.set('effectiveAtInterval', intervalHandler);
+    }
+  },
+
+  unbindCalendarInterval: function() {
+    clearInterval(this.get('effectiveAtInterval'));
+  },
 
   actions: {
     addLine: function() {
@@ -104,10 +158,7 @@ export default Ember.View.extend({
     },
 
     clear: function() {
-      this.get('linesView').reset();
-      this.controller.send('clear');
-      this.$().find(".effective-at").data("DateTimePicker").setDate(new Date());
-      this.addLine();
+      this.clear();
     }
   },
 
@@ -118,18 +169,19 @@ export default Ember.View.extend({
       defaultDate: new Date()
 
     }).on('dp.show', $.proxy(function() {
-      clearInterval(this.get('effectiveAtInterval'));
+      this.unbindCalendarInterval();
     }, this));
 
-    var intervalHandler = setInterval($.proxy(function() {
-      this.$().find(".effective-at").data("DateTimePicker").setDate(new Date());
-    }, this), 1000);
-
-    this.set('effectiveAtInterval', intervalHandler);
+    this.bindCalendarInterval();
+    this.bindJournalEntryStatesHandlers();
   },
 
   willDestroyElement: function() {
-    clearInterval(this.get('effectiveAtInterval'));
-  }
+    this.unbindCalendarInterval();
+  },
 
+  getEffectiveAt: function() {
+    var date = moment(this.$("#effectiveAt").val());
+    return date.isValid() ? date.toDate() : null;
+  }  
 });

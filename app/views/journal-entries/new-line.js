@@ -3,7 +3,116 @@ export default Ember.View.extend({
   classNames: 'line',  
   templateName: 'journal-entries/new-line',
 
+  isZeroLine: false,
+  isRemoving: false,
+  isDescriptionSynch: true,
+  isReferenceSynch: true,
+  isDebitNormalBalance: true,
   accountDescription: null,
+
+  debitClasses: function() {
+    var classes = ['form-group', 'currency-container'];
+
+    if (!this.get('noAccountSelected')) {
+      if (this.get('isDebitNormalBalance')) {
+        classes.push('match');
+      } else {
+        classes.push('no-match');
+      }
+    }
+
+    if (this.get('isZeroLine')) {
+      classes.push('hidden');
+    }
+
+    if (this.get('model').get('errors').get('value')) {
+      classes.push('has-error');
+    }
+
+    return classes.join(" ");
+
+  }.property(
+    'model.errors.@each.description', 
+    'isDebitNormalBalance',
+    'isZeroLine',
+    'noAccountSelected'
+  ),
+
+  creditClasses: function() {
+    var classes = ['form-group', 'currency-container'];
+
+    if (!this.get('noAccountSelected')) {
+      if (this.get('isDebitNormalBalance')) {
+        classes.push('no-match');
+      } else {
+        classes.push('match');
+      }
+    }
+
+    if (this.get('isZeroLine')) {
+      classes.push('hidden');
+    }
+
+    if (this.get('model').get('errors').get('value')) {
+      classes.push('has-error');
+    }
+
+    return classes.join(" ");
+    
+  }.property(
+    'model.errors.@each.description', 
+    'isDebitNormalBalance',
+    'isZeroLine',
+    'noAccountSelected'
+  ),  
+
+  journalEntryDescriptionChanged: function() {
+    if (this.get('isDescriptionSynch')) {
+      this.get('model').set('description', this.get('journalEntry').get('description'));
+    }
+  }.observes('journalEntry.description'),
+
+  journalEntryReferenceChanged: function() {
+    if (this.get('isReferenceSynch')) {
+      this.get('model').set('reference', this.get('journalEntry').get('reference'));
+    }
+  }.observes('journalEntry.reference'),
+
+  descriptionTabindex: function() {
+    return this.get('isDescriptionSynch') ? "-1" : this.get('tabIndex') + 1;
+  }.property('isDescriptionSynch'),
+
+  descriptionClasses: function() {
+    var classes = ['form-control', 'description'];
+
+    if (this.get('isDescriptionSynch')) {
+      classes.push('synch');
+    }
+
+    return classes.join(" ");
+  }.property('isDescriptionSynch'),
+
+  referenceTabindex: function() {
+    return this.get('isReferenceSynch') ? "-1" : this.get('tabIndex') + 1;
+  }.property('isReferenceSynch'),
+
+  referenceClasses: function() {
+    var classes = ['form-control', 'reference'];
+
+    if (this.get('isReferenceSynch')) {
+      classes.push('synch');
+    }
+
+    return classes.join(" ");
+  }.property('isReferenceSynch'),  
+
+  noAccountSelected: function() {
+    return Ember.isEmpty(this.get('model').get('account'));
+  }.property('model.account'),
+
+  isLastLine: function() {
+    return this.get('parentView').get('lastObject') === this;
+  }.property('parentView.@each'),
 
   debitAmount: function(key, value, previousValue) {
     if (arguments.length > 1) {
@@ -22,41 +131,27 @@ export default Ember.View.extend({
   }.property('model.creditAmount'),
 
   addNewLineObserver: function() {
+    if (Ember.isEmpty(this.get('model').get('account'))) return;
+
     var parentView = this.get('parentView');
 
     if (parentView.get('lastObject') === this) {
       // add new line
       this.get('parentView').get('parentView').addLine();
-
-      // enable delete button on this view
-      this.$(".remove").removeAttr('disabled');
     }   
 
-  }.observes('accountDescription'),
+  }.observes('model.account'),
 
   synchInputWithRecordField: function($input, record, field) {
     var self = this;
 
-    var observer = function() {
-      self.get('model').set(field, record.get(field));
-    };
-
-    // initially, call the observer function once, and bind it
-    observer();
-    record.addObserver(field, self, observer);
+    self.get('model').set(field, record.get(field));
 
     // now handle change events on the input field
     $input.on('keydown', function(e) {
       // discard keystrokes that didn't change the actual input value
       if (e.keyCode !== 32 && e.keyCode >= 9 && e.keyCode <= 45) return;
-
-      if (record.hasObserverFor(field)) {
-        // remove existing observer
-        record.removeObserver(field, self, observer);
-
-        // remove muted class
-        $input.removeClass("synch");
-      }
+      self.set('is' + Ember.String.capitalize(field) + 'Synch', false);
 
     }).on('change', function() {
       // if input content was deleted
@@ -64,19 +159,15 @@ export default Ember.View.extend({
         // copy back from record
         self.get('model').set(field, record.get(field));
 
-        // add muted class
-        $input.addClass('synch');
-
-        // rebind observer
-        record.addObserver(field, self, observer);
+        // set view as synched
+        self.set('is' + Ember.String.capitalize(field) + 'Synch', true);
       }
     });
   },
 
   actions: {
     removeLine: function() {
-      this.$(".removeAction").addClass("hidden");
-      this.$(".removeConfirmation").removeClass("hidden");
+      this.set('isRemoving', true);
     },
 
     confirmRemoveLine: function() {
@@ -84,23 +175,28 @@ export default Ember.View.extend({
     },
 
     cancelRemoveLine: function() {
-      this.$(".removeConfirmation").addClass("hidden");
-      this.$(".removeAction").removeClass("hidden");      
+      this.set('isRemoving', false);      
+    },
+
+    toogleZeroLine: function() {
+      this.get('parentView').get('parentView').get('controller').send('toogleZeroLine', this.get('model'));
+      this.set('isZeroLine', !this.get('isZeroLine'));
     }
   },
 
   didInsertElement: function() {
     var self = this;
 
-    // mask money fields
-    this.$().find(".currency").maskMoney({
+    // mask currency fields
+    this.$("input.currency").maskMoney({
       allowNegative: false
     });
 
-    // accounts typeahead
+    // accounts typeahead engine
     var accountsDataset = this.get('accountsDataset');
 
-    this.$().find(".account").typeahead({
+    // configure accounts typeahdead
+    this.$(".account").typeahead({
       hint: true,
       highlight: true,
       minLength: 1
@@ -116,30 +212,20 @@ export default Ember.View.extend({
         $(this).typeahead('val', '');
         self.get("model").set("account", null);
         self.set("accountDescription", null);
+        self.set("isDebitNormalBalance", true);
 
-        self.$(".debit, .credit").removeClass("sameNormalBalanceType invertedNormalBalanceType");
-        self.$(".debit input, .credit input").val("").attr("disabled", "disabled");
+        self.$("input.currency").val("");
       }
       
     }).on("typeahead:selected", function(e, suggestion, datasetName) {
       // save selected suggestion
       self.get("model").set("account", suggestion.id);
       self.set("accountDescription", suggestion.description);
-      self.$(".debit input, .credit input").removeAttr("disabled");
-
-      if (suggestion.normalBalance === 'debit') {
-        self.$(".debit").removeClass("invertedNormalBalanceType").addClass("sameNormalBalanceType");
-        self.$(".credit").removeClass("sameNormalBalanceType").addClass("invertedNormalBalanceType");
-
-        self.$(".debit input").focus();
-
-      } else {
-        self.$(".debit").removeClass("sameNormalBalanceType").addClass("invertedNormalBalanceType");
-        self.$(".credit").removeClass("invertedNormalBalanceType").addClass("sameNormalBalanceType");
-
-        self.$(".credit input").focus();
-      }
+      self.set("isDebitNormalBalance", suggestion.normalBalance === 'debit');
     });
+
+    // enable action tooltips
+    this.$('.zeroAction, .removeAction').tooltip();
 
     // synch values from journal entry inputs to line inputs
     this.synchInputWithRecordField(this.$(".description"), this.get('journalEntry'), 'description');

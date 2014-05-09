@@ -4,7 +4,40 @@ export default DS.Model.extend({
   description: DS.attr('string'),
   reference:   DS.attr('string'),
   version:     DS.attr('number'),
-  lines:       DS.attr(),
+  lines:       DS.hasMany('line'),
+
+  totalDebit: function() {
+    var total = 0;
+
+    this.get('lines').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('debitAmount'));
+    }, this);
+
+    return total;
+
+  }.property('lines.@each.debitAmount'),
+
+  totalCredit: function() {
+    var total = 0;
+
+    this.get('lines').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('creditAmount'));
+    }, this);
+
+    return total;
+
+  }.property('lines.@each.creditAmount'),
+
+  totalAmount: function() {
+    var total = 0;
+
+    this.get('lines').forEach(function(item, index, enumerable) {
+      total += accounting.unformat(item.get('amount'));
+    }, this);
+
+    return total;
+
+  }.property('lines'),
 
   isValid: function() {
     var hasErrors = false;
