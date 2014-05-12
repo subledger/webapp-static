@@ -29,9 +29,8 @@ export default Ember.View.extend({
 	},
 
 	willDestroyElement: function() {
-		messages.forEach(function(item) {
+		this.get('messages').forEach(function(item) {
 			Ember.run.cancel(item.get('timeoutHandler'));
-
 		}, this);
 	}
 });
