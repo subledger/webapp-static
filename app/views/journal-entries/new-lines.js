@@ -12,7 +12,7 @@ export default Ember.ContainerView.extend({
       'model': model,
       'journalEntry': journalEntry,
       'accountsDataset': accountsDataset,
-      'tabIndex': this.incrementProperty('tabIndex', 2),
+      'tabIndex': this.incrementProperty('tabIndex', 1),
     });
 
     this.pushObject(newLineView);

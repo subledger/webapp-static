@@ -79,7 +79,7 @@ export default Ember.View.extend({
   }.observes('journalEntry.reference'),
 
   descriptionTabindex: function() {
-    return this.get('isDescriptionSynch') ? "-1" : this.get('tabIndex') + 1;
+    return this.get('isDescriptionSynch') ? "-1" : this.get('tabIndex');
   }.property('isDescriptionSynch'),
 
   descriptionClasses: function() {
@@ -93,7 +93,7 @@ export default Ember.View.extend({
   }.property('isDescriptionSynch'),
 
   referenceTabindex: function() {
-    return this.get('isReferenceSynch') ? "-1" : this.get('tabIndex') + 1;
+    return this.get('isReferenceSynch') ? "-1" : this.get('tabIndex');
   }.property('isReferenceSynch'),
 
   referenceClasses: function() {
