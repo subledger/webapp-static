@@ -16,7 +16,7 @@ export default ApplicationAdapter.extend({
           });
 
       } else {
-        reject(new DS.InvalidError());
+        Ember.run(null, reject, new DS.InvalidError());
       }
     }, this));
 

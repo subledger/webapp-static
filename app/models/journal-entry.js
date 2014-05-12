@@ -72,19 +72,20 @@ export default DS.Model.extend({
     var totalCredit = 0;
     var totalDebit = 0;
 
+    var hasLineErrors = false;
     this.get('lines').forEach(function(line, index, enumerable) {
       if (Ember.isEmpty(line.get('account'))) {
-        hasErrors = true;
+        hasLineErrors = true;
         line.get('errors').add('account', 'Must not be blank');
       }      
 
       if (Ember.isEmpty(line.get('description'))) {
-        hasErrors = true;
+        hasLineErrors = true;
         line.get('errors').add('description', 'Must not be blank');
       }
 
       if (Ember.isEmpty(line.get('reference'))) {
-        hasErrors = true;
+        hasLineErrors = true;
         line.get('errors').add('reference', 'Must not be blank');
       } else {
         if (!urlregex.test(line.get('reference'))) {
@@ -94,7 +95,7 @@ export default DS.Model.extend({
       }
 
       if (Ember.isEmpty(line.get('value')) || Ember.isEmpty(line.get('value')['amount'])) {
-        hasErrors = true;
+        hasLineErrors = true;
         line.get('errors').add('value', 'Must not be blank');
 
       } else {
@@ -106,6 +107,11 @@ export default DS.Model.extend({
         }
       }
     }, this);
+
+    if (hasLineErrors) {
+      hasErrors = true;
+      this.get('errors').add('lines', 'One or more lines have validation errors');
+    }
 
     if (totalCredit !== totalDebit) {
       hasErrors = true;
