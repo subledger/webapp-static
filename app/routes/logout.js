@@ -16,7 +16,9 @@ export default Ember.Route.extend({
           $.proxy(function() {
             
             // go to login page
-            this.transitionTo('login');
+            this.transitionTo('login').then(function() {
+              document.location.reload(true);
+            });
 
           }, this)
         );
