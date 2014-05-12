@@ -1,13 +1,16 @@
+import MessagesView from 'subledger-app/views/messages';
 import NewLinesView from 'subledger-app/views/journal-entries/new-lines';
 
 export default Ember.View.extend({
   linesView: null,
+  messagesView: null,
 
   effectiveAtInterval: null,
 
   init: function() {
     this._super();
     this.set('linesView', NewLinesView.create());
+    this.set('messagesView', MessagesView.create());
   },
 
   autobalancer: function() {
@@ -105,11 +108,8 @@ export default Ember.View.extend({
   },
 
   postSuccessHandler: function() {
-    $.growl.notice({
-      title: "",
-      message: "Journal Entry Posted Successfully!",
-      duration: 5000
-    });
+    // add success message
+    this.get('messagesView').notifySuccess("Success!", "Journal Entry Posted", 5000);
 
     // clear, to allow entering a new journal entry
     this.clear();
