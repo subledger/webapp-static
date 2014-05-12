@@ -19,9 +19,19 @@ export default Ember.View.extend({
 		this.get('messages').addObject(msg);
 
 		if (timeout) {
-			Ember.run.later(this, function() {
+			var handler = Ember.run.later(this, function() {
 				this.get('messages').removeObject(msg);
 			}, timeout);
+
+			// save timeout handler to cancel it if necessary
+			msg.set('timeoutHandler', handler);
 		}
+	},
+
+	willDestroyElement: function() {
+		messages.forEach(function(item) {
+			Ember.run.cancel(item.get('timeoutHandler'));
+
+		}, this);
 	}
 });

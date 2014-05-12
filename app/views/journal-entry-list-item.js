@@ -28,6 +28,6 @@ export default Ember.View.extend({
 	},
 
 	willDestroyElement: function() {
-		clearTimeout(this.get('timeAgoInterval'));
+		clearInterval(this.get('timeAgoInterval'));
 	}
 });
