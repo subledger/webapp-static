@@ -31,24 +31,28 @@
         <span class="help-block">{{error.message}}</span>
       {{/each}}  
     </div>
+
+    <p {{bind-attr class=":zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
+
+    <div {{bind-attr class=":btn-group :pull-left :actions view.isRemoving:hidden"}}>
+      <button type="button" class="btn btn-xs btn-link zeroAction" {{action 'toogleZeroLine' target=view}} {{bind-attr title=view.zeroToogleButtonTitle}}>
+        <span class="glyphicon glyphicon-usd"></span> {{view.zeroToogleButtonText}}
+      </button>
+    </div>
   </div>
 
-  <div class="col-md-2 text-right">
+  <div class="col-md-2">
     <div {{bind-attr class=view.creditClasses}}>
       {{input type="text" value=view.creditAmount class="form-control currency" placeholder="Credit" tabindex=view.tabIndex disabled=view.noAccountSelected}}
     </div>
 
-    <p {{bind-attr class=":text-warning :warning view.isZeroLine::hidden"}}>Line will have value 0</p>
+    <p {{bind-attr class=":zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
 
     <div {{bind-attr class=":btn-group :pull-right :actions view.isRemoving:hidden"}}>
-      <button type="button" class="btn btn-xs btn-link zeroAction" {{action 'toogleZeroLine' target=view}} title="Toogle Zero value line">
-        <span class="glyphicon glyphicon-usd"></span> Zero
-      </button>  
-
       <button type="button" class="btn btn-xs btn-link removeAction" {{bind-attr disabled=view.isLastLine}} {{action 'removeLine' target=view}} title="Remove line">
         <span class="glyphicon glyphicon-remove-circle"></span> Remove
       </button>
-    </div>    
+    </div>
 
     <div {{bind-attr class=":btn-group :pull-right :actions view.isRemoving::hidden"}}>
       <button type="button" class="btn btn-xs btn-link" {{bind-attr disabled='!view.isRemoving'}} {{action 'confirmRemoveLine' target='view'}}>

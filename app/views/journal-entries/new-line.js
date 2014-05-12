@@ -10,6 +10,20 @@ export default Ember.View.extend({
   isDebitNormalBalance: true,
   accountDescription: null,
 
+  zeroToogleButtonText: function() {
+    return this.get("isZeroLine") ? "Debit / Credit" : "Zero";
+  }.property('isZeroLine'),
+
+  zeroToogleButtonTitle: function() {
+    Ember.run.next(this, function() {
+      this.$('.zeroAction').tooltip('destroy');
+      this.$('.zeroAction').tooltip();
+      this.$('.zeroAction').tooltip('show');
+    });
+
+    return this.get("isZeroLine") ? "Set value to Zero" : "Specify Debit / Credit";
+  }.property('isZeroLine'),
+
   debitClasses: function() {
     var classes = ['form-group', 'currency-container'];
 
