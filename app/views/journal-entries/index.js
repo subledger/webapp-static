@@ -2,11 +2,13 @@ export default Ember.View.extend({
   loadingFirstPage: true,
 
   autoScroller: function() {
+    var previousHeight = $(".app-main-content").prop('scrollHeight');
+
     Ember.run.next($.proxy(function() {
       if (this.get('loadingFirstPage')) {
         this.scrollToTheBottom();
       } else {
-        this.scrollToStartEntry();
+        this.scrollTo(previousHeight);
       }
     }, this));
   }.observes('controller.@each'),
@@ -36,8 +38,9 @@ export default Ember.View.extend({
     $(".app-main-content").scrollTop($(".app-main-content").prop('scrollHeight'));
   },
 
-  scrollToStartEntry: function() {
-    $(".app-main-content").scrollTop(this.$(".loading-more").prop('scrollHeight') + 30);
+  scrollTo: function(previousHeight) {
+    var pos = $(".app-main-content").prop('scrollHeight') - previousHeight;
+    $(".app-main-content").scrollTop(pos);
   },
 
   didInsertElement: function() {
