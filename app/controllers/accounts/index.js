@@ -4,9 +4,13 @@ export default Ember.ArrayController.extend({
   description: "",
   hasNextPage: false,
   loadingPage: false,
+  searchHandler: null,
 
   actions: {
     search: function(description) {
+      // cancel preivous search
+      Ember.run.cancel(this.get('searchHandler'));
+
       this.set('hasNextPage', false);
       this.get('content').clear();
 
@@ -14,7 +18,12 @@ export default Ember.ArrayController.extend({
         this.set('hasNextPage', true);
 
         // search
-        this.loadPage(null, this.get('description'));
+        var handler = Ember.run.later(this, function() {
+          this.loadPage(null, this.get('description'));
+        }, 500);
+
+        // save search handler
+        this.set('searchHandler', handler);
       }
     },
 
