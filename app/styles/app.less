@@ -4,32 +4,13 @@
 @import "variables.less";
 @import "bootstrap.less";
 
-.placeholder-color(@color: @white) {
-  &::-webkit-input-placeholder {
-     color: @color;
-  }
-
-  &:-moz-placeholder { /* Firefox 18- */
-     color: @color;  
-  }
-
-  &::-moz-placeholder {  /* Firefox 19+ */
-     color: @color;  
-  }
-
-  &:-ms-input-placeholder {  
-     color: @color;  
-  }
-}
-
 .box-shadow-highlight() {
   &.hover-highlight:hover {
-    box-shadow: 0 0 10px @brand-info;
+    .box-shadow(0 0 10px @brand-info);
     border: 1px solid @brand-info;
-    transition: box-shadow 0.5s;
+    .transition(box-shadow 0.5s);
   }
 }
-
 
 html {
   height: 100%;
@@ -127,7 +108,7 @@ body {
   padding-right: 0;
 
   .nav > li {
-    box-shadow: 0 1px 1px 0 @white;
+    .box-shadow(0 1px 1px 0 @white);
     border-bottom: 1px solid @default-border-color;
 
     &:first-child {
@@ -153,7 +134,7 @@ body {
         float: right;
         margin-right: -20px;
         position: initial;
-        transition: margin-right .4s;
+        .transition(margin-right .4s);
       }
 
       &:hover {
@@ -186,7 +167,7 @@ body {
   overflow-y: scroll;
   background-image: @background;
   border: 1px solid @default-border-color;
-  box-shadow: @default-box-shadow;
+  .box-shadow(@default-box-shadow);
 }
 
 .app-footer {
@@ -239,6 +220,11 @@ body {
   text-align: right;
 }
 
+.scrollable-dropdown-menu .tt-dropdown-menu {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
 .journal-entry {
   .box-shadow-highlight;
 }
@@ -288,7 +274,7 @@ body {
     &> .panel {
       border: 0;
       margin: 0;
-      box-shadow: none;
+      .box-shadow(none);
 
       .panel-heading {
         border-bottom: 0;
@@ -327,7 +313,7 @@ body {
 
         input:not([disabled]).currency {
           color: @white;
-          .placeholder-color(@white);
+          .placeholder(@white);
         }
 
         &.match {
@@ -352,18 +338,14 @@ body {
       }
 
       .actions {
-        margin-top: 16px;
-
-        opacity: 0;
-        filter: alpha(opacity=0);
-
-        transition: all .4s;
+        margin-top: 10px;
+        .opacity(0);
+        .transition(all .4s);
       }
 
       &:hover {
         .actions {
-          opacity: 100;
-          filter: alpha(opacity=100);
+          .opacity(100);
         }
       }
     }
