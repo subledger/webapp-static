@@ -36,13 +36,26 @@ export default Ember.View.extend({
     }
   },
 
+  onScrollHandler: function() {
+    // run balance updater
+    this.balancesUpdater();
+
+    if (this.get('loadingFirstPage')) return;
+
+    if (this.isScrolledAtBottom()) {
+      this.loadNextPage();
+    }
+  },
+
   firstPageChecker: function() {
     this.set('loadingFirstPage', false);
   }.observes('controller.@each'),
 
   isScrolledAtBottom: function() {
     var $content = $(".app-main-content");
-    return $content.prop('scrollHeight') - $content.scrollTop() === $content.innerHeight();
+    var diff = $content.prop('scrollHeight') - $content.scrollTop();
+
+    return diff === $content.innerHeight();
   },   
 
   search: function() {
@@ -56,11 +69,11 @@ export default Ember.View.extend({
     var defer = Ember.RSVP.defer();
 
     defer.promise.then($.proxy(function() {
-      Ember.run.next($.proxy(function() {
+      Ember.run.next(this, function() {
         if (this.isScrolledAtBottom()) {
           this.loadNextPage();          
         }
-      }, this));
+      });
     }, this));
 
     this.get('controller').send('nextPage', defer);
@@ -80,19 +93,11 @@ export default Ember.View.extend({
       }, this);
     }, 2000);
 
+    // update handler reference
     this.set('updateBalanceHandler', handler);
   },
 
   didInsertElement: function() {
-    $(".app-main-content").on('scroll', $.proxy(function() {
-      // run balance updater
-      this.balancesUpdater();
-
-      if (this.get('loadingFirstPage')) return;
-
-      if (this.isScrolledAtBottom()) {
-        this.loadNextPage();
-      }
-    }, this));
+    $(".app-main-content").on('scroll', Ember.run.bind(this, this.onScrollHandler));
   }  
 });
