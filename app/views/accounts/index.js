@@ -1,5 +1,15 @@
 export default Ember.View.extend({
   loadingFirstPage: true,
+  updateBalanceHandler: null,
+
+  init: function() {
+    this._super();
+    this.set('loadingFirstPage', new Date());
+  },
+
+  updateBalanceObserver: function() {
+    this.balancesUpdater();
+  }.observes('controller.@each'),
 
   keyUp: function(e) {
     this.search();
@@ -30,6 +40,11 @@ export default Ember.View.extend({
     this.set('loadingFirstPage', false);
   }.observes('controller.@each'),
 
+  isScrolledAtBottom: function() {
+    var $content = $(".app-main-content");
+    return $content.prop('scrollHeight') - $content.scrollTop() === $content.innerHeight();
+  },   
+
   search: function() {
     this.set('loadingFirstPage', true);
     this.get('controller').send('search');
@@ -49,15 +64,30 @@ export default Ember.View.extend({
     }, this));
 
     this.get('controller').send('nextPage', defer);
-  },  
+  },
 
-  isScrolledAtBottom: function() {
-    var $content = $(".app-main-content");
-    return $content.prop('scrollHeight') - $content.scrollTop() === $content.innerHeight();
-  },  
+  balancesUpdater: function() {
+    // cancel previous updateBalance
+    Ember.run.cancel(this.get('updateBalanceHandler'));
+
+    var handler = Ember.run.later(this, function() {
+      var childViews = this.get('childViews');
+
+      childViews.forEach(function(childView) {
+        if (childView.updateBalance) {
+          childView.updateBalance();
+        }
+      }, this);
+    }, 2000);
+
+    this.set('updateBalanceHandler', handler);
+  },
 
   didInsertElement: function() {
     $(".app-main-content").on('scroll', $.proxy(function() {
+      // run balance updater
+      this.balancesUpdater();
+
       if (this.get('loadingFirstPage')) return;
 
       if (this.isScrolledAtBottom()) {

@@ -20,10 +20,11 @@ export default Ember.View.extend({
   },
 
   updateBalance: function() {
-    this.get('controller').send('getBalance');
+    if (this.$().visible()) {
+      this.get('controller').send('getBalance');
+    }
   },
 
   didInsertElement: function() {
-    this.updateBalance();
   }
 });
