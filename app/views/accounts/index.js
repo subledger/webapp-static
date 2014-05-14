@@ -1,4 +1,7 @@
 export default Ember.View.extend({
+  tagName: 'div',
+  classNames: 'accounts',
+
   loadingFirstPage: true,
   updateBalanceHandler: null,
 

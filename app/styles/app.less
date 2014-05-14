@@ -20,6 +20,7 @@ body {
   height: 100%;
   padding-top: 50px;
   padding-bottom: 60px;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -164,7 +165,7 @@ body {
 .app-main-content {
   height: 100%;
   padding: @default-padding @default-padding 0 @default-padding;
-  overflow-y: scroll;
+  overflow-y: hidden;
   background-image: @background;
   border: 1px solid @default-border-color;
   .box-shadow(@default-box-shadow);
@@ -362,61 +363,87 @@ body {
 }
 
 .accounts {
-  .actions {
+  height: 100%;
+
+  .account-entry {
+    .box-shadow-highlight;
+  }  
+
+  .search {
+    margin-bottom: 15px;
+
     .form-group {
       margin-bottom: 0;
     }
   }
 
   .content {
-    .left {
-      width: 83%;
-      float: left;
+    height: 45%;
+    overflow-y: auto;
+    padding-top: 5px;
 
-      .items {
-        margin-right: 5px;
+    .items {
+      .description {
+        overflow-x: hidden;
+      }
+
+      .balance {
+        overflow-x: hidden;
       }
     }
+  }
 
-    .right {
-      float: right;
-
-      .aside {
-        .list-group-item {
-          padding: 0 15px;
-        }
-      }
+  .aside {
+    .list-group-item {
+      padding: 2px 0;
+      font-size: .9em;
     }
   }
 }
 
+// keep a decent height proportion on phone screen
+@media (min-height: 650px) and (max-width: @screen-xs-max) {
+  .accounts .content { height: 50%; }
+}
+
+@media (min-height: 700px) and (max-width: @screen-xs-max) {
+  .accounts .content { height: 55%; }
+}
+
+@media (min-height: 750px) and (max-width: @screen-xs-max) {
+  .accounts .content { height: 60%; }
+}
+
+@media (min-height: 850px) and (max-width: @screen-xs-max) {
+  .accounts .content { height: 65%; }
+}
+
+@media (min-height: 950px) and (max-width: @screen-xs-max) {
+  .accounts .content { height: 70%; }
+}
+
+// keep a decent height proportion on non phone screen
+@media (min-width: @screen-sm-min) {
+  .accounts .content { height: 85%; }
+}
+
+@media (min-height: 700px) and (min-width: @screen-sm-min) {
+  .accounts .content { height: 89%; }
+}
+
+@media (min-height: 900px) and (min-width: @screen-sm-min) {
+  .accounts .content { height: 93%; }
+}
+
 @media (min-width: @screen-sm-min) {
   .accounts {
-    .actions {
-      z-index: 5000;
-      position: fixed;
-      margin-right: 35px;
+    .content {
+      .balance {
+      }
+
     }
 
-    .content {
-      top: 100px;
-      position: relative;
-
-      .left {
-        width: 90%;
-      }
-
-      .right {
-        .aside {
-          top: 176px;
-          right: 35px;
-          position: fixed;
-
-          .list-group-item {
-            padding: 5px 15px;
-          }
-        }
-      }
+    .aside {
     }
   }
 }
@@ -424,9 +451,6 @@ body {
 @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
   .accounts {
     .content {
-      .left {
-        width: 93%;
-      }
     }
   }
 }
@@ -434,13 +458,6 @@ body {
 @media (min-width: @screen-lg-min) {
   .accounts {
     .content {
-      .left {
-        width: 95%;
-      }
     }
   }
-}
-
-.account-entry {
-  .box-shadow-highlight;
 }
