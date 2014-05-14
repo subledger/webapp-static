@@ -14,16 +14,6 @@ export default Ember.View.extend({
     return this.get("isZeroLine") ? "Debit / Credit" : "Zero";
   }.property('isZeroLine'),
 
-  zeroToogleButtonTitle: function() {
-    Ember.run.next(this, function() {
-      this.$('.zeroAction').tooltip('destroy');
-      this.$('.zeroAction').tooltip();
-      this.$('.zeroAction').tooltip('show');
-    });
-
-    return this.get("isZeroLine") ? "Set value to Zero" : "Specify Debit / Credit";
-  }.property('isZeroLine'),
-
   debitClasses: function() {
     var classes = ['form-group', 'currency-container'];
 
@@ -221,9 +211,13 @@ export default Ember.View.extend({
       source: accountsDataset.ttAdapter()
 
     }).on("blur", function(e) {
-      // clear the account fields if a suggestion was not used
-      if (self.get("accountDescription") !== $(this).typeahead('val')) {
-        $(this).typeahead('val', '');
+      // typeahead element reference
+      var $el = $(this);
+
+      // clear the fields if no suggestion was found
+      if (self.get("accountDescription") !== $el.typeahead('val')) {
+
+        $el.typeahead('val', '');
         self.get("model").set("account", null);
         self.set("accountDescription", null);
         self.set("isDebitNormalBalance", true);
@@ -236,10 +230,13 @@ export default Ember.View.extend({
       self.get("model").set("account", suggestion.id);
       self.set("accountDescription", suggestion.description);
       self.set("isDebitNormalBalance", suggestion.normalBalance === 'debit');
-    });
 
-    // enable action tooltips
-    this.$('.zeroAction, .removeAction').tooltip();
+    }).on("typeahead:autocompleted", function(e, suggestion, datasetName) {
+      // save selected suggestion
+      self.get("model").set("account", suggestion.id);
+      self.set("accountDescription", suggestion.description);
+      self.set("isDebitNormalBalance", suggestion.normalBalance === 'debit');
+    });
 
     // synch values from journal entry inputs to line inputs
     this.synchInputWithRecordField(this.$(".description"), this.get('journalEntry'), 'description');

@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-md-3">
     <div {{bind-attr class=':form-group view.model.errors.account:has-error'}}>
-      <input class="account form-control" type="text" placeholder="Account" {{bind-attr tabindex=view.tabIndex}} />
+      <div class="scrollable-dropdown-menu">
+        <input class="account form-control" type="text" placeholder="Account" {{bind-attr tabindex=view.tabIndex}} />
+      </div>
       {{#each error in view.model.errors.account}}
         <span class="help-block">{{error.message}}</span>
       {{/each}}        
@@ -35,8 +37,8 @@
     <p {{bind-attr class=":zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
 
     <div {{bind-attr class=":btn-group :pull-left :actions view.isRemoving:hidden"}}>
-      <button type="button" class="btn btn-xs btn-link zeroAction" {{action 'toogleZeroLine' target=view}} {{bind-attr title=view.zeroToogleButtonTitle}}>
-        <span class="glyphicon glyphicon-usd"></span> {{view.zeroToogleButtonText}}
+      <button type="button" class="btn btn-default btn-xs zeroAction" {{action 'toogleZeroLine' target=view}}>
+        {{view.zeroToogleButtonText}}
       </button>
     </div>
   </div>
@@ -49,17 +51,17 @@
     <p {{bind-attr class=":zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
 
     <div {{bind-attr class=":btn-group :pull-right :actions view.isRemoving:hidden"}}>
-      <button type="button" class="btn btn-xs btn-link removeAction" {{bind-attr disabled=view.isLastLine}} {{action 'removeLine' target=view}} title="Remove line">
-        <span class="glyphicon glyphicon-remove-circle"></span> Remove
+      <button type="button" class="btn btn-default btn-xs removeAction" {{bind-attr disabled=view.isLastLine}} {{action 'removeLine' target=view}}>
+        Remove
       </button>
     </div>
 
     <div {{bind-attr class=":btn-group :pull-right :actions view.isRemoving::hidden"}}>
-      <button type="button" class="btn btn-xs btn-link" {{bind-attr disabled='!view.isRemoving'}} {{action 'confirmRemoveLine' target='view'}}>
+      <button type="button" class="btn btn-default btn-xs" {{bind-attr disabled='!view.isRemoving'}} {{action 'confirmRemoveLine' target='view'}}>
         <span class="glyphicon glyphicon-ok"></span> I'm sure, remove it
       </button>
 
-      <button type="button" class="btn btn-xs btn-link" {{bind-attr disabled='!view.isRemoving'}} {{action 'cancelRemoveLine' target='view'}}>
+      <button type="button" class="btn btn-default btn-xs" {{bind-attr disabled='!view.isRemoving'}} {{action 'cancelRemoveLine' target='view'}}>
         <span class="glyphicon glyphicon-remove"></span> Cancel
       </button>      
     </div>
