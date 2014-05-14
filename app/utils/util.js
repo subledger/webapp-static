@@ -38,10 +38,12 @@ export default {
     return accounting.formatMoney(amount, "");
   },
 
-  formatBalance: function(value, normalBalance) {
-    if (value === undefined) {
+  formatBalance: function(balance, normalBalance) {
+    if (balance === undefined || !balance.get('value')) {
       return "";
     }
+
+    var value = balance.get('value');
 
     if (value.type === normalBalance) {
       return accounting.formatMoney(value.amount, "");

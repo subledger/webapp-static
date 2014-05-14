@@ -7,10 +7,12 @@ export default Ember.View.extend({
 
     if (balance && balance.get('value')) {
       Ember.run.next(this, function() {
-        this.$(".balance").fadeIn();
+        this.$(".balance").fadeOut('fast', function() {
+          $(this).fadeIn();
+        });
       });
     }
-  }.observes('controller.model.balance.value'),
+  }.observes('controller.model.balance'),
 
   click: function(e) {
     var account = this.get('controller').get('model');
