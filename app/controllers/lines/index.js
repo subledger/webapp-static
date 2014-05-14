@@ -11,15 +11,15 @@ export default Ember.ArrayController.extend({
     }
   },
 
-  loadPage: function(perPage) {
-    // mase sure only one page is loading at a time
-    if (this.get('loading')) return;
+  loadPage: function(limit) {
+    // mase sure only one page is loading at a time, and only when necessary
+    if (this.get('loading') || !this.get('hasNextPage')) return;
 
-    var line = this.get('lastObject');
+    var line = this.get('firstObject');
     var pageId = line ? line.get("id") : null;
 
     var query = {
-      limit: perPage || 25,
+      limit: limit || 25,
       pageId: pageId
     };
 
@@ -27,9 +27,9 @@ export default Ember.ArrayController.extend({
 
     return this.get('account').get('model').loadLines(query).then(
       $.proxy(function(lines) {
-        this.unshiftObjects(lines.content);
+        this.unshiftObjects(lines.toArray());
 
-        if (lines.content.length === query.perPage) {
+        if (lines.toArray().length === query.limit) {
           this.setProperties({
             'loading': false,
             'hasNextPage': true

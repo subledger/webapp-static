@@ -11,6 +11,11 @@
     </tr>
   </thead>
   <tbody>
+    <tr {{bind-attr class="hasNextPage::hidden"}}>
+      <td colspan="7" class="loading-more" id="accountLinesLoader">
+        {{partial "loading"}}
+      </td>
+    </tr>
     {{#each line in controller}}
       <tr>
         <td>{{format-date line.effectiveAt 'big'}}</td>
@@ -32,10 +37,5 @@
         </td>
       </tr>
     {{/each}}
-    <tr {{bind-attr class="view.loaderRunning::hidden"}}>
-      <td colspan="7" class="loading-more" id="accountLinesLoader">
-        {{partial "loading"}}
-      </td>
-    </tr>
   </tbody>
 </table>
