@@ -18,10 +18,10 @@ export default ApplicationAdapter.extend({
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
       var config = this.criteria().limit(query.limit || 25).active();
 
-      if (query.pageId !== undefined) {
+      if (!Ember.isEmpty(query.pageId)) {
         config = config.following().id(query.pageId);
       } else {
-        config = config.after().description();
+        config = config.starting().description(query.description);
       }
 
       this.getSelectedBook().account().get(config.get(), function(e, result) {

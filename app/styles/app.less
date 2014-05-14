@@ -22,6 +22,15 @@
   }
 }
 
+.box-shadow-highlight() {
+  &.hover-highlight:hover {
+    box-shadow: 0 0 10px @brand-info;
+    border: 1px solid @brand-info;
+    transition: box-shadow 0.5s;
+  }
+}
+
+
 html {
   height: 100%;
 }
@@ -231,11 +240,7 @@ body {
 }
 
 .journal-entry {
-  &.hover-highlight:hover {
-    box-shadow: 0 0 10px @brand-info;
-    border: 1px solid @brand-info;
-    transition: box-shadow 0.5s;
-  }
+  .box-shadow-highlight;
 }
 
 .report {
@@ -372,4 +377,88 @@ body {
       margin-bottom: 0;
     }
   }
+}
+
+.accounts {
+  .actions {
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+
+  .content {
+    .left {
+      width: 83%;
+      float: left;
+
+      .items {
+        margin-right: 5px;
+      }
+    }
+
+    .right {
+      float: right;
+
+      .aside {
+        .list-group-item {
+          padding: 0 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+  .accounts {
+    .actions {
+      z-index: 5000;
+      position: fixed;
+      margin-right: 35px;
+    }
+
+    .content {
+      top: 100px;
+      position: relative;
+
+      .left {
+        width: 90%;
+      }
+
+      .right {
+        .aside {
+          top: 176px;
+          right: 35px;
+          position: fixed;
+
+          .list-group-item {
+            padding: 5px 15px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+  .accounts {
+    .content {
+      .left {
+        width: 93%;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-lg-min) {
+  .accounts {
+    .content {
+      .left {
+        width: 95%;
+      }
+    }
+  }
+}
+
+.account-entry {
+  .box-shadow-highlight;
 }

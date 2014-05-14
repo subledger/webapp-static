@@ -1,0 +1,27 @@
+export default Ember.View.extend({
+  templateName: 'account-item',
+
+  balanceEffect: function() {
+    this.$(".balance").hide();
+    var balance = this.get('controller').get('model').get('balance');
+
+    if (balance && balance.get('value')) {
+      Ember.run.next(this, function() {
+        this.$(".balance").fadeIn();
+      });
+    }
+  }.observes('controller.model.balance.value'),
+
+  click: function(e) {
+    var account = this.get('controller').get('model');
+    this.get('controller').transitionToRoute('lines.index', account);
+  },
+
+  updateBalance: function() {
+    this.get('controller').send('getBalance');
+  },
+
+  didInsertElement: function() {
+    this.updateBalance();
+  }
+});

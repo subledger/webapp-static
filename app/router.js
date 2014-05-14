@@ -10,6 +10,9 @@ Router.map(function() {
 
   this.resource('journal-entry', { path: 'jorunal-entry/:id' });
 
+  this.resource('accounts', function() {
+  });
+
   this.resource('account', { path: '/account/:account_id' }, function() {
     this.resource('lines', function() {
     });

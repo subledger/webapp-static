@@ -5,6 +5,7 @@ export default DS.Model.extend({
   reference:     DS.attr('string'),
   normalBalance: DS.attr('string'),
   version:       DS.attr('number'),
+  balance:       DS.attr(),
 
   loadLines: function(query) {
     var self = this;

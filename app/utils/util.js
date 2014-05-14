@@ -43,6 +43,10 @@ export default {
       return "";
     }
 
-    return accounting.formatMoney(value.amount, "");
+    if (value.type === normalBalance) {
+      return accounting.formatMoney(value.amount, "");
+    } else {
+      return "(" + accounting.formatMoney(value.amount, "") + ")";
+    }
   }
 };

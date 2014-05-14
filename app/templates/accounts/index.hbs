@@ -1,0 +1,63 @@
+<div class="accounts">
+  <div class="well actions">
+    <form role="form" class="search">
+      <div class="form-group">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-search"></span>
+          </span>
+          {{input value=description class="form-control description" placeholder="Search or browse with sidebar" autofocus="autofocus"}}          
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row content">
+    <div class="col-xs-12">
+      <div class="left">
+        <div class="items">
+          {{#each account in controller}}
+            {{view 'account-item'}}
+          {{/each}}
+        </div>
+
+        {{#if hasNextPage}}
+          <div class="loading-more">
+            {{partial "loading"}}
+          </div>
+        {{/if}}  
+      </div>
+
+      <div class="right">
+        <div class="list-group aside text-center">
+          <a href="#" class="list-group-item browse" data-query="0x00" data-type="hex">.</a>
+          <a href="#" class="list-group-item browse" data-query="0">0</a>
+          <a href="#" class="list-group-item browse" data-query="1">1</a>
+          <a href="#" class="list-group-item browse" data-query="2">2</a>
+          <a href="#" class="list-group-item browse" data-query="3">3</a>
+          <a href="#" class="list-group-item browse" data-query="4">4</a>
+          <a href="#" class="list-group-item browse" data-query="5">5</a>
+          <a href="#" class="list-group-item browse" data-query="6">6</a>
+          <a href="#" class="list-group-item browse" data-query="7">7</a>
+          <a href="#" class="list-group-item browse" data-query="8">8</a>
+          <a href="#" class="list-group-item browse" data-query="9">9</a>
+          <a href="#" class="list-group-item browse" data-query="0x3A" data-type="hex">.</a>
+          <a href="#" class="list-group-item browse" data-query="A">A-B</a>
+          <a href="#" class="list-group-item browse" data-query="C">C-D</a>
+          <a href="#" class="list-group-item browse" data-query="E">E-F</a>
+          <a href="#" class="list-group-item browse" data-query="G">G-H</a>
+          <a href="#" class="list-group-item browse" data-query="I">I-J</a>
+          <a href="#" class="list-group-item browse" data-query="K">K-L</a>
+          <a href="#" class="list-group-item browse" data-query="M">M-N</a>
+          <a href="#" class="list-group-item browse" data-query="O">O-P</a>
+          <a href="#" class="list-group-item browse" data-query="Q">Q-R</a>
+          <a href="#" class="list-group-item browse" data-query="S">S-T</a>
+          <a href="#" class="list-group-item browse" data-query="U">U-V</a>
+          <a href="#" class="list-group-item browse" data-query="W">W-X</a>
+          <a href="#" class="list-group-item browse" data-query="Y">Y-Z</a>
+          <a href="#" class="list-group-item browse" data-query="0x5B" data-type="hex">.</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
