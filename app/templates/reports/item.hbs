@@ -1,0 +1,43 @@
+<div class="panel-body panel-body-white clickable">
+  {{description}}
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">{{description}}</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-xs-10 inputs">
+              <div class="form-group">
+                <div class='input-group date date-at'>
+                  <input type='text' class="form-control" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xs-2 actions">
+              <button type="submit" class="btn btn-success btn-block report-go">GO!</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" {{bind-attr style=view.progressStyle}}>
+                  <span class="sr-only">{{controller.progress}}% Complete</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

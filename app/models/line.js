@@ -1,3 +1,5 @@
+import Balance from 'subledger-app/models/balance';
+
 export default DS.Model.extend({
   account:      DS.attr(),
   journalEntry: DS.attr(),

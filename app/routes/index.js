@@ -1,6 +1,4 @@
-import AuthenticatedRoute from "subledger-app/routes/authenticated";
-
-export default AuthenticatedRoute.extend({
+export default Ember.Route.extend({
   beforeModel: function() {
     this.transitionTo('journal-entries');
   }

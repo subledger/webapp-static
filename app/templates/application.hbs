@@ -41,12 +41,12 @@
     <div class="col-sm-4 col-md-3 col-lg-2 app-main-nav">
       <ul class="nav nav-sidebar">
         <li>
-          {{view Ember.Select content=App.credentials.allBooks optionValuePath="content.id" optionLabelPath="content.description" class="form-control"}}
+          {{view Ember.Select content=controller optionValuePath="content.id" optionLabelPath="content.description" value=book class="form-control"}}
         </li>
 
         {{#link-to 'journal-entries.index' tagName="li" class="nav-link"}}
           <img src="assets/icon-stream.png" class="left" />
-          Activity Stream
+          Activity Stream {{selectedBookId}}
           <img src="assets/arrow.png" class="right" />
         {{/link-to}}
 

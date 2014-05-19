@@ -2,6 +2,9 @@ import MessagesView from 'subledger-app/views/messages';
 import NewLinesView from 'subledger-app/views/journal-entries/new-lines';
 
 export default Ember.View.extend({
+  tagName: 'div',
+  classNames: 'manual-journal-entry content',
+
   linesView: null,
   messagesView: null,
 

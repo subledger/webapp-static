@@ -25,13 +25,17 @@ export default Ember.ObjectController.extend({
     return this.store.find('reportRendering', query).then($.proxy(function(reportRenderings) {
       var reportRendering = reportRenderings.get('firstObject');
 
-      this.set('progress', reportRendering.get('progress').percentage);
+      var percentage = reportRendering.get('progress').percentage;
 
-      if (this.get('progress') === 100) {
-        this.set('rendering', false);
-        this.set('reportRendering', reportRendering);
+      if (percentage === 100) {
+        this.setProperties({
+          rendering: false,
+          progress: percentage,
+          reportRendering: reportRendering
+        });
 
       } else {
+        this.set('progress', percentage);
         return this.renderProgress(at, reportRendering.get('id'));
       }
     }, this));

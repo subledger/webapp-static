@@ -12,6 +12,91 @@
   }
 }
 
+.search-select-content-layout {
+  height: 100%;
+
+  .full-content {
+    height: 100%;
+  }
+
+  .content-row {
+    height: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .search {
+    padding: @default-padding @default-padding @default-padding/2 @default-padding;
+
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+
+  .content {
+    height: 45%;
+    overflow-y: auto;
+    padding: @default-margin/2 @default-padding @default-padding @default-padding;
+
+    .items {
+      .item {
+        .box-shadow-highlight;
+
+        .panel-body {
+          padding: @default-list-entry-padding;
+        }
+
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .aside {
+    padding: @default-padding/2 @default-padding @default-padding @default-padding;
+
+    .list-group-item {
+      padding: 2px 0;
+      font-size: .9em;
+    }
+  }
+
+  // keep a decent height proportion on phone screen
+  @media (min-height: 650px) and (max-width: @screen-xs-max) {
+    .content { height: 50%; }
+  }
+
+  @media (min-height: 700px) and (max-width: @screen-xs-max) {
+    .content { height: 55%; }
+  }
+
+  @media (min-height: 750px) and (max-width: @screen-xs-max) {
+    .content { height: 60%; }
+  }
+
+  @media (min-height: 850px) and (max-width: @screen-xs-max) {
+    .content { height: 65%; }
+  }
+
+  @media (min-height: 950px) and (max-width: @screen-xs-max) {
+    .content { height: 70%; }
+  }
+
+  // keep a decent height proportion on non phone screen
+  @media (min-width: @screen-sm-min) {
+    .content { height: 85%; }
+  }
+
+  @media (min-height: 700px) and (min-width: @screen-sm-min) {
+    .content { height: 89%; }
+  }
+
+  @media (min-height: 900px) and (min-width: @screen-sm-min) {
+    .content { height: 93%; }
+  }  
+}
+
 html {
   height: 100%;
 }
@@ -164,7 +249,7 @@ body {
 
 .app-main-content {
   height: 100%;
-  padding: @default-padding @default-padding 0 @default-padding;
+  padding: 0;
   overflow-y: hidden;
   background-image: @background;
   border: 1px solid @default-border-color;
@@ -194,7 +279,7 @@ body {
 }
 
 .loading-more {
-  margin-bottom: 30px;
+  margin: 30px;
 }
 
 .items-actions {
@@ -226,11 +311,36 @@ body {
   overflow-y: auto;
 }
 
+.journal-entries {
+  height: 100%;
+
+  .content {
+    height: 100%;
+    overflow-y: auto;
+
+    .journal-entry {
+      .box-shadow-highlight;
+      margin: @default-margin;
+
+      .panel-body {
+        padding: @default-list-entry-padding;
+      }
+
+      &.last-of-type {
+        margin-bottom: @default-margin;
+      }
+    }
+  }
+}
+
 .journal-entry {
-  .box-shadow-highlight;
+  max-height: 98%;
+  overflow-y: auto;
+  margin: @default-margin;
 }
 
 .report {
+  margin-right: @default-margin;
   text-transform: uppercase;
 
   .panel-body {
@@ -269,6 +379,13 @@ body {
 }
 
 .report-rendering {
+  height: 99%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: @default-margin;  
+}
+
+.report-rendering-category {
   .panel-body  {
     padding: 0 0 0 15px;
 
@@ -287,8 +404,14 @@ body {
 }
 
 .manual-journal-entry {
+  padding: @default-padding;
+
   .form-group {
     margin-bottom: 5px;
+  }
+
+  .panel {
+    margin-bottom: 0;
   }
 
   .separator {
@@ -362,102 +485,40 @@ body {
   }
 }
 
-.accounts {
-  height: 100%;
+.account {
+  max-height: 98%;
+  overflow-y: auto;
+  margin: @default-margin;
+}
 
-  .account-entry {
-    .box-shadow-highlight;
-  }  
-
-  .search {
-    margin-bottom: 15px;
-
-    .form-group {
-      margin-bottom: 0;
-    }
-  }
+.reports {
+  &:extend(.search-select-content-layout all);
 
   .content {
-    height: 45%;
-    overflow-y: auto;
-    padding-top: 5px;
-
     .items {
-      .description {
-        overflow-x: hidden;
+      .item {
+        .description {
+          overflow-x: hidden;
+        }
       }
+    }  
+  }  
+}
 
-      .balance {
-        overflow-x: hidden;
+.accounts {
+  &:extend(.search-select-content-layout all);
+
+  .content {
+    .items {
+      .item {
+        .description {
+          overflow-x: hidden;
+        }
+
+        .balance {
+          overflow-x: hidden;
+        }
       }
-    }
-  }
-
-  .aside {
-    .list-group-item {
-      padding: 2px 0;
-      font-size: .9em;
-    }
-  }
-}
-
-// keep a decent height proportion on phone screen
-@media (min-height: 650px) and (max-width: @screen-xs-max) {
-  .accounts .content { height: 50%; }
-}
-
-@media (min-height: 700px) and (max-width: @screen-xs-max) {
-  .accounts .content { height: 55%; }
-}
-
-@media (min-height: 750px) and (max-width: @screen-xs-max) {
-  .accounts .content { height: 60%; }
-}
-
-@media (min-height: 850px) and (max-width: @screen-xs-max) {
-  .accounts .content { height: 65%; }
-}
-
-@media (min-height: 950px) and (max-width: @screen-xs-max) {
-  .accounts .content { height: 70%; }
-}
-
-// keep a decent height proportion on non phone screen
-@media (min-width: @screen-sm-min) {
-  .accounts .content { height: 85%; }
-}
-
-@media (min-height: 700px) and (min-width: @screen-sm-min) {
-  .accounts .content { height: 89%; }
-}
-
-@media (min-height: 900px) and (min-width: @screen-sm-min) {
-  .accounts .content { height: 93%; }
-}
-
-@media (min-width: @screen-sm-min) {
-  .accounts {
-    .content {
-      .balance {
-      }
-
-    }
-
-    .aside {
-    }
-  }
-}
-
-@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-  .accounts {
-    .content {
-    }
-  }
-}
-
-@media (min-width: @screen-lg-min) {
-  .accounts {
-    .content {
-    }
+    }  
   }
 }

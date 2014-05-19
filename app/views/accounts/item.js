@@ -1,5 +1,8 @@
 export default Ember.View.extend({
-  templateName: 'account-item',
+  tagName: 'div',
+  classNames: 'panel panel-default item hover-highlight',
+
+  templateName: 'accounts/item',
 
   balanceEffect: function() {
     this.$(".balance").hide();

@@ -1,5 +1,4 @@
 export default Ember.Route.extend({
-
   beforeModel: function(transition) {
     this.store.find('credential', 1).then(
       $.proxy(function(credential) {
@@ -30,5 +29,4 @@ export default Ember.Route.extend({
       }, this)
     );
   }
-
 });

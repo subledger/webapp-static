@@ -3,16 +3,11 @@ export default Ember.View.extend({
   classNames: 'full-content',
 
   loadingFirstPage: true,
-  updateBalanceHandler: null,
 
   init: function() {
     this._super();
     this.set('loadingFirstPage', new Date());
   },
-
-  updateBalanceObserver: function() {
-    this.balancesUpdater();
-  }.observes('controller.@each'),
 
   keyUp: function(e) {
     this.search();
@@ -40,9 +35,6 @@ export default Ember.View.extend({
   },
 
   onScrollHandler: function() {
-    // run balance updater
-    this.balancesUpdater();
-
     if (this.get('loadingFirstPage')) return;
 
     if (this.isScrolledAtBottom()) {
@@ -80,24 +72,6 @@ export default Ember.View.extend({
     }, this));
 
     this.get('controller').send('nextPage', defer);
-  },
-
-  balancesUpdater: function() {
-    // cancel previous updateBalance
-    Ember.run.cancel(this.get('updateBalanceHandler'));
-
-    var handler = Ember.run.later(this, function() {
-      var childViews = this.get('childViews');
-
-      childViews.forEach(function(childView) {
-        if (childView.updateBalance) {
-          childView.updateBalance();
-        }
-      }, this);
-    }, 2000);
-
-    // update handler reference
-    this.set('updateBalanceHandler', handler);
   },
 
   didInsertElement: function() {

@@ -1,6 +1,7 @@
 export default Ember.View.extend({
   tagName: 'div',
-  classNames: 'line',  
+  classNames: 'line',
+
   templateName: 'journal-entries/new-line',
 
   isZeroLine: false,

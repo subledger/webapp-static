@@ -1,10 +1,8 @@
 {{#if hasNextPage}}
-  <div class="loading-more">
-    {{partial "loading"}}
-  </div>
+  {{partial "loading"}}
 {{/if}}
 
-<div class="journal-entries">
+<div class="items">
   {{#each journalEntry in controller}}
     {{view "journal-entry-list-item"}}
   {{/each}}

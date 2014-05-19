@@ -18,7 +18,8 @@ Router.map(function() {
     });
   });
 
-  this.resource('reports');
+  this.resource('reports', function() {
+  });
 
   this.resource('report-rendering', { path: 'report-rendering/:id' });
 });

@@ -1,41 +1,39 @@
-<table class="table table-striped">
-  <thead>
+<thead>
+  <tr>
+    <th>Date</th>
+    <th>Description</th>
+    <th>Debit</th>
+    <th>Credit</th>
+    <th>Balance</th>
+    <th class="text-center">Reference</th>
+    <th class="text-center">Journal entry</th>
+  </tr>
+</thead>
+<tbody>
+  <tr {{bind-attr class="hasNextPage::hidden"}}>
+    <td colspan="7" class="loading-more" id="accountLinesLoader">
+      {{partial "loading"}}
+    </td>
+  </tr>
+  {{#each line in controller}}
     <tr>
-      <th>Date</th>
-      <th>Description</th>
-      <th>Debit</th>
-      <th>Credit</th>
-      <th>Balance</th>
-      <th class="text-center">Reference</th>
-      <th class="text-center">Journal entry</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr {{bind-attr class="hasNextPage::hidden"}}>
-      <td colspan="7" class="loading-more" id="accountLinesLoader">
-        {{partial "loading"}}
+      <td>{{format-date line.effectiveAt 'big'}}</td>
+      <td>{{line.description}}</td>
+      <td>{{format-value line.value 'debit'}}</td>
+      <td>{{format-value line.value 'credit'}}</td>
+      <td>{{format-balance line.balance normalBalance}}</td>
+      <td class="text-center">
+        {{#if line.reference}}
+          <a {{bind-attr href=line.reference}} target="_blank">
+            <img src="assets/icon-reference.png"></img>
+          </a>
+        {{/if}}
+      </td>
+      <td class="text-center">
+        {{#link-to "journal-entry" line.journalEntry}}
+          <img src="assets/icon-journal-entry.png"></img>
+        {{/link-to}}
       </td>
     </tr>
-    {{#each line in controller}}
-      <tr>
-        <td>{{format-date line.effectiveAt 'big'}}</td>
-        <td>{{line.description}}</td>
-        <td>{{format-value line.value 'debit'}}</td>
-        <td>{{format-value line.value 'credit'}}</td>
-        <td>{{format-balance line.balance.value normalBalance}}</td>
-        <td class="text-center">
-          {{#if line.reference}}
-            <a {{bind-attr href=line.reference}} target="_blank">
-              <img src="assets/icon-reference.png"></img>
-            </a>
-          {{/if}}
-        </td>
-        <td class="text-center">
-          {{#link-to "journal-entry" line.journalEntry}}
-            <img src="assets/icon-journal-entry.png"></img>
-          {{/link-to}}
-        </td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+  {{/each}}
+</tbody>

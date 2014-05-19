@@ -1,3 +1,8 @@
 export default Ember.View.extend({
-  templateName: 'journal-entry'
+  tagName: 'div',
+  classNames: 'panel panel-default journal-entry',
+
+  templateName: 'journal-entry',
+
+  isCollapsive: false
 });

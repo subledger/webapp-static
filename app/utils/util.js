@@ -39,11 +39,11 @@ export default {
   },
 
   formatBalance: function(balance, normalBalance) {
-    if (balance === undefined || !balance.get('value')) {
+    if (balance === undefined || (balance.get && !balance.get('value')) && !balance.value) {
       return "";
     }
 
-    var value = balance.get('value');
+    var value = balance.get ? balance.get('value') : balance.value;
 
     if (value.type === normalBalance) {
       return accounting.formatMoney(value.amount, "");

@@ -1,5 +1,5 @@
 export default Ember.ArrayController.extend({
-  itemController: 'accounts.Item',
+  itemController: 'reports.Item',
 
   description: "",
   hasNextPage: false,
@@ -55,11 +55,11 @@ export default Ember.ArrayController.extend({
       description: description
     };
 
-    return this.store.find('account', query).then(
-      $.proxy(function(accounts) {
-        this.addObjects(accounts.toArray());
+    return this.store.find('report', query).then(
+      $.proxy(function(reports) {
+        this.addObjects(reports.toArray());
 
-        if (accounts.toArray().length === perPage) {
+        if (reports.toArray().length === perPage) {
           this.set('hasNextPage', true);
 
         } else {
@@ -67,7 +67,7 @@ export default Ember.ArrayController.extend({
         }
 
         this.set('loadingPage', false);
-        return accounts;
+        return reports;
       }, this)
     );
   }  

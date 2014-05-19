@@ -1,8 +1,12 @@
 export default Ember.View.extend({
+	tagName: 'div',
+	classNames: 'panel panel-default journal-entry hover-highlight',
+
 	templateName: 'journal-entry',
 
 	timeAgo: "",
 	timeAgoInterval: null,
+	isCollapsive: true,
 
 	init: function() {
 		this._super();

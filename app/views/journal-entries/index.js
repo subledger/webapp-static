@@ -1,59 +1,52 @@
 export default Ember.View.extend({
-  loadingFirstPage: true,
+  tagName: 'div',
+  classNames: 'content',
 
   autoScroller: function() {
-    var previousHeight = $(".app-main-content").prop('scrollHeight');
+    if (this.$()) {
+      var previousHeight = this.$().prop('scrollHeight');
 
-    Ember.run.next($.proxy(function() {
-      if (this.get('loadingFirstPage')) {
-        this.scrollToTheBottom();
-      } else {
-        this.scrollTo(previousHeight);
-      }
-    }, this));
+      Ember.run.next(this, function() {
+        this.scrollTo(previousHeight + 15);
+      });
+    }
   }.observes('controller.@each'),
 
   loadNextPage: function() {
     var defer = Ember.RSVP.defer();
 
     defer.promise.then($.proxy(function() {
-      Ember.run.next($.proxy(function() {
+      Ember.run.next(this, function() {
         if (this.isScrolledAtTop()) {
           this.loadNextPage();
-          
-        } else {
-          this.set('loadingFirstPage', false);
         }
-      }, this));
+      });
     }, this));
 
     this.get('controller').send('nextPage', defer);
   },
 
   isScrolledAtTop: function() {
-    return $(".app-main-content").scrollTop() === 0;
+    return this.$().scrollTop() === 0;
   },
 
   scrollToTheBottom: function() {
-    $(".app-main-content").scrollTop($(".app-main-content").prop('scrollHeight'));
+    this.$().scrollTop(this.$().prop('scrollHeight'));
   },
 
   scrollTo: function(previousHeight) {
-    var pos = $(".app-main-content").prop('scrollHeight') - previousHeight;
-    $(".app-main-content").scrollTop(pos);
+    var pos = this.$().prop('scrollHeight') - previousHeight;
+    this.$().scrollTop(pos);
   },
 
   didInsertElement: function() {
-    Ember.run.next($.proxy(function() {
-      if (this.isScrolledAtTop()) {
-        this.loadNextPage();
-      }
-    }, this));
+    if (this.get('controller').toArray().length === 0) {
+      this.loadNextPage();
+    } else {
+      this.scrollToTheBottom();
+    }
 
-
-    $(".app-main-content").on('scroll', $.proxy(function() {
-      this.set('loadingFirstPage', false);
-
+    this.$().on('scroll', $.proxy(function() {
       if (this.isScrolledAtTop()) {        
         this.loadNextPage();
       }      
@@ -61,6 +54,6 @@ export default Ember.View.extend({
   },
 
   willDestroyElement: function() {
-    $(".app-main-content").off('scroll');
+    this.$().off('scroll');
   }
 });

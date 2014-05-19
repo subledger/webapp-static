@@ -1,93 +1,94 @@
-  {{view view.messagesView}}
+{{view view.messagesView}}
 
-  <form role="form" class="manual-journal-entry" {{action "post" target="view" on="submit"}} {{bind-attr disabled=model.isSaving}}>
-    <div class="panel panel-default">
-      <div class="panel-body">
-      
-        <div class="row">
-          <div class="col-md-3">
-            <div {{bind-attr class=':form-group model.errors.effectiveAt:has-error'}}>
-              <div class='input-group date effective-at'>
-                {{input type="text" class="form-control" id="effectiveAt" tabindex="1"}}
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-              </div>
+<form role="form" {{action "post" target="view" on="submit"}} {{bind-attr disabled=model.isSaving}}>
 
-              {{#each error in model.errors.effectiveAt}}
-                <span class="help-block">{{error.message}}</span>
-              {{/each}}            
-            </div>
-          </div>
-
-          <div class="col-md-9">
-            <div {{bind-attr class=':form-group model.errors.description:has-error'}}>
-              {{input type="text" value=model.description class="form-control journal-entry-description" placeholder="Description" autofocus="autofocus" tabindex="1"}}
-              {{#each error in model.errors.description}}
-                <span class="help-block">{{error.message}}</span>
-              {{/each}}
+  <div class="panel panel-default">  
+    <div class="panel-body">    
+      <div class="row">
+        <div class="col-md-3">
+          <div {{bind-attr class=':form-group model.errors.effectiveAt:has-error'}}>
+            <div class='input-group date effective-at'>
+              {{input type="text" class="form-control" id="effectiveAt" tabindex="1"}}
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
             </div>
 
-            <div {{bind-attr class=':form-group model.errors.reference:has-error'}}>
-              {{input type="text" value=model.reference class="form-control" placeholder="Reference" tabindex="1"}}
-              {{#each error in model.errors.reference}}
-                <span class="help-block">{{error.message}}</span>
-              {{/each}}
-            </div>
-          </div>
-        </div>
-
-        <div class="separator"></div>
-
-        <div class="row">
-          <div class="col-md-12">        
-            <div id="lines" >
-              {{view view.linesView}}
-            </div>
-          </div>
-        </div>
-
-        <div class="row totals">
-          <div class="col-md-8 text-right">
-            Totals
-
-            {{#each error in model.errors.lines}}
-              <p class="text-danger">{{error.message}}</p>
+            {{#each error in model.errors.effectiveAt}}
+              <span class="help-block">{{error.message}}</span>
             {{/each}}            
           </div>
+        </div>
 
-          <div class="col-md-2 text-right">
-            {{format-amount model.totalDebit}}
+        <div class="col-md-9">
+          <div {{bind-attr class=':form-group model.errors.description:has-error'}}>
+            {{input type="text" value=model.description class="form-control journal-entry-description" placeholder="Description" autofocus="autofocus" tabindex="1"}}
+            {{#each error in model.errors.description}}
+              <span class="help-block">{{error.message}}</span>
+            {{/each}}
           </div>
 
-          <div class="col-md-2 text-right">
-            {{format-amount model.totalCredit}}
+          <div {{bind-attr class=':form-group model.errors.reference:has-error'}}>
+            {{input type="text" value=model.reference class="form-control" placeholder="Reference" tabindex="1"}}
+            {{#each error in model.errors.reference}}
+              <span class="help-block">{{error.message}}</span>
+            {{/each}}
           </div>
         </div>
       </div>
 
-      <div class="panel-footer">
-        <div class="row">
-          <div class="col-xs-6 col-md-9">
-            <button type="button" class="btn btn-primary" tabindex="10002" {{action 'clear' target="view"}} {{bind-attr disabled=model.isSaving}}>Clear all</button>          
-          </div>
+      <div class="separator"></div>
 
-          <div class="col-xs-6 col-md-3 text-right">
-            <div {{bind-attr class=":postProgress model.isSaving::hidden"}}>
-              <div class="progress progress-striped active">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                </div>
+      <div class="row">
+        <div class="col-md-12">        
+          <div id="lines" >
+            {{#if loadingAccounts}}
+              {{partial 'loading'}}
+            {{else}}
+              {{view view.linesView}}
+            {{/if}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row totals">
+        <div class="col-md-8 text-right">
+          Totals
+
+          {{#each error in model.errors.lines}}
+            <p class="text-danger">{{error.message}}</p>
+          {{/each}}            
+        </div>
+
+        <div class="col-md-2 text-right">
+          {{format-amount model.totalDebit}}
+        </div>
+
+        <div class="col-md-2 text-right">
+          {{format-amount model.totalCredit}}
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-xs-6 col-md-9">
+          <button type="button" class="btn btn-primary" tabindex="10002" {{action 'clear' target="view"}} {{bind-attr disabled=model.isSaving}}>Clear all</button>          
+        </div>
+
+        <div class="col-xs-6 col-md-3 text-right">
+          <div {{bind-attr class=":postProgress model.isSaving::hidden"}}>
+            <div class="progress progress-striped active">
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
               </div>
             </div>
-
-            <div {{bind-attr class="model.isSaving:hidden"}}>
-              <button type="submit" class="btn btn-success" tabindex="10001">Post</button>
-            </div>          
           </div>
+
+          <div {{bind-attr class="model.isSaving:hidden"}}>
+            <button type="submit" class="btn btn-success" tabindex="10001">Post</button>
+          </div>          
         </div>
       </div>
     </div>
   </div>
-</div>
-
 </form>
