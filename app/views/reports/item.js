@@ -44,8 +44,6 @@ export default Ember.View.extend({
   didInsertElement: function() {
     // configure modal
     this.$(".modal").modal({
-      backdrop: 'static',
-      keyboard: false,
       show: false
       
     }).on('hidden.bs.modal', $.proxy(function(e) {
@@ -55,7 +53,9 @@ export default Ember.View.extend({
     }, this));
 
     // configure datepicker
-    this.$(".modal form .date-at").datetimepicker({});
+    this.$(".modal form .date-at").datetimepicker({
+      defaultDate: new Date()
+    });
 
     // hide progressbar
     this.$(".modal form .progress").hide();
