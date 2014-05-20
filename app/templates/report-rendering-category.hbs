@@ -7,23 +7,23 @@
 <div class="accounts">
   {{#if accounts}}
     <table class="table table-striped">
-      <thead>
+{{!--       <thead>
         <tr>
           <th class="account-description">Description</th>
           <th class="account-balance">Balance</th>
         </tr>
-      </thead>
+      </thead> --}}
       <tbody>
         {{#each account in accounts}}
           <tr>
-            <td>{{account.description}}</td>
-            <td>{{format-balance account.balance account.normalBalance}}</td>
+            <td class="account-description">{{account.description}}</td>
+            <td class="account-balance">{{format-balance account.balance account.normalBalance}}</td>
           </tr>
         {{/each}}
       </tbody>
     </table>
   {{else}}
-    <p>No accounts attached to this category yet</p>
+    <p>No accounts attached to this category</p>
   {{/if}}
 </div>
 

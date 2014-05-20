@@ -45,8 +45,8 @@ export default {
 
     var value = balance.get ? balance.get('value') : balance.value;
 
-    if (value.type === normalBalance) {
-      return accounting.formatMoney(value.amount, "");
+    if (value.type === 'zero' || value.type === normalBalance) {
+      return new Ember.Handlebars.SafeString(accounting.formatMoney(value.amount, "") + "&nbsp;");
     } else {
       return "(" + accounting.formatMoney(value.amount, "") + ")";
     }

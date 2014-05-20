@@ -406,12 +406,23 @@ body {
 }
 
 .report-rendering-category {  
-  div {
+  .category-info {
     padding: @default-padding 0;
     border-bottom: 1px dotted @default-border-color;
 
     .glyphicon {
       opacity: 0;
+    }
+
+    .description {
+      font-weight: bold;
+      text-shadow: @white-text-shadow;
+    }
+
+    .balance {
+      font-weight: bold;
+      text-shadow: @white-text-shadow;
+      padding-right: 5px;
     }
 
     &:hover {
@@ -432,6 +443,8 @@ body {
 
   .accounts {
     display: none;
+    padding-left: 15px;
+    margin-top: @default-margin;
 
     table {
       margin-bottom: 0;
@@ -442,12 +455,12 @@ body {
 
       .account-balance {
         width: 100px;
+        padding-right: 5px;
+        text-align: right;
       }
     }
 
     p {
-      margin-bottom: 0;
-      padding-left: 15px;
       font-style: italic;
     }
   }
