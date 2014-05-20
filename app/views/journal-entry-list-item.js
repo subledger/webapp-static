@@ -12,6 +12,35 @@ export default Ember.View.extend({
 		this._super();
 	},
 
+	popoverObserver: function() {
+		this.createPopover();
+	}.observes('controller.expanded'),
+
+	timeAgoISO: function() {
+		return this.get('controller').get('model').get('effectiveAt').toISOString();
+	}.property('controller.model.effectiveAt'),
+
+	createPopover: function() {
+		if (this.get('controller').get('expanded')) {
+			this.$(".time-ago").popover('destroy');
+
+		} else {
+			Ember.run.scheduleOnce('afterRender', this, function() {
+				this.$(".time-ago").popover({
+					trigger: 'click',
+					placement: 'right',
+					content: this.get('timeAgoISO'),
+					container: this.$()
+				});
+
+				this.$(".time-ago").on('click', $.proxy(function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+				}, this));
+			});
+		}		
+	},
+
 	calculateTimeAgo: function() {
 		this.set('timeAgo', moment(this.get('controller').get('model').get('effectiveAt')).fromNow());
 	},
@@ -22,6 +51,9 @@ export default Ember.View.extend({
 			e.preventDefault();
 			this.get('controller').send('toggleExpanded');
 		}, this));
+
+		// time ago ISO popover
+		this.createPopover();
 
 		// calculate initial time ago
 		this.calculateTimeAgo();
