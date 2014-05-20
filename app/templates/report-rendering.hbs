@@ -1,9 +1,11 @@
-<div class="row">
-  <div class="col-md-12 link-back">
-    {{#link-to 'reports'}}&lt; Back to List{{/link-to}}      
-  </div>
+<div class="link-back">
+  {{#link-to 'reports' class='btn btn-default'}}
+    <span class="glyphicon glyphicon-chevron-left"></span> Back to List
+  {{/link-to}}
 </div>
 
-{{#each category in categories}}
-  {{render "report-rendering-category" category}}
-{{/each}}
+<ul>
+  {{#each category in categories}}
+    <li class="report-rendering-category">{{render "report-rendering-category" category}}</li>
+  {{/each}}
+</ul>

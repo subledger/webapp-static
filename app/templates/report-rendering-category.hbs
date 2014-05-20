@@ -1,21 +1,36 @@
-<div class="panel panel-default report-rendering-category">
-  <div class="panel-heading">
-    <div class="row">
-      <div class="col-xs-10">
-        {{description}}
-      </div>
+<div class="category-info">
+  <span class="glyphicon glyphicon-collapse-up"></span> 
+  <span class="description">{{description}}</span>
+  <span class="balance pull-right">{{format-balance balance normalBalance}}</span>
+</div>
 
-      <div class="col-xs-2 text-right">
-        {{format-amount balance.value.amount}}
-      </div>
-    </div>
-  </div>
-
-  {{#if categories}}        
-    <div class="panel-body">
-      {{#each subCategory in categories}}
-        {{render "report-rendering-category" subCategory}}
-      {{/each}}
-    </div>
+<div class="accounts">
+  {{#if accounts}}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="account-description">Description</th>
+          <th class="account-balance">Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each account in accounts}}
+          <tr>
+            <td>{{account.description}}</td>
+            <td>{{format-balance account.balance account.normalBalance}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p>No accounts attached to this category yet</p>
   {{/if}}
 </div>
+
+{{#if categories}}
+  <ul>
+    {{#each subCategory in categories}}
+      <li class="report-rendering-category">{{render "report-rendering-category" subCategory}}</li>
+    {{/each}}
+  </ul>
+{{/if}}

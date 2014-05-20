@@ -151,7 +151,7 @@ body {
 }
 
 .link-back {
-  margin-bottom: 15px;
+  margin: 0 0 @default-margin @default-margin;
 }
 
 .app-all-content {
@@ -381,25 +381,79 @@ body {
 .report-rendering {
   height: 99%;
   overflow-y: auto;
-  overflow-x: hidden;
-  margin: @default-margin;  
+  margin: @default-margin 0;
+
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  ul {
+    padding-left: 0;
+    margin: 0 @default-margin;
+    list-style-type: none;
+
+    background-image: @background-light;
+  }
+
+  &> ul {
+    padding-bottom: @default-padding;
+
+    &> li {
+      padding: 0 @default-padding;
+    }
+  }
 }
 
-.report-rendering-category {
-  .panel-body  {
-    padding: 0 0 0 15px;
+.report-rendering-category {  
+  div {
+    padding: @default-padding 0;
+    border-bottom: 1px dotted @default-border-color;
 
-    &> .panel {
-      border: 0;
-      margin: 0;
-      .box-shadow(none);
+    .glyphicon {
+      opacity: 0;
+    }
 
-      .panel-heading {
-        border-bottom: 0;
-        padding-left: 15px;
-        background-color:  transparent;
+    &:hover {
+      cursor: pointer;
+      border-bottom: 1px solid @brand-info;
+
+      .glyphicon {
+        opacity: 100;
+        .transition(opacity 0.5s);
       }
     }
+  }
+
+  ul {
+    margin: 0;
+    padding-left: @default-padding * 2;
+  }
+
+  .accounts {
+    display: none;
+
+    table {
+      margin-bottom: 0;
+
+      .account-description {
+        overflow: hidden;
+      }
+
+      .account-balance {
+        width: 100px;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+      padding-left: 15px;
+      font-style: italic;
+    }
+  }
+
+  li:last-child div.category-info {
+    border-bottom: 0;
   }
 }
 
