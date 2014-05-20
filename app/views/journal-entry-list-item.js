@@ -55,6 +55,11 @@ export default Ember.View.extend({
 		// time ago ISO popover
 		this.createPopover();
 
+		// dismiss popover on scroll
+		this.$().parents('.content').on('scroll', $.proxy(function() {
+			this.$(".time-ago").popover('hide');
+		}, this));
+
 		// calculate initial time ago
 		this.calculateTimeAgo();
 
