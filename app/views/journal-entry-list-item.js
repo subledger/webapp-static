@@ -57,7 +57,9 @@ export default Ember.View.extend({
 
 		// dismiss popover on scroll
 		this.$().parents('.content').on('scroll', $.proxy(function() {
-			this.$(".time-ago").popover('hide');
+			if (this.$(".time-ago") !== undefined) {
+				this.$(".time-ago").popover('hide');
+			}
 		}, this));
 
 		// calculate initial time ago

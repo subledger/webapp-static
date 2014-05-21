@@ -1,5 +1,14 @@
 {{#if expanded}}
-  <div {{bind-attr class=":panel-heading view.isCollapsive:clickable"}}>{{description}}</div>
+  <div {{bind-attr class=":panel-heading view.isCollapsive:clickable"}}>
+    <div class="row">
+      <div class="col-xs-9 col-md-11">
+        {{description}}
+      </div>
+      <div class="col-xs-3 col-md-1 text-right">
+        {{state}}
+      </div>
+    </div>
+  </div>
 
   <div class="panel-body">
     {{format-date effectiveAt 'full'}}
@@ -62,7 +71,7 @@
         {{description}}
       </div>
       <div class="col-xs-3 col-md-1 text-right">
-        POSTED {{#if expanded}}EXPANDED{{/if}}
+        {{state}}
       </div>
     </div>
   </div>

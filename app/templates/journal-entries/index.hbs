@@ -1,9 +1,47 @@
-{{#if hasNextPage}}
-  {{partial "loading"}}
-{{/if}}
+<div class="panel panel-default header">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-3 col-md-2">
+        Effective&nbsp;At
+      </div>
+      <div class="col-xs-6 col-md-9">
+        Description
+      </div>
+      <div class="col-xs-3 col-md-1">
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            {{selectedState}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            {{#each state in states}}
+              <li><button class="btn btn-link" {{action 'changeState' state}}>{{state}}</button></li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<div class="items">
-  {{#each journalEntry in controller}}
-    {{view "journal-entry-list-item"}}
-  {{/each}}
+<div class="content">
+  {{#if hasNextPage}}
+    {{partial "loading"}}
+  {{/if}}
+
+  <div class="items">
+    {{#each journalEntry in controller}}
+      {{view "journal-entry-list-item"}}
+    {{/each}}
+
+    {{#if loadingNewerPage}}
+      {{partial "loading"}}
+    {{else}}
+      <p class="text-center load-newer">
+        <button class="btn btn-default" {{action 'getNewEntries'}}>
+          <span class="glyphicon glyphicon-refresh"></span>
+          Check for new Entries
+        </button>
+      </p>
+    {{/if}}
+  </div>
 </div>

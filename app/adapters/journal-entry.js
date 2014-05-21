@@ -35,18 +35,39 @@ export default ApplicationAdapter.extend({
     }, this));
   },
 
-  // possilble parameters are order, date, nextPageId, perPage
   findQuery: function(store, type, query) {
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
       var date = query.date ? query.date.toISOString() : new Date().toISOString();
-      var config = this.criteria().limit(query.limit || 25).posted();
 
-      if (query.pageId) {
-        config = config.preceding().id(query.pageId); 
-                 
+      var resultKey = null;
+      var config = this.criteria().limit(query.limit || 25);
+      
+      if (query.state === "POSTING") {
+        config = config.posting();
+        resultKey = "posting_journal_entries";
+
       } else {
-        config = config.ending().effectiveAt(date);          
+        config = config.posted();
+        resultKey = "posted_journal_entries";
       }
+
+      if (query.newer) {
+        if (query.pageId) {
+          config = config.following().id(query.pageId); 
+                   
+        } else {
+          config = config.ending().effectiveAt(date);          
+        }
+
+      } else {
+        if (query.pageId) {
+          config = config.preceding().id(query.pageId); 
+                   
+        } else {
+          config = config.ending().effectiveAt(date);          
+        }
+      }
+
 
       this.getSelectedBook().journalEntry().get(config.get(), function(e, result) {
         if (e !== null) {
@@ -54,8 +75,10 @@ export default ApplicationAdapter.extend({
           return;
         }
 
-        // reverse order
-        result['posted_journal_entries'] = result['posted_journal_entries'].reverse();
+        // set state on each element
+        for (var i = 0; i < result[resultKey].length; i++) {
+          result[resultKey][i].state = query.state;
+        }
 
         resolve(result);
       });

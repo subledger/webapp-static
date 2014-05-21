@@ -314,8 +314,12 @@ body {
 .journal-entries {
   height: 100%;
 
-  .content {
+  .full-content {
     height: 100%;
+  }
+
+  .content {
+    height: 40%;
     overflow-y: auto;
 
     .journal-entry {
@@ -328,6 +332,71 @@ body {
 
       &.last-of-type {
         margin-bottom: @default-margin;
+      }
+    }
+
+    .load-newer {
+      margin: 30px 0 @default-margin 0;
+    }
+  }
+
+  // keep a decent height proportion on phone screen
+  @media (min-height: 650px) and (max-width: @screen-xs-max) {
+    .content { height: 50%; }
+  }
+
+  @media (min-height: 700px) and (max-width: @screen-xs-max) {
+    .content { height: 55%; }
+  }
+
+  @media (min-height: 750px) and (max-width: @screen-xs-max) {
+    .content { height: 60%; }
+  }
+
+  @media (min-height: 850px) and (max-width: @screen-xs-max) {
+    .content { height: 65%; }
+  }
+
+  @media (min-height: 950px) and (max-width: @screen-xs-max) {
+    .content { height: 70%; }
+  }
+
+  // keep a decent height proportion on non phone screen
+  @media (min-width: @screen-sm-min) {
+    .content { height: 78%; }
+  }
+
+  @media (min-height: 700px) and (min-width: @screen-sm-min) {
+    .content { height: 89%; }
+  }
+
+  @media (min-height: 900px) and (min-width: @screen-sm-min) {
+    .content { height: 91%; }
+  }  
+
+  .header {
+    text-shadow: @white-text-shadow;
+    background-image: @background-brown;
+
+    .box-shadow-highlight;
+    margin: @default-margin;
+
+    .panel-body {
+      padding: @default-list-entry-padding;
+    }    
+
+    .row {
+      font-size: 1.1em;
+      font-weight: bold;
+      line-height: 30px;
+    }
+
+    .dropdown-menu {
+      min-width: initial;
+
+      .btn-link {
+        color: @text-color;
+        text-decoration: none;
       }
     }
   }

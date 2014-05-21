@@ -1,16 +1,28 @@
 export default Ember.View.extend({
   tagName: 'div',
-  classNames: 'content',
+  classNames: 'full-content',
 
   autoScroller: function() {
-    if (this.$()) {
-      var previousHeight = this.$().prop('scrollHeight');
+    if (!this.get('controller').get('loadedPageWasNewer')) {
+      if (this.$()) {
+        var previousHeight = this.$(".content").prop('scrollHeight');
 
-      Ember.run.next(this, function() {
-        this.scrollTo(previousHeight + 15);
+        Ember.run.scheduleOnce('afterRender', this, function() {
+          this.scrollTo(previousHeight + 15);
+        });
+      }
+    } else {
+      Ember.run.scheduleOnce('afterRender', this, function() {
+        this.scrollToTheBottom();
       });
     }
   }.observes('controller.@each'),
+
+  onStateChange: function() {
+    Ember.run.scheduleOnce('afterRender', this, function() {
+      this.loadNextPage();
+    });
+  }.observes('controller.selectedState'),
 
   loadNextPage: function() {
     var defer = Ember.RSVP.defer();
@@ -27,16 +39,16 @@ export default Ember.View.extend({
   },
 
   isScrolledAtTop: function() {
-    return this.$().scrollTop() === 0;
+    return this.$(".content").scrollTop() === 0;
   },
 
   scrollToTheBottom: function() {
-    this.$().scrollTop(this.$().prop('scrollHeight'));
+    this.$(".content").scrollTop(this.$(".content").prop('scrollHeight'));
   },
 
   scrollTo: function(previousHeight) {
-    var pos = this.$().prop('scrollHeight') - previousHeight;
-    this.$().scrollTop(pos);
+    var pos = this.$(".content").prop('scrollHeight') - previousHeight;
+    this.$(".content").scrollTop(pos);
   },
 
   didInsertElement: function() {
@@ -46,7 +58,7 @@ export default Ember.View.extend({
       this.scrollToTheBottom();
     }
 
-    this.$().on('scroll', $.proxy(function() {
+    this.$(".content").on('scroll', $.proxy(function() {
       if (this.isScrolledAtTop()) {        
         this.loadNextPage();
       }      
