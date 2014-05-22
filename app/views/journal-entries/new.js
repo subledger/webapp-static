@@ -45,39 +45,6 @@ export default Ember.View.extend({
     });
   }.observes('controller.model.totalCredit'),
 
-  accountsLoaded: function() {
-    if (this.get("controller.loadingAccounts") === false) {
-      // get accounts from controller
-      var accounts = this.controller.get("accounts");
-
-      // instantiate and configure suggestion engine
-      var accountsDataset = new Bloodhound({
-        name: "accountsDataset",
-        local: $.map(accounts, function(account) {
-          return {
-            id: account.get("id"),
-            description: account.get("description"),
-            normalBalance: account.get("normalBalance")
-          };
-        }),
-        datumTokenizer: function(d) {
-          return Bloodhound.tokenizers.whitespace(d.description);
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-      });
-
-      // initialize it
-      accountsDataset.initialize();
-
-      // set the suggestion engine
-      this.set("accountsDataset", accountsDataset);
-
-      // add first line
-      this.addLine();
-    }    
-
-  }.observes("controller.loadingAccounts"),
-
   addLine: function() {
     this.controller.send('addLine');
     var line = this.controller.get('model').get('lines').get('lastObject');
@@ -177,6 +144,60 @@ export default Ember.View.extend({
 
     this.bindCalendarInterval();
     this.bindJournalEntryStatesHandlers();
+
+    // instantiate and configure suggestion engine
+    var accountsDataset = new Bloodhound({
+      name: "accountsDataset",
+      remote: {
+        url: window.App.get('credentials').get('apiUrl'),
+        replace: function(url, query) {
+          var parts = [
+            url,
+            '/orgs/',
+            window.App.get('credentials').get('org'),
+            '/books/',
+            window.App.get('credentials').get('book'),
+            '/accounts?limit=25&state=active&action=starting&description=',
+            query
+          ];
+
+          return parts.join('');
+        },
+        filter: function(response) {
+          return $.map(response.active_accounts, function(account) {
+            return {
+              id: account.id,
+              description: account.description,
+              normalBalance: account.normal_balance
+            };
+          });
+        },
+        ajax: {
+          cache: false,
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Authorization': window.App.get('credentials').get('basicAuthenticationHeader')
+          }
+        }
+      },
+      datumTokenizer: function(d) {
+        return Bloodhound.tokenizers.whitespace(d.description);
+      },
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+    });
+
+    // initialize it
+    accountsDataset.initialize();
+
+    // set the suggestion engine
+    this.set("accountsDataset", accountsDataset);
+
+    Ember.run.scheduleOnce('afterRender', this, function() {
+      // add first line
+      this.addLine();  
+    });    
   },
 
   willDestroyElement: function() {
