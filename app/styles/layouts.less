@@ -1,0 +1,276 @@
+@import "/vendor/bootstrap/less/bootstrap.less";
+@import "variables.less";
+@import "bootstrap.less";
+@import "mixins.less";
+
+.app-layout-top() {
+  margin: @default-margin @default-margin @default-margin/2 @default-margin;
+
+  .form-group {
+    margin-bottom: 0;
+  }
+}
+
+.app-layout-content(@base-height: 100%) {
+  .make-row();
+
+  height: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.app-layout-header-only {
+  height: 100%;
+  overflow: hidden;
+
+  &> aside {
+    .app-layout-top();
+  }
+
+  &> section {
+    .app-layout-content();
+  }
+}
+
+.app-layout-header-rightnav {
+  height: 100%;
+  overflow: hidden;
+
+  &> aside {
+    .app-layout-top();
+  }
+
+  &> section { 
+    .app-layout-content();
+    overflow: hidden;
+
+    &> div {
+      .make-xs-column(12);
+      .make-sm-column(9);
+      .make-md-column(10);
+      .make-lg-column(11);
+
+      height: 65%;      
+      overflow-y: auto;
+      padding: @default-margin/2 @default-padding @default-padding @default-padding;
+
+      // keep a decent height proportion on non phone screen
+      @media (min-height: 355px) {
+        height: 80%;
+      }
+
+      @media (min-height: 455px) {
+        height: 85%;
+      }
+
+      @media (min-height: 600px) {
+        height: 89%;
+      }      
+
+      @media (min-height: 800px) {
+        height: 94%;
+      }      
+    }
+
+    &> aside {
+      .make-sm-column(3);
+      .make-md-column(2);
+      .make-lg-column(1);
+      &:extend(.hidden-xs all);
+
+      padding: @default-padding/2 @default-padding @default-padding @default-padding;
+
+      .list-group-item {
+        padding: 2px 0;
+        font-size: .9em;
+      }      
+    }
+  } 
+}
+
+.app-layout-panel-with-header-and-table {
+  &:extend(.panel all);
+  &:extend(.panel-default all);
+
+  height: 98%;
+  overflow: hidden;
+  margin: @default-margin;    
+
+  &> header {
+    &:extend(.panel-heading all);
+
+    background-color: @white;
+    background-image: none;
+    border-bottom: 1px solid @default-border-color;
+    border-radius: @border-radius-large @border-radius-large 0 0;
+  }
+
+  &> section {
+    height: 92%;
+    overflow: hidden;
+
+    &> table {
+      &:extend(.table all);
+      &:extend(.table-striped all);
+
+      margin-bottom: 0;
+
+      &> thead > tr > th {
+        border-bottom: 0;
+      }
+
+      &> thead > tr:nth-child(odd) > th {
+        background-image: @background-darker;
+      }
+    }
+
+    &> div {
+      height: 94%;
+      overflow-y: scroll;
+
+      &> table {
+        &:extend(.table all);
+        &:extend(.table-striped all);
+
+        margin-bottom: 0;
+
+        &> tbody > tr:nth-child(odd) > td {
+          background-image: @background-dark;
+        }
+
+        &> tfoot > tr:nth-child(odd) > th {
+          background-image: @background-darker;
+        }        
+      }
+    }      
+  }
+}
+
+.app-layout-panel-with-body-only {
+  &:extend(.panel all);
+  &:extend(.panel-default all);
+
+  margin: @default-margin;
+
+  &> section.body {
+    &:extend(.panel-body all);
+
+    padding: @default-list-entry-padding;
+
+    background-color: @white;
+    background-image: none;
+    border-radius: @border-radius-large;    
+  }
+
+  &.last-of-type {
+    margin-bottom: @default-margin;
+  }
+}
+
+.app-layout-panel-with-header-and-body-table {
+  &:extend(.panel all);
+  &:extend(.panel-default all);
+
+  height: 98%;
+  overflow: hidden;
+  margin: @default-margin;    
+
+  &> header {
+    &:extend(.panel-heading all);
+
+    background-color: @white;
+    background-image: none;
+    border-bottom: 1px solid @default-border-color;
+    border-radius: @border-radius-large @border-radius-large 0 0;
+  }
+
+  &> section.body {
+    &:extend(.panel-body all);
+  }
+
+  &> section.table {
+    height: 92%;
+    overflow: hidden;
+
+    &> table {
+      &:extend(.table all);
+      &:extend(.table-striped all);
+
+      margin-bottom: 0;
+
+      &> thead > tr > th {
+        border-bottom: 0;
+      }
+
+      &> thead > tr:nth-child(odd) > th {
+        background-image: @background-darker;
+      }
+    }
+
+    &> div {
+      height: 94%;
+      overflow-y: scroll;
+
+      &> table {
+        &:extend(.table all);
+        &:extend(.table-striped all);
+
+        margin-bottom: 0;
+
+        &> tbody > tr:nth-child(odd) > td {
+          background-image: @background-dark;
+        }
+
+        &> tfoot > tr:nth-child(odd) > th {
+          background-image: @background-darker;
+        }
+      }
+    }      
+  }
+
+  &.last-of-type {
+    margin-bottom: @default-margin;
+  }
+}
+
+.app-layout-collapsive-panel {
+  &:extend(.app-layout-panel-with-body-only all);
+
+  &.collapsed {
+    &:extend(.app-layout-panel-with-header-and-body-table all);
+
+    &> section.body {
+      background-color: initial;
+      border-radius: initial;      
+    }
+
+    &.list-item {
+      height: initial;
+
+      &> header {
+        cursor: pointer;
+      }
+
+      &> section.body {
+        cursor: initial;
+      }
+
+      &> section.table {
+        height: initial;
+
+        &> div {
+          height: initial;
+          overflow-y: initial;
+        }
+      }
+    }    
+  }
+
+  &.list-item {
+    &> section.body {
+      cursor: pointer;
+    }
+
+    .box-shadow-highlight();
+  }
+}

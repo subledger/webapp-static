@@ -1,6 +1,9 @@
 export default Ember.View.extend({
   tagName: 'div',
-  classNames: 'full-content',
+  classNames: 'index',
+  layoutName: 'layouts/header-and-rightnav',
+  headerName: 'accounts/index/header',
+  rightNavName: 'accounts/index/right-nav',
 
   loadingFirstPage: true,
   updateBalanceHandler: null,

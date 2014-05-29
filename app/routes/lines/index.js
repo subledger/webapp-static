@@ -1,9 +1,11 @@
 export default Ember.Route.extend({
-	setupController: function(controller, model) {
-		controller.clear();
-    controller.setProperties({
-      loading: false,
-      hasNextPage: true
-    });
-	}
+  model: function() {
+    return Ember.A();
+  },
+
+  setupController: function(controller, model) {
+    controller.set('model', model);
+    controller.set('account', this.modelFor('account'));
+    controller.reset();
+  }
 });

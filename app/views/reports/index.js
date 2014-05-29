@@ -1,6 +1,10 @@
 export default Ember.View.extend({
   tagName: 'div',
-  classNames: 'full-content',
+  classNames: 'index',
+  layoutName: 'layouts/header-and-rightnav',
+  headerName: 'reports/index/header',
+  rightNavName: 'reports/index/right-nav',
+  contentClasses: 'infinite-scroll',
 
   loadingFirstPage: true,
 

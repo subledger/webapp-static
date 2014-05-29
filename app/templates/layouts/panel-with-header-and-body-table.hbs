@@ -1,0 +1,11 @@
+<header {{bind-attr class=view.headerClasses}}>
+  {{partial view.headerTemplateName}}
+</header>
+
+<section {{bind-attr class=view.bodyClasses}}>
+  {{partial view.bodyTemplateName}}
+</section>
+
+<section {{bind-attr class=view.tableClasses}}>
+  {{yield}}
+</section>

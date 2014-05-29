@@ -1,60 +1,17 @@
-<div class="navbar navbar-default navbar-fixed-top app-menu" role="navigation">
-  <div class="container-fluid">
-    <div class="navbar-header">
+{{partial 'app-menu'}}
 
-      {{#if App.credentials.isPresent}}
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      {{/if}}
-
-      <a class="navbar-brand" href="#">
-        <img src="assets/logo.png" alt="Subledger Logo" class="app-logo"></img>
-        <span class="label label-info">Beta</span>
-      </a>
-    </div>
-
-    {{#if App.credentials.isPresent}}
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right app-account-nav">
-          <!--
-          <li>
-            {{#link-to 'login'}}
-              <img src="assets/icon-settings.png" class="left" />
-              <span class="text">Settings</span>
-              <span class="separator">
-                <img src="assets/separator.png" class="vertical-line" />
-              </span>
-            {{/link-to}}
-          </li>
-          -->
-          <li>
-            {{#link-to 'logout'}}
-              <img src="assets/icon-logout.png" class="left" />
-              <span class="text">Logout</span>
-            {{/link-to}}
-          </li>
-        </ul>
-      </div>
-    {{/if}}
-  </div>
-</div>
-
-<div class="container-fluid">
+<div class="app-body">
   {{#if App.credentials.isPresent}}
-    <div class="row app-all-content">
-      <div class="col-sm-4 col-md-3 col-lg-2 app-main-nav">
-        <ul class="nav nav-sidebar">
+    <div class="app-all-content">
+      <div class="app-main-nav">
+        <ul>
           <li>
             {{view Ember.Select content=controller optionValuePath="content.id" optionLabelPath="content.description" value=book class="form-control"}}
           </li>
 
           {{#link-to 'journal-entries.index' tagName="li" class="nav-link"}}
             <img src="assets/icon-stream.png" class="left" />
-            Activity Stream {{selectedBookId}}
+            Activity Stream
             <img src="assets/arrow.png" class="right" />
           {{/link-to}}
 
@@ -78,28 +35,14 @@
         </ul>
       </div>
 
-      <div class="col-sm-8 col-md-9 col-lg-10 app-main-content">
+      <div class="app-main-content">
         {{outlet}}
       </div>
     </div>
+
   {{else}}
     {{outlet}}
   {{/if}}
 </div>
 
-<nav class="navbar navbar-default navbar-fixed-bottom hidden-xs app-footer" role="navigation">
-  <div class="container-fluid">
-    <ul class="nav navbar-nav">
-      <li><a href="//subledger.com" target="_blank">About</a></li>
-      <li><a href="//subledger.com/blog" target="_blank">Blog</a></li>
-      <li><a href="//subledger.com/#team" target="_blank">Jobs</a></li>
-      <!--
-      <li><a href="//subledger.com/term">Terms of service</a></li>
-      -->
-    </ul>
-
-    <p class="navbar-text navbar-right">
-      <a href="//subledger.com" target="_blank">&copy; Subledger Inc 2014</a>
-    </p>
-  </div>
-</nav>
+{{partial 'app-footer'}}

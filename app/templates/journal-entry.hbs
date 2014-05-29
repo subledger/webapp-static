@@ -1,41 +1,29 @@
-{{#if expanded}}
-  <div {{bind-attr class=":panel-heading view.isCollapsive:clickable"}}>
-    <div class="row">
-      <div class="col-xs-9 col-md-11">
-        {{description}}
-      </div>
-      <div class="col-xs-3 col-md-1 text-right">
-        {{state}}
-      </div>
-    </div>
-  </div>
+<table>
+  <thead>
+    <tr>
+      <th class="acc">Account</th>
+      <th class="description">Description</th>
+      <th class="debit">Debit</th>
+      <th class="credit">Credit</th>
+      <th class="reference">REF</th>
+    </tr>
+  </thead>
+</table>
 
-  <div class="panel-body">
-    {{format-date effectiveAt 'full'}}
-  </div>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Account</th>
-        <th>Description</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th class="text-center">Reference</th>
-      </tr>
-    </thead>
+<div>
+  <table>
       <tbody>
         {{#each line in lines}}
           <tr>
-            <td>
+            <td class="acc">
               {{#link-to 'lines.index' line.account.id}}
                 {{line.account.description}}
               {{/link-to}}
             </td>
-            <td>{{line.description}}</td>
-            <td>{{format-value line.value 'debit'}}</td>
-            <td>{{format-value line.value 'credit'}}</td>
-            <td class="text-center">
+            <td class="description">{{line.description}}</td>
+            <td class="debit">{{format-value line.value 'debit'}}</td>
+            <td class="credit">{{format-value line.value 'credit'}}</td>
+            <td class="reference">
               {{#if line.reference}}
                 <a {{bind-attr href=line.reference}} target="_blank">
                   <img src="assets/icon-reference.png"></img>
@@ -44,6 +32,7 @@
             </td>
           </tr>
         {{/each}}
+
         {{#if loadingLines}}
           <tr>
             <td colspan="5">
@@ -55,24 +44,10 @@
       <tfoot>
         <tr>
           <th colspan="2" class="text-right">Total</th>
-          <th>{{format-amount totalDebit.amount}}</th>
-          <th>{{format-amount totalCredit.amount}}</th>
+          <th class="debit">{{format-amount totalDebit.amount}}</th>
+          <th class="credit">{{format-amount totalCredit.amount}}</th>
           <th>&nbsp;</th>
         </tr>
       </tfoot>
   </table>
-{{else}}
-  <div class="panel-body panel-body-white clickable">
-    <div class="row">
-      <div class="col-xs-3 col-md-2">
-        <span class="time-ago">{{view.timeAgo}}</span>
-      </div>
-      <div class="col-xs-6 col-md-9">
-        {{description}}
-      </div>
-      <div class="col-xs-3 col-md-1 text-right">
-        {{state}}
-      </div>
-    </div>
-  </div>
-{{/if}}
+</div>

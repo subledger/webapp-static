@@ -1,0 +1,17 @@
+<td class="date">{{format-date line.effectiveAt 'big'}}</td>
+<td class="description">{{line.description}}</td>
+<td class="debit">{{format-value line.value 'debit'}}</td>
+<td class="credit">{{format-value line.value 'credit'}}</td>
+<td class="balance">{{format-balance line.balance normalBalance}}</td>
+<td class="reference">
+  {{#if line.reference}}
+    <a {{bind-attr href=line.reference}} target="_blank">
+      <img src="assets/icon-reference.png"></img>
+    </a>
+  {{/if}}
+</td>
+<td class="je">
+  {{#link-to "journal-entry" line.journalEntry}}
+    <img src="assets/icon-journal-entry.png"></img>
+  {{/link-to}}
+</td>

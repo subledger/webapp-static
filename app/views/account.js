@@ -1,4 +1,6 @@
 export default Ember.View.extend({
-  tagName: 'div',
-  classNames: 'account panel panel-default'
+  tagName: 'article',
+  classNames: 'account',
+  layoutName: 'layouts/panel-with-header-and-table',
+  headerTemplateName: 'account/header'
 });

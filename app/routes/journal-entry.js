@@ -10,7 +10,8 @@ export default Ember.Route.extend({
 
   setupController: function(controller, model) {
     controller.set('model', model);
-    controller.set('expanded', true);
+    controller.set('collapsive', false);
+    controller.set('collapsed', true);
     controller.set('linesAlreadyLoaded', false);
 
     controller.loadAllLinesPages();

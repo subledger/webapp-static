@@ -1,5 +1,7 @@
 export default Ember.ObjectController.extend({
-  expanded: false,
+  collapsive: true,
+  collapsed: false,
+
   loadingLines: false,
   linesAlreadyLoaded: false,
 
@@ -20,12 +22,12 @@ export default Ember.ObjectController.extend({
   },
 
   actions: {
-    toggleExpanded: function() {
-      if (this.get('expanded')) {
-        this.set('expanded', false);
+    toggleCollapsed: function() {
+      if (this.get('collapsed')) {
+        this.set('collapsed', false);
 
       } else {
-        this.set('expanded', true);
+        this.set('collapsed', true);
 
         if (!this.get('linesAlreadyLoaded') && !this.get('loadingLines')) {
           this.loadAllLinesPages();

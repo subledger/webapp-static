@@ -30,11 +30,21 @@ export default ApplicationAdapter.extend({
         var date = query.date ? query.date.toISOString() : new Date().toISOString() ;
         var config = this.criteria().limit(query.limit || 25);
 
-        if (query.pageId) {
-          config = config.preceding().id(query.pageId);
+        if (query.newer) {
+          if (query.pageId) {
+            config = config.following().id(query.pageId);
+
+          } else {
+            config.ending().effectiveAt(date);
+          }
 
         } else {
-          config = config.ending().effectiveAt(date);
+          if (query.pageId) {
+            config = config.preceding().id(query.pageId);
+
+          } else {
+            config = config.ending().effectiveAt(date);
+          }
         }
 
         var apiLine = this.getSelectedBook().account(query.account.id).line();
@@ -44,9 +54,6 @@ export default ApplicationAdapter.extend({
             reject(e);
             return;
           }
-
-          // reverse order
-          result['posted_lines'] = result['posted_lines'].reverse();
 
           resolve(result);
         });

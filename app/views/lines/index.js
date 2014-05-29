@@ -1,21 +1,7 @@
-export default Ember.View.extend({
-	tagName: 'table',
-	classNames: 'table table-striped',
-	
-	loader: function() {
-		Ember.run.next(this, function() {
-			this.loadPage();
-		});		
-	}.observes('controller.@each'),
+import InfiniteScrollView from "subledger-app/mixins/infinite-scroll-view";
 
-	loadPage: function() {
-		this.controller.send("loadPage");
-	},
-
-	didInsertElement: function() {
-		this.loadPage();
-	},
-
-	willDestroyElement: function() {
-	}
+export default Ember.View.extend(InfiniteScrollView, {
+	tagName: 'section',
+	classNames: 'lines',
+	contentClasses: 'infinite-scroll'
 });

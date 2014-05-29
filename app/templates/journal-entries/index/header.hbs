@@ -1,0 +1,22 @@
+<div>
+  <div>
+    <div>
+      Effective&nbsp;At
+    </div>
+    <div>
+      Description
+    </div>
+    <div>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          {{selectedState}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          {{#each state in states}}
+            <li><button class="btn btn-link" {{action 'changeState' state}}>{{state}}</button></li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

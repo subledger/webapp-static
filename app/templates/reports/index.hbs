@@ -1,55 +1,9 @@
-<form role="form" class="search">
-  <div class="form-group">
-    <div class="input-group input-group">
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-search"></span>
-      </span>
-      {{input value=description class="form-control description" placeholder="Search or browse with sidebar" autofocus="autofocus"}}          
-    </div>
-  </div>
-</form>
-
-<div class="row content-row">
-  <div class="col-xs-12 col-sm-9 col-md-10 col-lg-11 content">
-    <div class="items">
-      {{#each report in controller}}
-        {{view 'reports/item'}}
-      {{/each}}
-    </div>
-
-    {{#if hasNextPage}}
-      {{partial "loading"}}
-    {{/if}}  
-  </div>
-
-  <div class="hidden-xs col-sm-3 col-md-2 col-lg-1 aside">
-    <div class="list-group text-center">
-      <a href="#" class="list-group-item browse" data-query="0x00" data-type="hex">.</a>
-      <a href="#" class="list-group-item browse" data-query="0">0</a>
-      <a href="#" class="list-group-item browse" data-query="1">1</a>
-      <a href="#" class="list-group-item browse" data-query="2">2</a>
-      <a href="#" class="list-group-item browse" data-query="3">3</a>
-      <a href="#" class="list-group-item browse" data-query="4">4</a>
-      <a href="#" class="list-group-item browse" data-query="5">5</a>
-      <a href="#" class="list-group-item browse" data-query="6">6</a>
-      <a href="#" class="list-group-item browse" data-query="7">7</a>
-      <a href="#" class="list-group-item browse" data-query="8">8</a>
-      <a href="#" class="list-group-item browse" data-query="9">9</a>
-      <a href="#" class="list-group-item browse" data-query="0x3A" data-type="hex">.</a>
-      <a href="#" class="list-group-item browse" data-query="A">A-B</a>
-      <a href="#" class="list-group-item browse" data-query="C">C-D</a>
-      <a href="#" class="list-group-item browse" data-query="E">E-F</a>
-      <a href="#" class="list-group-item browse" data-query="G">G-H</a>
-      <a href="#" class="list-group-item browse" data-query="I">I-J</a>
-      <a href="#" class="list-group-item browse" data-query="K">K-L</a>
-      <a href="#" class="list-group-item browse" data-query="M">M-N</a>
-      <a href="#" class="list-group-item browse" data-query="O">O-P</a>
-      <a href="#" class="list-group-item browse" data-query="Q">Q-R</a>
-      <a href="#" class="list-group-item browse" data-query="S">S-T</a>
-      <a href="#" class="list-group-item browse" data-query="U">U-V</a>
-      <a href="#" class="list-group-item browse" data-query="W">W-X</a>
-      <a href="#" class="list-group-item browse" data-query="Y">Y-Z</a>
-      <a href="#" class="list-group-item browse" data-query="0x5B" data-type="hex">.</a>
-    </div>
-  </div>
+<div class="items">
+  {{#each report in controller}}
+    {{view 'reports/item'}}
+  {{/each}}
 </div>
+
+{{#if hasNextPage}}
+  {{partial "loading"}}
+{{/if}}
