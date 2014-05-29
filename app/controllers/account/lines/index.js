@@ -1,7 +1,7 @@
 import InfiniteScrollController from "subledger-app/mixins/infinite-scroll-controller";
 
 export default Ember.ArrayController.extend(InfiniteScrollController, {
-  itemController: 'line',
+  itemController: 'account/lines/line',
 
   actions: {
     loadOlderPage: function() {

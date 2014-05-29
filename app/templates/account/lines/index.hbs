@@ -22,7 +22,7 @@
       </tr>
       
       {{#each line in controller}}
-        {{view 'line'}}
+        {{view 'account/lines/line'}}
       {{/each}}
 
       <tr {{bind-attr class=":loading-newer loadingOlderPage:hidden"}}>

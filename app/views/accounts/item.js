@@ -19,7 +19,7 @@ export default Ember.View.extend({
 
   click: function(e) {
     var account = this.get('controller').get('model');
-    this.get('controller').transitionToRoute('lines.index', account);
+    this.get('controller').transitionToRoute('account.lines.index', account);
   },
 
   updateBalance: function() {

@@ -16,7 +16,7 @@
         {{#each line in lines}}
           <tr>
             <td class="acc">
-              {{#link-to 'lines.index' line.account.id}}
+              {{#link-to 'account.lines.index' line.account.id}}
                 {{line.account.description}}
               {{/link-to}}
             </td>

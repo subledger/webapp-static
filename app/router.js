@@ -14,7 +14,7 @@ Router.map(function() {
   });
 
   this.resource('account', { path: '/account/:account_id' }, function() {
-    this.resource('lines', function() {
+    this.resource('account.lines', { path: '/lines' }, function() {
     });
   });
 
