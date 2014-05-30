@@ -17,8 +17,17 @@ export default Ember.View.extend(InfiniteScrollView, {
   timeAgoFromNowInterval: null,
   timeAgoFromNowLastUpdated: null,
 
-  // initialAction: function() {
-  // }.on('didInsertElement'),  
+  initialAction: function() {
+    if (this.get('listItem')) {
+
+    } else {
+      if (this.get('controller').toArray().length === 0) {
+        this.loadOlderPage();
+      } else {
+        this.scrollToBottom();
+      }
+    }
+  }.on('didInsertElement'),  
 
   listItem: function() {
     return this.get('controller').get('parentController') !== null;
@@ -46,6 +55,12 @@ export default Ember.View.extend(InfiniteScrollView, {
 
   collpasedObserver: function() {
     this.timeAgoPopup();
+
+    if (this.get('collapsed') && this.get('listItem')) {
+      if (this.get('controller').toArray().length === 0) {
+        this.loadOlderPage();
+      }
+    }
   }.observes('collapsed'),
 
   timeAgoPopup: function() {
