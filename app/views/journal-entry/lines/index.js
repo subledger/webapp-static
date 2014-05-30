@@ -42,9 +42,13 @@ export default Ember.View.extend(InfiniteScrollView, {
 
   timeAgoFromNow: function() {
     return moment(this.get('controller').get('journalEntry').get('effectiveAt')).fromNow();
-  }.property('controller.journalEntry.effectiveAt'),
+  }.property('controller.journalEntry.effectiveAt', 'timeAgoFromNowLastUpdated'),
 
   collpasedObserver: function() {
+    this.timeAgoPopup();
+  }.observes('collapsed'),
+
+  timeAgoPopup: function() {
     if (this.get('collapsed')) {
       this.$('.time-ago').popover('destroy');
 
@@ -63,7 +67,7 @@ export default Ember.View.extend(InfiniteScrollView, {
         }, this));
       });      
     }
-  }.observes('collapsed'),
+  },
 
   calculateTimeAgoFromNow: function() {
     this.set('timeAgoFromNowLastUpdated', new Date());
@@ -76,6 +80,10 @@ export default Ember.View.extend(InfiniteScrollView, {
         e.preventDefault();
         this.get('controller').send('toggleCollapsed');
       }, this));
+    }
+
+    if (!this.get('collapsed')) {
+      this.timeAgoPopup();
     }
 
     // dismiss popover on scroll

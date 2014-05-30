@@ -2,7 +2,7 @@
   <div class="col-md-3">
     <div {{bind-attr class=':form-group view.model.errors.account:has-error'}}>
       <div class="scrollable-dropdown-menu">
-        <input class="account form-control" type="text" placeholder="Account" {{bind-attr tabindex=view.tabIndex}} />
+        <input class="line-account form-control" type="text" placeholder="Account" {{bind-attr tabindex=view.tabIndex}} />
       </div>
       {{#each error in view.model.errors.account}}
         <span class="help-block">{{error.message}}</span>

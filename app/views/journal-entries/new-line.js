@@ -201,7 +201,7 @@ export default Ember.View.extend({
     var accountsDataset = this.get('accountsDataset');
 
     // configure accounts typeahdead
-    this.$(".account").typeahead({
+    this.$(".line-account").typeahead({
       hint: true,
       highlight: true,
       minLength: 1

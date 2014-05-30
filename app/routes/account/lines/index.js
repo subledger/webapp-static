@@ -1,11 +1,12 @@
 export default Ember.Route.extend({
   model: function() {
-    return Ember.A();
+    return this.modelFor('account').get('lines');
   },
 
   setupController: function(controller, model) {
+    controller.reset();
+
     controller.set('model', model);
     controller.set('account', this.modelFor('account'));
-    controller.reset();
   }
 });

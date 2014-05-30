@@ -1,5 +1,5 @@
 export default Ember.ArrayController.extend({
-  itemController: 'accounts.Item',
+  itemController: 'accounts/item',
 
   description: "",
   hasNextPage: false,
