@@ -3,6 +3,35 @@
 @import "bootstrap.less";
 @import "mixins.less";
 
+.scrollable(@overflow-y: auto, @he1: 56%, @he2: 75%, @he3: 77%, @he4: 85%, @he5: 87%, @he6: 90%, @he7: 91%) {
+  height: @he1;
+  overflow-y: @overflow-y;
+
+  @media (min-height: 400px) {
+    height: @he2;
+  }
+
+  @media (min-height: 500px) {
+    height: @he3;
+  }
+
+  @media (min-height: 600px) {
+    height: @he4;
+  }
+
+  @media (min-height: 700px) {
+    height: @he5;
+  }
+
+  @media (min-height: 800px) {
+    height: @he6;
+  }
+
+  @media (min-height: 900px) {
+    height: @he7;
+  }
+}
+
 .app-layout-top() {
   margin: @default-margin @default-margin @default-margin/2 @default-margin;
 
@@ -11,10 +40,9 @@
   }
 }
 
-.app-layout-content(@base-height: 100%) {
+.app-layout-content() {
   .make-row();
 
-  height: 100%;
   margin-left: 0;
   margin-right: 0;
 }
@@ -29,6 +57,7 @@
 
   &> section {
     .app-layout-content();
+    .scrollable(auto);
   }
 }
 
@@ -42,34 +71,16 @@
 
   &> section { 
     .app-layout-content();
-    overflow: hidden;
+    .scrollable(hidden, 72%, 83%, 88%, 90%, 91%, 93%, 94%);
 
     &> div {
       .make-xs-column(12);
       .make-sm-column(9);
       .make-md-column(10);
       .make-lg-column(11);
+      .scrollable(auto, 99%, 99%, 99%, 99%, 100%, 100%, 100%);
 
-      height: 65%;      
-      overflow-y: auto;
       padding: @default-margin/2 @default-padding @default-padding @default-padding;
-
-      // keep a decent height proportion on non phone screen
-      @media (min-height: 355px) {
-        height: 80%;
-      }
-
-      @media (min-height: 455px) {
-        height: 85%;
-      }
-
-      @media (min-height: 600px) {
-        height: 89%;
-      }      
-
-      @media (min-height: 800px) {
-        height: 94%;
-      }      
     }
 
     &> aside {
@@ -86,64 +97,6 @@
       }      
     }
   } 
-}
-
-.app-layout-panel-with-header-and-table() {
-  &:extend(.panel all);
-  &:extend(.panel-default all);
-
-  height: 98%;
-  overflow: hidden;
-  margin: @default-margin;    
-
-  &> header {
-    &:extend(.panel-heading all);
-
-    background-color: @white;
-    background-image: none;
-    border-bottom: 1px solid @default-border-color;
-    border-radius: @border-radius-large @border-radius-large 0 0;
-  }
-
-  &> section {
-    height: 92%;
-    overflow: hidden;
-
-    &> table {
-      &:extend(.table all);
-      &:extend(.table-striped all);
-
-      margin-bottom: 0;
-
-      &> thead > tr > th {
-        border-bottom: 0;
-      }
-
-      &> thead > tr:nth-child(odd) > th {
-        background-image: @background-darker;
-      }
-    }
-
-    &> div {
-      height: 94%;
-      overflow-y: scroll;
-
-      &> table {
-        &:extend(.table all);
-        &:extend(.table-striped all);
-
-        margin-bottom: 0;
-
-        &> tbody > tr:nth-child(odd) > td {
-          background-image: @background-dark;
-        }
-
-        &> tfoot > tr:nth-child(odd) > th {
-          background-image: @background-darker;
-        }        
-      }
-    }      
-  }
 }
 
 .app-layout-panel-with-body-only() {
@@ -167,12 +120,11 @@
   }
 }
 
-.app-layout-panel-with-header-and-body-table() {
+.app-layout-panel-with-header-and-table() {
   &:extend(.panel all);
   &:extend(.panel-default all);
 
-  height: 98%;
-  overflow: hidden;
+  .scrollable(hidden, 91%, 94%, 95%, 96%, 97%, 97%, 98%);
   margin: @default-margin;    
 
   &> header {
@@ -184,13 +136,8 @@
     border-radius: @border-radius-large @border-radius-large 0 0;
   }
 
-  &> section.body {
-    &:extend(.panel-body all);
-  }
-
-  &> section.table {
-    height: 92%;
-    overflow: hidden;
+  &> section {
+    .scrollable(hidden, 65%, 73%, 80%, 84%, 87%, 89%, 90%);
 
     &> table {
       &:extend(.table all);
@@ -208,8 +155,66 @@
     }
 
     &> div {
-      height: 94%;
-      overflow-y: scroll;
+      .scrollable(scroll, 71%, 80%, 87%, 90%, 92%, 93%, 95%);
+
+      &> table {
+        &:extend(.table all);
+        &:extend(.table-striped all);
+
+        margin-bottom: 0;
+
+        &> tbody > tr:nth-child(odd) > td {
+          background-image: @background-dark;
+        }
+
+        &> tfoot > tr:nth-child(odd) > th {
+          background-image: @background-darker;
+        }        
+      }
+    }      
+  }
+}
+
+.app-layout-panel-with-header-and-body-table() {
+  &:extend(.panel all);
+  &:extend(.panel-default all);
+
+  .scrollable(hidden, 91%, 94%, 95%, 96%, 97%, 97%, 98%);
+  margin: @default-margin;    
+
+  &> header {
+    &:extend(.panel-heading all);
+
+    background-color: @white;
+    background-image: none;
+    border-bottom: 1px solid @default-border-color;
+    border-radius: @border-radius-large @border-radius-large 0 0;
+  }
+
+  &> section.body {
+    &:extend(.panel-body all);
+  }
+
+  &> section.table {
+    .scrollable(hidden, 49%, 54%, 66%, 73%, 75%, 81%, 84%);
+
+    &> table {
+      &:extend(.table all);
+      &:extend(.table-striped all);
+
+      margin-bottom: 0;
+
+      &> thead > tr > th {
+        border-bottom: 0;
+      }
+
+      &> thead > tr:nth-child(odd) > th {
+        background-image: @background-darker;
+      }
+    }
+
+    &> div {
+      .scrollable(scroll, 67%, 73%, 84%, 89%, 95%, 93%, 94%);
 
       &> table {
         &:extend(.table all);
