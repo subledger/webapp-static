@@ -18,9 +18,7 @@ export default Ember.View.extend(InfiniteScrollView, {
   timeAgoFromNowLastUpdated: null,
 
   initialAction: function() {
-    if (this.get('listItem')) {
-
-    } else {
+    if (!this.get('listItem')) {
       if (this.get('controller').toArray().length === 0) {
         this.loadOlderPage();
       } else {

@@ -48,7 +48,8 @@ export default Ember.Mixin.create({
   }.on('didInsertElement'),
 
   bindOnScrollHandlers: function() {
-    this.$scroll().on('scroll', $.proxy(function() {
+    this.$scroll().on('scroll', $.proxy(function(e) {
+      console.log(e);
       if (this.isScrolledToTop()) {
         this.loadOlderPage();
 
@@ -109,7 +110,7 @@ export default Ember.Mixin.create({
   },
 
   isScrolledToBottom: function() {
-    return this.scrollHeight() - this.scrollCurrent() === this.$scroll().height();
+    return this.scrollHeight() - this.scrollCurrent() >= this.$scroll().height() - 5;
   },
 
   loadOlderPage: function() {
