@@ -1,0 +1,15 @@
+<td class="acc">
+  {{#link-to 'account.lines.index' line.account}}
+    {{accountDescription}}
+  {{/link-to}}
+</td>
+<td class="description">{{description}}</td>
+<td class="debit">{{format-value value 'debit'}}</td>
+<td class="credit">{{format-value value 'credit'}}</td>
+<td class="reference">
+  {{#if reference}}
+    <a {{bind-attr href=reference}} target="_blank">
+      <img src="assets/icon-reference.png"></img>
+    </a>
+  {{/if}}
+</td>

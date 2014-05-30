@@ -498,7 +498,7 @@ body {
   overflow: hidden;
 
   .index {
-    &:extend(.app-layout-header-only all);
+    .app-layout-header-only();
 
     &> aside {
       &:extend(.panel all);
@@ -562,7 +562,7 @@ body {
   overflow: hidden;
 
   .index {
-    &:extend(.app-layout-header-rightnav all);
+    .app-layout-header-rightnav();
 
     .items {
       .item {
@@ -589,7 +589,7 @@ body {
   overflow: hidden;
 
   .index {
-    &:extend(.app-layout-header-rightnav all);
+    .app-layout-header-rightnav();
 
     .items {
       .item {
@@ -616,7 +616,7 @@ body {
 }
 
 .account {
-  &:extend(.app-layout-panel-with-header-and-table all);
+  .app-layout-panel-with-header-and-table();
 
   th.date, td.date {
     width: 165px;
@@ -641,28 +641,30 @@ body {
 }
 
 .journal-entry {
-  &:extend(.app-layout-collapsive-panel all);
+  .app-layout-collapsive-panel();
 
   &.collapsed {
-    th.acc, td.acc  {
-      width: 260px;
-    }
+    section.table {
+      th.acc, td.acc  {
+        width: 260px;
+      }
 
-    th.debit, td.debit, th.credit, td.credit {
-      width: 115px;
-      text-align: right;
-      overflow-x: hidden;
-    }
+      th.debit, td.debit, th.credit, td.credit {
+        width: 115px;
+        text-align: right;
+        overflow-x: hidden;
+      }
 
-     td.reference {
-      width: 50px;
-      text-align: center;
-    }
+      td.reference {
+        width: 50px;
+        text-align: center;
+      }
 
-    th.reference {
-      width: 65px;
-      text-align: center;
-      padding-right: 15px;
+      th.reference {
+        width: 65px;
+        text-align: center;
+        padding-right: 15px;
+      }
     }
 
     &.list-item {

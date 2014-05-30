@@ -8,7 +8,10 @@ Router.map(function() {
     this.route('new');
   });
 
-  this.resource('journal-entry', { path: 'jorunal-entry/:id' });
+  this.resource('journal-entry', { path: 'journal-entry/:id' }, function() {
+    this.resource('journal-entry.lines', { path: '/lines' }, function() {
+    });
+  });
 
   this.resource('accounts', function() {
   });

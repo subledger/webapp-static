@@ -3,7 +3,7 @@
 </div>
 
 {{#each journalEntry in controller}}
-  {{view "journal-entry"}}
+  {{render "journal-entry/lines/index" journalEntry.lines}}
 {{/each}}
 
 <div {{bind-attr class=":loading-newer loadingOlderPage:hidden"}}>

@@ -1,0 +1,37 @@
+<table>
+  <thead>
+    <tr>
+      <th class="acc">Account</th>
+      <th class="description">Description</th>
+      <th class="debit">Debit</th>
+      <th class="credit">Credit</th>
+      <th class="reference">REF</th>
+    </tr>
+  </thead>
+</table>
+
+<div>
+  <table>
+      <tbody>
+        {{#each line in controller}}
+          {{view 'journal-entry/lines/line'}}
+        {{/each}}
+
+        {{#if loadingLines}}
+          <tr>
+            <td colspan="5">
+              {{partial "loading"}}
+            </td>
+          </tr>
+        {{/if}}
+      </tobdy>
+      <tfoot>
+        <tr>
+          <th colspan="2" class="text-right">Total</th>
+          <th class="debit">{{format-amount journalEntry.totalDebit}}</th>
+          <th class="credit">{{format-amount journalEntry.totalCredit}}</th>
+          <th>&nbsp;</th>
+        </tr>
+      </tfoot>
+  </table>
+</div>

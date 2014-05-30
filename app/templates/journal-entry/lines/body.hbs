@@ -1,5 +1,5 @@
 {{#if collapsed}}
-  {{format-date effectiveAt 'full'}}
+  {{format-date journalEntry.effectiveAt 'full'}}
 
 {{else}}
   <div class="row">
@@ -7,10 +7,10 @@
       <span class="time-ago">{{view.timeAgoFromNow}}</span>
     </div>
     <div class="col-xs-6 col-md-9">
-      {{description}}
+      {{journalEntry.description}}
     </div>
     <div class="col-xs-3 col-md-1 text-right">
-      {{state}}
+      {{journalEntry.state}}
     </div>
   </div>
 {{/if}}

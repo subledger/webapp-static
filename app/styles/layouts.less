@@ -19,7 +19,7 @@
   margin-right: 0;
 }
 
-.app-layout-header-only {
+.app-layout-header-only() {
   height: 100%;
   overflow: hidden;
 
@@ -32,7 +32,7 @@
   }
 }
 
-.app-layout-header-rightnav {
+.app-layout-header-rightnav() {
   height: 100%;
   overflow: hidden;
 
@@ -88,7 +88,7 @@
   } 
 }
 
-.app-layout-panel-with-header-and-table {
+.app-layout-panel-with-header-and-table() {
   &:extend(.panel all);
   &:extend(.panel-default all);
 
@@ -146,7 +146,7 @@
   }
 }
 
-.app-layout-panel-with-body-only {
+.app-layout-panel-with-body-only() {
   &:extend(.panel all);
   &:extend(.panel-default all);
 
@@ -167,7 +167,7 @@
   }
 }
 
-.app-layout-panel-with-header-and-body-table {
+.app-layout-panel-with-header-and-body-table() {
   &:extend(.panel all);
   &:extend(.panel-default all);
 
@@ -233,11 +233,11 @@
   }
 }
 
-.app-layout-collapsive-panel {
-  &:extend(.app-layout-panel-with-body-only all);
+.app-layout-collapsive-panel() {
+  .app-layout-panel-with-body-only();
 
   &.collapsed {
-    &:extend(.app-layout-panel-with-header-and-body-table all);
+    .app-layout-panel-with-header-and-body-table();
 
     &> section.body {
       background-color: initial;

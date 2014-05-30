@@ -30,6 +30,14 @@ export default ApplicationAdapter.extend({
           return;
         }
 
+        // set state
+        if (result['posted_journal_entry']) {
+          result['posted_journal_entry'].state = 'POSTED';
+
+        } else if (result['posting_journal_entry']) {
+          result['posting_journal_entry'].state = 'POSTING';
+        }
+
         resolve(result);
       });
     }, this));

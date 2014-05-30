@@ -1,19 +1,24 @@
-export default Ember.View.extend({
+import InfiniteScrollView from "subledger-app/mixins/infinite-scroll-view";
+
+export default Ember.View.extend(InfiniteScrollView, {
   tagName: 'article',
   classNames: 'journal-entry',
   classNameBindings: ['collapsed', 'listItem'],
 
   layoutName: 'layouts/panel-with-header-and-body-table',
-  templateName: 'journal-entry',
+  templateName: 'journal-entry/lines/index',
 
-  headerTemplateName: 'journal-entry/header',
-  bodyTemplateName: 'journal-entry/body',
+  headerTemplateName: 'journal-entry/lines/header',
+  bodyTemplateName: 'journal-entry/lines/body',
 
-  collapsive: Ember.computed.alias('controller.collapsive'),
   collapsed: Ember.computed.alias('controller.collapsed'),
+  collapsive: Ember.computed.alias('controller.collapsive'),
 
   timeAgoFromNowInterval: null,
   timeAgoFromNowLastUpdated: null,
+
+  // initialAction: function() {
+  // }.on('didInsertElement'),  
 
   listItem: function() {
     return this.get('controller').get('parentController') !== null;
@@ -32,12 +37,12 @@ export default Ember.View.extend({
   }.property('collapsed'),
 
   timeAgoISO: function() {
-    return this.get('controller').get('model').get('effectiveAt').toISOString();
-  }.property('controller.model.effectiveAt'),
+    return this.get('controller').get('journalEntry').get('effectiveAt').toISOString();
+  }.property('controller.journalEntry.effectiveAt'),
 
   timeAgoFromNow: function() {
-    return moment(this.get('controller').get('model').get('effectiveAt')).fromNow();
-  }.property('controller.model.effectiveAt'),
+    return moment(this.get('controller').get('journalEntry').get('effectiveAt')).fromNow();
+  }.property('controller.journalEntry.effectiveAt'),
 
   collpasedObserver: function() {
     if (this.get('collapsed')) {
