@@ -67,7 +67,7 @@ module.exports = function(grunt) {
     require("time-grunt")(grunt);
   }
 
-  // Loads task options from `tasks/options/` and `tasks/custom-options`
+   // Loads task options from `tasks/options/` and `tasks/custom-options`
   // and loads tasks defined in `package.json`
   var config = _.extend({},
     require('load-grunt-config')(grunt, {
@@ -82,6 +82,7 @@ module.exports = function(grunt) {
   );
 
   grunt.loadTasks('tasks'); // Loads tasks in `tasks/` folder
+
 
   config.env = process.env;
 
@@ -251,6 +252,40 @@ module.exports = function(grunt) {
   grunt.registerTask('createResultDirectory', function() {
     grunt.file.mkdir('tmp/result');
   });
+
+  // Merge S3 configuration
+  _.merge(config, {
+    aws: grunt.file.readJSON('aws.json'),
+
+    s3: {
+      options: {
+        key: '<%= aws.key %>',
+        secret: '<%= aws.secret %>',
+        bucket: '<%= aws.bucket %>',
+        region: 'us-west-2',
+        headers: {
+          'Cache-Control': 'max-age=60',
+        }
+      },
+
+      dev: {
+        upload: [
+          {
+            src: 'dist/*',
+            dest: ''
+          },
+          {
+            src: 'dist/assets/*',
+            dest: 'assets/'
+          },
+          {
+            src: 'dist/fonts/*',
+            dest: 'fonts/'
+          }
+        ]
+      }
+    }
+  });  
 
   grunt.initConfig(config);
 };

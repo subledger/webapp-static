@@ -20,3 +20,4 @@ Tumbs.db
 /coverage/*
 *.log
 .swp
+aws.json

@@ -1,17 +1,28 @@
 ## Require NodeJS and NPM installed
-##To start (in command line):
+
+## To start (in command line):
 
 ### > sudo npm install -g grunt-cli
 ### > sudo npm install -g bower
 ### > npm install
-
-### > grunt dist (or 'grunt server' for development)
+### > grunt server
 
 Then open browser at http://localhost:8000/
 
-### key: q94AwWLKow837L2AidxX15
-### secret: gbw1tb0KTvGTYmqnWUbF01
-### org_id: TnmilrLvIQvIk6FaI0Ldb2
+
+## To deploy to Production (S3):
+
+## Copy aws.json.example to aws.json
+## Set S3 API credential and bucket info
+## > grunt dist
+## > grunt s3
+
+
+## Lemonade Example:
+
+### key: 8bDALFFz8q7uvFNskbW9Kq
+### secret: flWncmVODPlEUktLahThhW
+### org_id: Mx88KmjlVja1i4EMXoBjs1
 
 ##Fonts
 PT Sans
