@@ -45,8 +45,6 @@ export default Ember.Controller.extend({
         }, this),
 
         $.proxy(function(e) {
-          console.log(e);
-          
           if (line) {
             this.get('model').get('lines').pushObject(line);
           }

@@ -109,9 +109,6 @@ export default Ember.Mixin.create({
   },
 
   isScrolledToBottom: function() {
-    console.log(this.scrollHeight() - this.scrollCurrent() - 5);
-    console.log(this.$scroll().height());
-
     return this.scrollHeight() - this.scrollCurrent() - 5 <= this.$scroll().height();
   },
 
