@@ -1,5 +1,6 @@
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
+import Credential from "subledger-app/utils/Credential";
 
 var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
@@ -14,9 +15,14 @@ var App = Ember.Application.extend({
 loadInitializers(App, 'subledger-app');
 
 Ember.Application.initializer({
-  name: "authentication",
+  name: "credential",
 
   initialize: function(container, application) {
+    container.register('credential:current', Credential, { singleton: true });
+
+    container.typeInjection('controller', 'credential', 'credential:current');
+    container.typeInjection('route', 'credential', 'credential:current');
+    container.typeInjection('adapter', 'credential', 'credential:current');
   }
 });
 

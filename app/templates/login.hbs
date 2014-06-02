@@ -2,14 +2,18 @@
   <div class="col-md-4 col-md-offset-4">
     <div class="panel panel-default">
       <div class="panel-body">
+        {{#if error}}
+          <div class="alert alert-danger">{{error}}</div>
+        {{/if}}
+
         <form role="form" {{action "login" on="submit"}}>
-          <div class="form-group">
-            {{input value=model.key type="text" class="form-control" placeholder="key_id" autofocus="autofocus"}}
+          <div {{bind-attr class=":form-group error:has-error"}}>
+            {{input value=key type="text" class="form-control" placeholder="key_id" autofocus="autofocus"}}
           </div>
-          <div class="form-group">
+          <div  {{bind-attr class=":form-group error:has-error"}}>
             {{input value=secret type="text" class="form-control" placeholder="secret"}}
           </div>
-          <div class="form-group">
+          <div {{bind-attr class=":form-group error:has-error"}}>
             {{input value=org type="text" class="form-control" placeholder="org"}}
           </div>
 

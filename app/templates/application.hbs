@@ -1,48 +1,43 @@
 {{partial 'app-menu'}}
 
 <div class="app-body">
-  {{#if App.credentials.isPresent}}
-    <div class="app-all-content">
-      <div class="app-main-nav">
-        <ul>
-          <li>
-            {{view Ember.Select content=controller optionValuePath="content.id" optionLabelPath="content.description" value=book class="form-control"}}
-          </li>
+  <div class="app-all-content">
+    <div {{bind-attr class="credential.authenticated:app-main-nav:hidden"}}>
+      <ul>
+        <li>
+          {{view Ember.Select content=credential.books optionValuePath="content.id" optionLabelPath="content.description" value=credential.selectedBook class="form-control"}}
+        </li>
 
-          {{#link-to 'journal-entries.index' tagName="li" class="nav-link"}}
-            <img src="assets/icon-stream.png" class="left" />
-            Activity Stream
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}
+        {{#link-to 'journal-entries.index' tagName="li" class="nav-link"}}
+          <img src="assets/icon-stream.png" class="left" />
+          Activity Stream
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}
 
-          {{#link-to 'accounts.index' tagName="li" class="nav-link"}}
-            <img src="assets/icon-money.png" class="left" />
-            Accounts
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}        
+        {{#link-to 'accounts.index' tagName="li" class="nav-link"}}
+          <img src="assets/icon-money.png" class="left" />
+          Accounts
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}        
 
-          {{#link-to 'reports' tagName="li" class="nav-link"}}
-            <img src="assets/icon-report.png" class="left" />
-            Reports
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}
+        {{#link-to 'reports' tagName="li" class="nav-link"}}
+          <img src="assets/icon-report.png" class="left" />
+          Reports
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}
 
-          {{#link-to 'journal-entries.new' tagName="li" class="nav-link"}}
-            <img src="assets/icon-new.png" class="left" />
-            Create Journal Entry
-            <img src="assets/arrow.png" class="right" />
-          {{/link-to}}
-        </ul>
-      </div>
-
-      <div class="app-main-content">
-        {{outlet}}
-      </div>
+        {{#link-to 'journal-entries.new' tagName="li" class="nav-link"}}
+          <img src="assets/icon-new.png" class="left" />
+          Create Journal Entry
+          <img src="assets/arrow.png" class="right" />
+        {{/link-to}}
+      </ul>
     </div>
 
-  {{else}}
-    {{outlet}}
-  {{/if}}
+    <div {{bind-attr class="credential.authenticated:app-main-content"}}>
+      {{outlet}}
+    </div>
+  </div>
 </div>
 
 {{partial 'app-footer'}}

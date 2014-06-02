@@ -87,31 +87,31 @@ export default DS.RESTAdapter.extend({
     return criterions;
   },
 
-  getAPIClient: function() {
+  getAPIClient: function() {  
     var apiClient = new Subledger();
-    var credentials = window.App.get('credentials');
+    var credential = this.get('credential');
 
     apiClient.setCredentials(
-      credentials.get('key'),
-      credentials.get('secret')
+      credential.get('key'),
+      credential.get('secret')
     );
 
     return apiClient;
   },
 
   getOrganization: function() {
-    var credentials = window.App.get('credentials');
+    var apiClient = this.getAPIClient();
+    var credential = this.get('credential');
 
-    return this.getAPIClient().organization(
-      credentials.get('org')
+    return apiClient.organization(
+      credential.get('org')
     );
   },
 
   getSelectedBook: function() {
-    var credentials = window.App.get('credentials');
+    var org = this.getOrganization();
+    var credential = this.get('credential');
 
-    return this.getOrganization().book(
-      credentials.get('book')
-    );
+    return org.book(credential.get('book'));
   }
 });

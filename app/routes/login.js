@@ -1,5 +1,13 @@
 export default Ember.Route.extend({
   model: function() {
-    return window.App.get('credentials');
+    return this.get('credential');
+  },
+
+  setupController: function(controller, model) {
+    controller.set('model', model);
+
+    controller.set('key', model.get('key'));
+    controller.set('secret', model.get('secret'));
+    controller.set('org', model.get('org'));
   }
 });

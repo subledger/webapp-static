@@ -1,27 +1,34 @@
 export default Ember.ObjectController.extend({
+  key: null,
+  secret: null,
+  org: null,
+
+  error: null,
+
   actions: {
     login: function() {
-      var credentials = this.get('model');
+      this.set('error', null);      
+      var credential = this.get('model');
 
-      this.store.find('book').then($.proxy(function(books) {
-        // get first book
-        var firstBook = books.get('firstObject');
+      credential.setProperties({
+        key: this.get('key'),
+        secret: this.get('secret'),
+        org: this.get('org')
+      });
 
-        if (firstBook) {
-          credentials.set('book', firstBook.get('id'));
+      credential.authenticate(this.store).then(
+        $.proxy(function() {
+          credential.update();
 
-        } else {
-          // TODO handle creds with no books
-        }
+          Ember.run.next(this, function() {
+            this.transitionToRoute('journal-entries');
+          });        
+        }, this),
 
-        credentials.save().then($.proxy(function() {
-          this.controllerFor('application').clear();
-          this.controllerFor('application').addObjects(books);
-
-          this.transitionToRoute('index');
-        }, this));
-        
-      }, this));      
+        $.proxy(function(reason) {
+          this.set('error', reason);
+        }, this)
+      );
     }
   }
 });
