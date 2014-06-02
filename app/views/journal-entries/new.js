@@ -149,20 +149,20 @@ export default Ember.View.extend({
     var accountsDataset = new Bloodhound({
       name: "accountsDataset",
       remote: {
-        url: window.App.get('credentials').get('apiUrl'),
-        replace: function(url, query) {
+        url: this.get('credential').get('apiUrl'),
+        replace: $.proxy(function(url, query) {
           var parts = [
             url,
             '/orgs/',
-            window.App.get('credentials').get('org'),
+            this.get('credential').get('org'),
             '/books/',
-            window.App.get('credentials').get('book'),
+            this.get('credential').get('book'),
             '/accounts?limit=25&state=active&action=starting&description=',
             query
           ];
 
           return parts.join('');
-        },
+        }, this),
         filter: function(response) {
           return $.map(response.active_accounts, function(account) {
             return {
@@ -178,7 +178,7 @@ export default Ember.View.extend({
             'Accept': 'application/json',
             'Content-type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
-            'Authorization': window.App.get('credentials').get('basicAuthenticationHeader')
+            'Authorization': this.get('credential').get('basicAuthenticationHeader')
           }
         }
       },
