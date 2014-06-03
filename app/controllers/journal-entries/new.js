@@ -24,21 +24,21 @@ export default Ember.Controller.extend({
     },
 
     post: function(journalEntryData) {
+      // journal entry reference
       var journalEntry = this.get('model');
+
+      // lines reference
+      var lines = journalEntry.get('lines');
 
       // clear previous error messages
       journalEntry.get('errors').clear();
 
-      this.get('model').get('lines').forEach(function(item, index, enumerable) {
+      lines.forEach(function(item, index, enumerable) {
         item.get('errors').clear();
       }, this);
 
-      // remove last line (will re-add if post fails)
-      var line = null;
-      if (this.get('model').get('lines').toArray().length > 1) {
-        line = this.get('model').get('lines').get('lastObject');
-        this.get('model').get('lines').removeObject(line);
-      }
+      // remove last line, if at least two lines exists (will re-add if post fails)
+      var line = lines.toArray().length > 1 ? lines.popObject() : null;
 
       journalEntry.save().then(
         $.proxy(function(savedJournalEntry) {
@@ -46,7 +46,7 @@ export default Ember.Controller.extend({
 
         $.proxy(function(e) {
           if (line) {
-            this.get('model').get('lines').pushObject(line);
+            lines.pushObject(line);
           }
         }, this)
       );

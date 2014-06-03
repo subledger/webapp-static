@@ -16,7 +16,7 @@ export default ApplicationAdapter.extend({
           });
 
       } else {
-        Ember.run(null, reject, new DS.InvalidError());
+        Ember.run(null, reject, "Record is invalid");
       }
     }, this));
 
