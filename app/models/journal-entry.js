@@ -53,15 +53,9 @@ export default DS.Model.extend({
       this.get('errors').add('description', 'Must not be blank');
     }
 
-    if (Ember.isEmpty(this.get('reference'))) {
+    if (!Ember.isEmpty(this.get('reference')) && !urlregex.test(this.get('reference'))) {
       hasErrors = true;
-      this.get('errors').add('reference', 'Must not be blank');
-
-    } else {
-      if (!urlregex.test(this.get('reference'))) {
-        hasErrors = true;
-        this.get('errors').add('reference', 'Must be valid URI');
-      }
+      this.get('errors').add('reference', 'Must be valid URI');
     }
 
     if (this.get('lines').length < 1) {
@@ -84,14 +78,9 @@ export default DS.Model.extend({
         line.get('errors').add('description', 'Must not be blank');
       }
 
-      if (Ember.isEmpty(line.get('reference'))) {
-        hasLineErrors = true;
-        line.get('errors').add('reference', 'Must not be blank');
-      } else {
-        if (!urlregex.test(line.get('reference'))) {
-          hasErrors = true;
-          line.get('errors').add('reference', 'Must be valid URI');
-        }        
+      if (!Ember.isEmpty(line.get('reference')) && !urlregex.test(line.get('reference'))) {
+        hasErrors = true;
+        line.get('errors').add('reference', 'Must be valid URI');
       }
 
       if (Ember.isEmpty(line.get('value')) || Ember.isEmpty(line.get('value')['amount'])) {

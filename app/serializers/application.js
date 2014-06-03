@@ -14,6 +14,12 @@ export default DS.RESTSerializer.extend({
     return type;
   },
 
+  serializeAttribute: function(record, json, key, attribute) {
+    if (!Ember.isEmpty(record.get(key))) {
+      this._super(record, json, key, attribute);
+    }
+  },  
+
   serializeHasMany: function(record, json, relationship) {
     json[relationship.key] = [];
 
