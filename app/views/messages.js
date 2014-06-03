@@ -29,8 +29,12 @@ export default Ember.View.extend({
 	},
 
 	willDestroyElement: function() {
+		// cancel the timeout handlers
 		this.get('messages').forEach(function(item) {
 			Ember.run.cancel(item.get('timeoutHandler'));
 		}, this);
+
+		// delete existing messages
+		this.get('messages').clear();
 	}
 });
