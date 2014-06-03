@@ -18,30 +18,6 @@
 
     <div class="collapse navbar-collapse app-menu-links">
       <ul class="nav navbar-nav">
-        <!--
-        <li class="visible-xs">
-          <a href="//subledger.com" target="_blank">
-            <span>About</span>
-          </a>
-        </li>
-        <li class="visible-xs">
-          <a href="//subledger.com/blog" target="_blank">
-            <span>Blog</span>
-          </a>
-        </li>
-        <li class="visible-xs">
-          <a href="//subledger.com/#team" target="_blank">
-            <span>Jobs</span>
-          </a>
-        </li>
-
-        <li class="visible-xs">
-          <a href="//subledger.com/term">
-            <span>Terms of service</span>
-          </a>
-        </li>
-        -->
-
         {{#if credential.authenticated}}
           <li class="visible-xs">
             {{view Ember.Select content=credential.books optionValuePath="content.id" optionLabelPath="content.description" value=credential.selectedBook class="form-control"}}
@@ -49,48 +25,31 @@
 
           <li class="visible-xs">
             {{#link-to 'journal-entries.index'}}
-              <img src="assets/icon-stream.png" />
-              <span>Activity Stream</span>
+              <span class="glyphicon sl-refresh"></span>Activity Stream
             {{/link-to}}
           </li>
 
           <li class="visible-xs">
             {{#link-to 'accounts.index'}}
-              <img src="assets/icon-money.png" />
-              <span>Accounts</span>
+              <span class="glyphicon sl-entry"></span>Accounts
             {{/link-to}}
           </li>
 
           <li class="visible-xs">
             {{#link-to 'reports'}}
-              <img src="assets/icon-report.png" />
-              <span>Reports</span>
+              <span class="glyphicon sl-entries"></span>Reports
             {{/link-to}}
           </li>
 
           <li class="visible-xs">
             {{#link-to 'journal-entries.new'}}
-              <img src="assets/icon-new.png" />
-              <span>Create Journal Entry</span>
+              <span class="glyphicon glyphicon-edit"></span>Create Journal Entry
             {{/link-to}}
           </li>
-
-          <!--
-          <li>
-            {{#link-to 'login'}}
-              <img src="assets/icon-settings.png" class="left" />
-              <span class="text">Settings</span>
-              <span class="separator">
-                <img src="assets/separator.png" class="vertical-line" />
-              </span>
-            {{/link-to}}
-          </li>
-          -->
 
           <li>
             {{#link-to 'logout'}}
-              <img src="assets/icon-logout.png" />
-              <span>Logout</span>
+              <span class="glyphicon glyphicon-log-out"></span>Logout
             {{/link-to}}
           </li>
         {{/if}}

@@ -6,6 +6,47 @@
 @import "mixins.less";
 @import "layouts.less";
 
+@font-face {
+  font-family: 'subledger';
+  src:url('../fonts/subledger.eot?-xpbx2a');
+  src:url('../fonts/subledger.eot?#iefix-xpbx2a') format('embedded-opentype'),
+    url('../fonts/subledger.woff?-xpbx2a') format('woff'),
+    url('../fonts/subledger.ttf?-xpbx2a') format('truetype'),
+    url('../fonts/subledger.svg?-xpbx2a#subledger') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="sl-"], [class*=" sl-"] {
+  font-family: 'subledger';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.sl-entry:before {
+  content: "\e604";
+}
+.sl-gears:before {
+  content: "\e600";
+}
+.sl-entries:before {
+  content: "\e601";
+}
+.sl-refresh:before {
+  content: "\e602";
+}
+.sl-chart:before {
+  content: "\e603";
+}
+
 html {
   height: 100%;
   overflow: hidden;
@@ -80,19 +121,31 @@ body {
       &:extend(.navbar-right all);
 
       &> li {
+        select.form-control {
+          margin-left: 8px;
+        }
+
         a {
           color: @less-white;          
           line-height: 51px;
           padding: 0 0 0 15px;
           text-shadow: black 0 1px;
 
-          img {
+          .glyphicon {
+            font-size: 1.8em;
             margin-right: 10px;
+            
+            top: 6px;
+            position: relative;
+
+            text-shadow: none;
           }
 
           &:hover {
-            span {
-              text-decoration: underline;
+            text-decoration: underline;
+
+            .glyphicon {
+              text-decoration: none;
             }
           }
         }
@@ -111,6 +164,12 @@ body {
         vertical-align: bottom;
       }
     }    
+  }
+
+  .navbar-toggle {
+    .icon-bar {
+      background-color: @less-white;
+    }
   }
 }
 
@@ -155,15 +214,21 @@ body {
             padding: 0 0 0 @default-padding;
             text-shadow: @white 0 1px;
             
-            img.left {
-              margin-right: 22px;
-            }
-
             img.right {
               float: right;
               margin-right: -20px;
               position: initial;
               .transition(margin-right .4s);
+            }
+
+            .glyphicon {
+              font-size: 2em;
+              margin-right: 10px;
+              
+              top: 6px;
+              position: relative;
+
+              text-shadow: none;
             }
 
             &:hover {
