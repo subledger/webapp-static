@@ -1,23 +1,17 @@
 <div class="category-info">
   <span class="glyphicon glyphicon-collapse-up"></span> 
   <span class="description">{{description}}</span>
-  <span class="balance pull-right">{{format-balance balance normalBalance}}</span>
+  <span class="balance pull-right">{{format-balance balance normal_balance}}</span>  
 </div>
 
 <div class="accounts">
   {{#if accounts}}
     <table class="table table-striped">
-{{!--       <thead>
-        <tr>
-          <th class="account-description">Description</th>
-          <th class="account-balance">Balance</th>
-        </tr>
-      </thead> --}}
       <tbody>
         {{#each account in accounts}}
           <tr>
             <td class="account-description">{{account.description}}</td>
-            <td class="account-balance">{{format-balance account.balance account.normalBalance}}</td>
+            <td class="account-balance">{{format-balance account.balance account.normal_balance}}</td>
           </tr>
         {{/each}}
       </tbody>
