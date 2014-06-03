@@ -170,6 +170,18 @@ export default Ember.View.extend({
     });
   },
 
+  accountSelected: function(accountId, description, normalBalance) {
+    // save selected suggestion
+    this.get("model").set("account", accountId);
+    this.set("accountDescription", description);
+    this.set("isDebitNormalBalance", normalBalance === 'debit');
+
+    // mask currency fields
+    this.$("input.currency").maskMoney({
+      allowNegative: false
+    }); 
+  },
+
   actions: {
     removeLine: function() {
       this.set('isRemoving', true);
@@ -190,18 +202,14 @@ export default Ember.View.extend({
   },
 
   didInsertElement: function() {
-    var self = this;
-
-    // mask currency fields
-    this.$("input.currency").maskMoney({
-      allowNegative: false
-    });
-
     // accounts typeahead engine
     var accountsDataset = this.get('accountsDataset');
 
+    // typeahead element reference
+    var $typeAhead = this.$(".line-account");    
+
     // configure accounts typeahdead
-    this.$(".line-account").typeahead({
+    $typeAhead.typeahead({
       hint: true,
       highlight: true,
       minLength: 1
@@ -211,33 +219,25 @@ export default Ember.View.extend({
       displayKey: 'description',
       source: accountsDataset.ttAdapter()
 
-    }).on("blur", function(e) {
-      // typeahead element reference
-      var $el = $(this);
-
+    }).on("blur", $.proxy(function(e) {
       // clear the fields if no suggestion was found
-      if (self.get("accountDescription") !== $el.typeahead('val')) {
+      if (this.get("accountDescription") !== $typeAhead.typeahead('val')) {
 
-        $el.typeahead('val', '');
-        self.get("model").set("account", null);
-        self.set("accountDescription", null);
-        self.set("isDebitNormalBalance", true);
+        $typeAhead.typeahead('val', '');
+        this.get("model").set("account", null);
+        this.set("accountDescription", null);
+        this.set("isDebitNormalBalance", true);
 
-        self.$("input.currency").val("");
+        this.$("input.currency").val("");
       }
       
-    }).on("typeahead:selected", function(e, suggestion, datasetName) {
-      // save selected suggestion
-      self.get("model").set("account", suggestion.id);
-      self.set("accountDescription", suggestion.description);
-      self.set("isDebitNormalBalance", suggestion.normalBalance === 'debit');
+    }, this)).on("typeahead:selected", $.proxy(function(e, suggestion, datasetName) {
+      this.accountSelected(suggestion.id, suggestion.description, suggestion.normalBalance);
 
-    }).on("typeahead:autocompleted", function(e, suggestion, datasetName) {
-      // save selected suggestion
-      self.get("model").set("account", suggestion.id);
-      self.set("accountDescription", suggestion.description);
-      self.set("isDebitNormalBalance", suggestion.normalBalance === 'debit');
-    });
+    }, this)).on("typeahead:autocompleted", $.proxy(function(e, suggestion, datasetName) {
+      this.accountSelected(suggestion.id, suggestion.description, suggestion.normalBalance);
+
+    }, this));
 
     // synch values from journal entry inputs to line inputs
     this.synchInputWithRecordField(this.$(".description"), this.get('journalEntry'), 'description');
