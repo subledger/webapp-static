@@ -1,17 +1,18 @@
-<td class="date">{{format-date line.effectiveAt 'full'}}</td>
-<td class="description">{{line.description}}</td>
-<td class="debit">{{format-value line.value 'debit'}}</td>
-<td class="credit">{{format-value line.value 'credit'}}</td>
-<td class="balance">{{format-balance line.balance normalBalance}}</td>
+<td class="date">{{format-date effectiveAt 'full'}}</td>
+<td class="description">{{description}}</td>
+<td class="debit">{{format-value value 'debit'}}</td>
+<td class="credit">{{format-value value 'credit'}}</td>
+{{log normalBalance}}
+<td class="balance">{{format-balance balance normalBalance}}</td>
 <td class="reference">
-  {{#if line.reference}}
-    <a {{bind-attr href=line.reference}} target="_blank">
+  {{#if reference}}
+    <a {{bind-attr href=reference}} target="_blank">
       <img src="assets/icon-reference.png"></img>
     </a>
   {{/if}}
 </td>
 <td class="je">
-  {{#link-to "journal-entry.lines" line.journalEntry}}
+  {{#link-to "journal-entry.lines" journalEntry}}
     <img src="assets/icon-journal-entry.png"></img>
   {{/link-to}}
 </td>
