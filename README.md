@@ -17,8 +17,8 @@ After clonning the project, access the created directory and execute the followi
 
 Running this steps should install both NPM and Bower depencies. It not, try the following commands:
 
-1. ```npm install````
-2. ```bower install````
+1. ```npm install```
+2. ```bower install```
 
 If previous steps succeed, you should be able to access the app at http://localhost:8000/.
 
