@@ -29,6 +29,15 @@ export default Ember.ObjectController.extend({
           this.set('error', reason);
         }, this)
       );
+    },
+
+
+    lemonade: function() {
+      this.setProperties({
+        key: '8bDALFFz8q7uvFNskbW9Kq',
+        secret: 'flWncmVODPlEUktLahThhW',
+        org: 'Mx88KmjlVja1i4EMXoBjs1'
+      });
     }
   }
 });

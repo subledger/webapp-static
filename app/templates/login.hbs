@@ -10,9 +10,11 @@
           <div {{bind-attr class=":form-group error:has-error"}}>
             {{input value=key type="text" class="form-control" placeholder="key_id" autofocus="autofocus"}}
           </div>
+
           <div  {{bind-attr class=":form-group error:has-error"}}>
             {{input value=secret type="text" class="form-control" placeholder="secret"}}
           </div>
+
           <div {{bind-attr class=":form-group error:has-error"}}>
             {{input value=org type="text" class="form-control" placeholder="org"}}
           </div>
@@ -21,5 +23,8 @@
         </form>
       </div>  
     </div>
+
+    <p class="example">Just want to see it working? <a href="#" {{action 'lemonade'}}>Use our demo application credentials!</a></p>
+    
   </div>
 </div>
