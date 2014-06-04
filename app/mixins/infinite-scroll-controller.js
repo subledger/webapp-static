@@ -66,10 +66,7 @@ export default Ember.Mixin.create({
       this.set('loadingNewerPage', false);
       this.set('loadingOlderPage', false);
       this.set('loadedPageWas', newer ? 'newer' : 'older');
-
-      if (result.toArray().length > 0) {
-        this.incrementProperty('pagesLoaded', 1);
-      }      
+      this.incrementProperty('pagesLoaded', 1);
 
       this.endPropertyChanges();
 

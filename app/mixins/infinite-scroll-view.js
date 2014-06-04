@@ -44,7 +44,7 @@ export default Ember.Mixin.create({
   },
 
   bindAutoScroller: function() {
-    Ember.addObserver(this, 'controller.@each', this, this.autoScroller);
+    Ember.addObserver(this, 'controller.pagesLoaded', this, this.autoScroller);
   }.on('didInsertElement'),
 
   bindOnScrollHandlers: function() {
