@@ -20,6 +20,14 @@ export default Ember.Mixin.create({
     return this.loadPage(modelName, pageId, false, queryExtras);
   },
 
+  addNewerObjects: function(result) {
+    this.addObjects(result.toArray());
+  },
+
+  addOlderObjects: function(result) {
+    this.unshiftObjects(result.toArray().reverse());
+  },
+
   loadNewerPage: function(modelName, queryExtras) {
     var object = this.get('lastObject');
     var pageId = null;
@@ -56,10 +64,10 @@ export default Ember.Mixin.create({
       this.beginPropertyChanges();
 
       if (newer) {
-        this.addObjects(result.toArray());
+        this.addNewerObjects(result);
 
       } else {
-        this.unshiftObjects(result.toArray().reverse());
+        this.addOlderObjects(result);
         this.set('hasOlderPage', result.toArray().length === query.limit);
       }
 

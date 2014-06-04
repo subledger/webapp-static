@@ -15,6 +15,11 @@ export default Ember.ArrayController.extend(InfiniteScrollController, {
     }
   },
 
+  // overwrite addOlderOjects
+  addOlderObjects: function(result) {
+    this.addObjects(result.toArray());
+  },
+
   actions: {
     loadOlderPage: function() {
       this.loadOlderPage('line', { journalEntry: this.get('journalEntry') });
