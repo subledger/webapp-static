@@ -19,6 +19,8 @@ Router.map(function() {
   this.resource('account', { path: '/account/:account_id' }, function() {
     this.resource('account.lines', { path: '/lines' }, function() {
     });
+
+    this.route('chart');
   });
 
   this.resource('reports', function() {
