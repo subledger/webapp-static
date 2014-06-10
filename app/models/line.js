@@ -22,13 +22,20 @@ export default DS.Model.extend({
   }.property('type'),
 
   debitAmount: function(key, value, previousValue) {
-    if (arguments.length > 1) {
-      if (value && value !== '0.00') {
+    if (arguments.length > 1) {     
+      if (value) {
+        value = value.replace(",", "");
+      }
+
+      var decimalPlaces = this.get('credential').get('decimalPlaces');
+      var zero = new BigNumber(0).toFixed(decimalPlaces);
+
+      if (value && value !== zero) {
         this.set('value', {
           type: 'debit',
           amount: value
         });
-      } else if (((value && value === '0.00') || !value) && previousValue) {
+      } else if (((value && value === zero) || !value) && previousValue) {
         this.set('value', null);
       }
     }
@@ -44,12 +51,19 @@ export default DS.Model.extend({
 
   creditAmount: function(key, value, previousValue) {
     if (arguments.length > 1) {
-      if (value && value !== '0.00') {
+      if (value) {
+        value = value.replace(",", "");
+      }
+
+      var decimalPlaces = this.get('credential').get('decimalPlaces');
+      var zero = new BigNumber(0).toFixed(decimalPlaces);
+
+      if (value && value !== zero) {
         this.set('value', {
           type: 'credit',
           amount: value
         });
-      } else if (((value && value === '0.00') || !value) && previousValue) {
+      } else if (((value && value === zero) || !value) && previousValue) {
         this.set('value', null);
       }
     }

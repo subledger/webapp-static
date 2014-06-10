@@ -4,7 +4,9 @@ export default Ember.Object.extend({
   key: null,
   secret: null,
   org: null,
+
   book: null,
+  decimalPlaces: 2,
 
   books: Ember.A(),
   authenticated: false,
@@ -54,7 +56,8 @@ export default Ember.Object.extend({
       key: this.get('key'),
       secret: this.get('secret'),
       org: this.get('org'),
-      book: this.get('book')
+      book: this.get('book'),
+      decimalPlaces: this.get('decimalPlaces')
     });
 
     localStorage.setItem("credential", json);
@@ -91,6 +94,7 @@ export default Ember.Object.extend({
       org: null,
       books: Ember.A(),
       book: null,
+      decimalPlaces: 2,
       authenticated: false
     });
   }

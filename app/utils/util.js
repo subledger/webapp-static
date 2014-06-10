@@ -1,4 +1,4 @@
-export default {
+var Util = {
   timeAgo: function(date) {
     return moment(date).fromNow();
   },
@@ -26,16 +26,32 @@ export default {
     return moment(date).format(formatString);
   },
 
+  formatDecimal: function(value, decimalPlaces) {
+    var number = new BigNumber(value);
+
+    var integerStr = accounting.formatMoney(number.floor().toString(), "", 0);
+    var decimalStr = number.toFixed(decimalPlaces).split(".")[1];
+
+    if (decimalPlaces > 0) {
+      return  integerStr + "." + decimalStr;  
+
+    } else {
+      return integerStr;
+    }
+  },
+
   formatValue: function(value, onlyForType) {
     if (value === undefined || value.type !== onlyForType) {
       return "";
     }
 
-    return accounting.formatMoney(value.amount, "");
+    var decimalPlaces = this.get('credential').get('decimalPlaces');
+    return Util.formatDecimal(value.amount, decimalPlaces);
   },
 
   formatAmount: function(amount) {
-    return accounting.formatMoney(amount, "");
+    var decimalPlaces = this.get('credential').get('decimalPlaces');
+    return Util.formatDecimal(amount, decimalPlaces);
   },
 
   formatBalance: function(balance, normalBalance) {
@@ -44,11 +60,15 @@ export default {
     }
 
     var value = balance.get ? balance.get('value') : balance.value;
+    var decimalPlaces = this.get('credential').get('decimalPlaces');
 
     if (value.type === 'zero' || value.type === normalBalance) {
-      return new Ember.Handlebars.SafeString(accounting.formatMoney(value.amount, "") + "&nbsp;");
+      return new Ember.Handlebars.SafeString(Util.formatDecimal(value.amount, decimalPlaces) + "&nbsp;");
+
     } else {
-      return "(" + accounting.formatMoney(value.amount, "") + ")";
+      return "(" + Util.formatDecimal(value.amount, decimalPlaces) + ")";
     }
   }
 };
+
+export default Util;

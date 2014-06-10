@@ -1,6 +1,7 @@
 @import "/vendor/bootstrap/less/bootstrap.less";
 @import "/vendor/eonasdan-bootstrap-datetimepicker/src/less/bootstrap-datetimepicker.less";
 @import "/vendor/typeahead.js-bootstrap3.less/typeahead.less";
+@import "/vendor/seiyria-bootstrap-slider/css/bootstrap-slider.css";
 @import "variables.less";
 @import "bootstrap.less";
 @import "mixins.less";
@@ -315,6 +316,14 @@ body {
 .login {
   margin-top: 60px;
 
+  .decimal-places {    
+    margin-bottom: @default-margin;
+
+    .slider {
+      width: 100%;
+    }
+  }
+
   .example {
     margin: 15px 0 0 0;
   }
@@ -464,7 +473,7 @@ body {
       }
 
       .account-balance {
-        width: 100px;
+        width: 175px;
         padding-right: 5px;
         text-align: right;
       }
@@ -695,7 +704,7 @@ body {
   }
 
   th.debit, td.debit, th.credit, td.credit, th.balance, td.balance {
-    width: 115px;
+    width: 175px;
     text-align: right;
     overflow-x: hidden;
   }
@@ -717,7 +726,7 @@ body {
       }
 
       th.debit, td.debit, th.credit, td.credit {
-        width: 115px;
+        width: 175px;
         text-align: right;
         overflow-x: hidden;
       }

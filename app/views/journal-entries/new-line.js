@@ -177,8 +177,11 @@ export default Ember.View.extend({
     this.set("isDebitNormalBalance", normalBalance === 'debit');
 
     // mask currency fields
+    var decimalPlaces = this.get('controller').get('credential').get('decimalPlaces');
+
     this.$("input.currency").maskMoney({
-      allowNegative: false
+      allowNegative: false,
+      precision: decimalPlaces
     }); 
   },
 

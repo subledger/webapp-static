@@ -15,11 +15,13 @@
     "jquery-visible": "https://github.com/teamdf/jquery-visible.git#1.1.0",
     "bootstrap": "~3.1.1",
     "eonasdan-bootstrap-datetimepicker": "~3.0.0",
-    "subledger-js-library": "git@github.com:subledger/Subledger_JS_Library.git#master",
+    "subledger-js-library": "git@github.com:subledger/js-client.git#master",
     "ember-load-initializers": "git://github.com/stefanpenner/ember-load-initializers.git#0.0.1",
     "jquery-maskmoney": "~3.0.2",
     "accounting": "~0.3.2",
     "typeahead.js": "~0.10.2",
-    "typeahead.js-bootstrap3.less": "~0.2.3"
+    "typeahead.js-bootstrap3.less": "~0.2.3",
+    "bignumber.js": "~1.4.1",
+    "seiyria-bootstrap-slider": "~3.1.0"
   }
 }
