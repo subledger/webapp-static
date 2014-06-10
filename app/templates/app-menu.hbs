@@ -48,8 +48,14 @@
           </li>
 
           <li>
+            {{#link-to 'settings'}}
+              <span class="glyphicon glyphicon-cog"></span>Settings
+            {{/link-to}}
+          </li>          
+
+          <li>
             {{#link-to 'logout'}}
-              <span class="glyphicon glyphicon-log-out"></span>Logout
+              <span class="glyphicon glyphicon-off"></span>Logout
             {{/link-to}}
           </li>
         {{/if}}
