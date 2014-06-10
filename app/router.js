@@ -1,8 +1,9 @@
 var Router = Ember.Router.extend();
 
 Router.map(function() {
-  this.resource('login');
-  this.resource('logout');
+  this.route('login');
+  this.route('logout');
+  this.route('settings');
 
   this.resource('journal-entries', function() {
     this.route('new');

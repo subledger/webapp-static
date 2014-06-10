@@ -1,5 +1,7 @@
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
+
+import Util from "subledger-app/utils/util";
 import Credential from "subledger-app/utils/Credential";
 
 var App = Ember.Application.extend({

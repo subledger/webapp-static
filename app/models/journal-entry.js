@@ -7,35 +7,41 @@ export default DS.Model.extend({
   lines:       DS.hasMany('line'),
 
   totalDebit: function() {
-    var total = 0;
+    var total = new BigNumber(0);
 
     this.get('lines').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('debitAmount'));
+      if (item.get('debitAmount')) {
+        total = total.plus(item.get('debitAmount'));  
+      }      
     }, this);
 
-    return total;
+    return total.toString();
 
   }.property('lines.@each.debitAmount'),
 
   totalCredit: function() {
-    var total = 0;
+    var total = new BigNumber(0);
 
     this.get('lines').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('creditAmount'));
+      if (item.get('creditAmount')) {
+        total = total.plus(item.get('creditAmount'));  
+      }      
     }, this);
 
-    return total;
+    return total.toString();
 
   }.property('lines.@each.creditAmount'),
 
   totalAmount: function() {
-    var total = 0;
+    var total = new BigNumber(0);
 
     this.get('lines').forEach(function(item, index, enumerable) {
-      total += accounting.unformat(item.get('amount'));
+      if (item.get('amount')) {
+        total = total.plus(item.get('amount'));  
+      }      
     }, this);
 
-    return total;
+    return total.toString();
 
   }.property('lines'),
 
@@ -63,8 +69,8 @@ export default DS.Model.extend({
       this.get('errors').add('lines', 'You need at least one line');
     }
 
-    var totalCredit = 0;
-    var totalDebit = 0;
+    var totalCredit = new BigNumber(0);
+    var totalDebit = new BigNumber(0);
 
     var hasLineErrors = false;
     this.get('lines').forEach(function(line, index, enumerable) {
@@ -88,11 +94,11 @@ export default DS.Model.extend({
         line.get('errors').add('value', 'Must not be blank');
 
       } else {
-        if (line.get('value')['type'] === 'credit') {
-          totalCredit += accounting.unformat(line.get('value')['amount']);
+        if (line.get('value')['type'] === 'credit' && line.get('value')['amount']) {
+          totalCredit = totalCredit.plus(line.get('value')['amount']);
           
-        } else if (line.get('value')['type'] === 'debit') {
-          totalDebit += accounting.unformat(line.get('value')['amount']);
+        } else if (line.get('value')['type'] === 'debit' && line.get('value')['amount']) {
+          totalDebit = totalDebit.plus(line.get('value')['amount']);
         }
       }
     }, this);
@@ -102,7 +108,7 @@ export default DS.Model.extend({
       this.get('errors').add('lines', 'One or more lines have validation errors');
     }
 
-    if (totalCredit !== totalDebit) {
+    if (!totalCredit.equals(totalDebit)) {
       hasErrors = true;
       this.get('errors').add('lines', 'Total credit must match total debit');
     }

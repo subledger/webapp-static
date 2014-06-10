@@ -2,10 +2,15 @@ export default Ember.ObjectController.extend({
   key: null,
   secret: null,
   org: null,
+  decimalPlaces: 2,
 
   error: null,
 
   actions: {
+    setDecimalPlaces: function(newDecimalPlaces) {
+      this.set('decimalPlaces', newDecimalPlaces);
+    },
+
     login: function() {
       this.set('error', null);      
       var credential = this.get('model');
@@ -13,7 +18,8 @@ export default Ember.ObjectController.extend({
       credential.setProperties({
         key: this.get('key'),
         secret: this.get('secret'),
-        org: this.get('org')
+        org: this.get('org'),
+        decimalPlaces: this.get('decimalPlaces')
       });
 
       credential.authenticate(this.store).then(
@@ -31,12 +37,12 @@ export default Ember.ObjectController.extend({
       );
     },
 
-
     lemonade: function() {
       this.setProperties({
         key: '8bDALFFz8q7uvFNskbW9Kq',
         secret: 'flWncmVODPlEUktLahThhW',
-        org: 'Mx88KmjlVja1i4EMXoBjs1'
+        org: 'Mx88KmjlVja1i4EMXoBjs1',
+        decimalPlaces: 2
       });
     }
   }

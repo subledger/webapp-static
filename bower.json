@@ -21,6 +21,8 @@
     "accounting": "~0.3.2",
     "typeahead.js": "~0.10.2",
     "typeahead.js-bootstrap3.less": "~0.2.3",
+    "bignumber.js": "~1.4.1",
+    "seiyria-bootstrap-slider": "~3.1.0",
     "highcharts-release": "~4.0.1"
   }
 }

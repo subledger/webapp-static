@@ -47,6 +47,12 @@
   margin-right: 0;
 }
 
+.app-layout-content-only() {
+  height: 100%;
+  overflow: hidden;
+  margin: @default-margin;
+}
+
 .app-layout-header-only() {
   height: 100%;
   overflow: hidden;
@@ -144,6 +150,13 @@
       &:extend(.table-striped all);
 
       margin-bottom: 0;
+      table-layout: fixed;
+
+      th, td {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
 
       &> thead > tr > th {
         border-bottom: 0;
@@ -162,6 +175,14 @@
         &:extend(.table-striped all);
 
         margin-bottom: 0;
+
+        table-layout: fixed;
+
+        th, td {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
 
         &> tbody > tr:nth-child(odd) > td {
           background-image: @background-dark;
@@ -204,6 +225,14 @@
 
       margin-bottom: 0;
 
+      table-layout: fixed;
+
+      th, td {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
       &> thead > tr > th {
         border-bottom: 0;
       }
@@ -221,6 +250,13 @@
         &:extend(.table-striped all);
 
         margin-bottom: 0;
+        table-layout: fixed;
+
+        th, td {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
 
         &> tbody > tr:nth-child(odd) > td {
           background-image: @background-dark;
