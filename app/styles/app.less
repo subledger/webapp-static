@@ -696,26 +696,50 @@ body {
 }
 
 .account {
-  .app-layout-panel-with-header-and-table();
+  height: 100%;
+  overflow: hidden;
 
-  th.date, td.date {
-    width: 260px;
+  .account-lines {
+    .app-layout-panel-with-header-and-table();
+
+    &> header h3 a {
+      position: relative;
+      top: -10px;
+    }
+
+    .lines {
+      th.date, td.date, col.date {
+        width: 260px;
+      }
+
+      th.description, td.description, col.description {
+        width: 100%;
+      }
+
+      th.reference, col.reference, td.je, col.je {
+        width: 50px;
+        text-align: center;
+      }
+
+      th.debit, td.debit, col.debit, th.credit, td.credit, col.credit, th.balance, td.balance, col.balance {
+        width: 175px;
+        text-align: right;
+      }
+
+      th.je {
+        width: 65px;
+        text-align: center;
+        padding-right: 15px;
+      }
+    }
   }
 
-  th.reference, td.reference, td.je {
-    width: 50px;
-    text-align: center;
-  }
+  .account-chart {
+    .app-layout-panel-with-body-only();
+    .scrollable(auto, 92%, 96%, 96%, 96%, 97%, 97%, 97%);
 
-  th.debit, td.debit, th.credit, td.credit, th.balance, td.balance {
-    width: 175px;
-    text-align: right;
-  }
-
-  th.je {
-    width: 65px;
-    text-align: center;
-    padding-right: 15px;
+    background-color: @white;
+    background-image: none;
   }
 }
 

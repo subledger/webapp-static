@@ -1,24 +1,81 @@
 export default Ember.View.extend({
-  account: Ember.computed.alias('controller.account'),
+  tagName: 'section',
+  classNames: 'account-chart',
+
+  layoutName: 'layouts/panel-with-body-only',
+  
   $masterChart: null,
   $detailChart: null,
 
-  createMasterChart: function( points) {
-    var self = this;
+  detailFrom: null,
+  detailTo: null,
 
-    var firstPoint = points.get('firstObject');
-    var lastPoint = points.get('lastObject');    
+  masterData: Ember.A(),
+  detailData: Ember.A(),
+  account: Ember.computed.alias('controller.account'),
 
-    var data = [];
-    points.every(function(point) {
-      data.push({
-        x: point.date.getTime(),
-        y: point.amount
-      });
+  detailDataLoaded: function() {
+    if (this.get('detailFrom') && this.get('detailTo')) {
+      this.get('masterData').clear();
+      this.get('detailData').clear();
 
-      return true;
-    }, this);
+      this.get('controller').every(function(point) {
+        var time = point.get('date').getTime();
 
+        this.get('masterData').addObject({
+          x: time,
+          y: point.amount
+        });
+
+        if (time >= this.get('detailFrom') && time <= this.get('detailTo')) {
+          this.get('detailData').addObject({
+            x: time,
+            y: point.get('amount')
+          });
+        }
+
+        return true;
+      }, this);
+
+      this.get('$masterChart').series[0].setData(this.get('masterData').toArray());
+      this.get('$detailChart').series[0].setData(this.get('detailData').toArray());
+    }
+  }.observes('controller.@each'),
+
+  intervalSelected: function(event) {
+    var extremesObject = event.xAxis[0];
+
+    this.setProperties({
+      detailFrom: extremesObject.min,
+      detailTo: extremesObject.max
+    });
+
+    var xAxis = this.get('$masterChart').xAxis[0];
+
+    // move the plot bands to reflect the new detail span
+    xAxis.removePlotBand('mask-before');
+    xAxis.addPlotBand({
+      id: 'mask-before',
+      from: this.get('masterData').get('firstObject').x,
+      to: this.get('detailFrom'),
+      color: 'rgba(0, 0, 0, 0.2)'
+    });
+
+    xAxis.removePlotBand('mask-after');
+    xAxis.addPlotBand({
+      id: 'mask-after',
+      from: this.get('detailTo'),
+      to: this.get('masterData').get('lastObject').x,
+      color: 'rgba(0, 0, 0, 0.2)'
+    });
+
+    // load balances for selected interval
+    this.get('controller').send('loadBalances', this.get('detailFrom'), this.get('detailTo'));
+
+    return false;
+  },
+
+  createMasterChart: function() {
     return this.$('.master').highcharts({
       chart: {
         reflow: false,
@@ -28,47 +85,7 @@ export default Ember.View.extend({
         marginRight: 20,
         zoomType: 'x',
         events: {
-          // listen to the selection event on the master chart to update the
-          // extremes of the detail chart
-          selection: function(event) {
-            var extremesObject = event.xAxis[0],
-              min = extremesObject.min,
-              max = extremesObject.max,
-              detailData = [],
-              xAxis = this.xAxis[0];
-
-            // reverse engineer the last part of the data
-            $.each(this.series[0].data, function(i, point) {
-              if (point.x > min && point.x < max) {
-                detailData.push({
-                  x: point.x,
-                  y: point.y
-                });
-              }
-            });
-
-            // move the plot bands to reflect the new detail span
-            xAxis.removePlotBand('mask-before');
-            xAxis.addPlotBand({
-              id: 'mask-before',
-              from: data[0].x,
-              to: min,
-              color: 'rgba(0, 0, 0, 0.2)'
-            });
-
-            xAxis.removePlotBand('mask-after');
-            xAxis.addPlotBand({
-              id: 'mask-after',
-              from: max,
-              to: data[data.length - 1].x,
-              color: 'rgba(0, 0, 0, 0.2)'
-            });
-
-
-            self.get('$detailChart').series[0].setData(detailData);
-
-            return false;
-          }
+          selection: $.proxy(this.intervalSelected, this)
         }
       },
       title: {
@@ -79,8 +96,8 @@ export default Ember.View.extend({
         showLastTickLabel: true,
         plotBands: [{
           id: 'mask-before',
-          from: data[0].x,
-          to: data[1].x,
+          from: this.get('masterData').get('firstObject').x,
+          to: this.get('masterData').objectAt(1).x,
           color: 'rgba(0, 0, 0, 0.2)'
         }],
         title: {
@@ -135,7 +152,7 @@ export default Ember.View.extend({
       series: [{
         type: 'area',
         name: 'Account Balance',
-        data: data
+        data: this.get('masterData').toArray()
       }],
 
       exporting: {
@@ -149,33 +166,34 @@ export default Ember.View.extend({
   },
 
   createDetailChart: function(masterChart) {
-    // prepare the detail chart
-    var detailData = [],
-        detailStart = masterChart.series[0].data[1].x;
+    this.get('detailData').clear();
+    var detailStart = this.get('masterData').objectAt(1).x;
 
-    $.each(masterChart.series[0].data, function(i, point) {
+    this.get('masterData').every(function(point) {
       if (point.x >= detailStart) {
-        detailData.push({
+        this.get('detailData').addObject({
           x: point.x,
           y: point.y
         });
       }
-    });
+
+      return true;
+    }, this);
 
     var title = this.get('account').get('description');
     title += " balances from ";
-    title += Highcharts.dateFormat('%B %e, %Y', detailData[0].x);
+    title += Highcharts.dateFormat('%B %e, %Y', this.get('detailData').get('firstObject').x);
     title += " to ";
-    title += Highcharts.dateFormat('%B %e, %Y', detailData[detailData.length - 1].x);
+    title += Highcharts.dateFormat('%B %e, %Y', this.get('detailData').get('lastObject').x);
 
     // create a detail chart referenced by a global variable
     return this.$('.detail').highcharts({
       chart: {
         type: 'spline',
-        marginBottom: 120,
+        marginBottom: 150,
         reflow: false,
-        marginLeft: 50,
-        marginRight: 20,
+        marginLeft: 70,
+        marginRight: 30,
         style: {
           position: 'absolute'
         }
@@ -225,7 +243,7 @@ export default Ember.View.extend({
       },
       series: [{
         name: 'Balance',
-        data: detailData
+        data: this.get('detailData').toArray()
       }],
 
       exporting: {
@@ -238,17 +256,26 @@ export default Ember.View.extend({
   didInsertElement: function() {
     var points = this.get('controller').get('content');
 
+    points.every(function(point) {
+      this.get('masterData').addObject({
+        x: point.date.getTime(),
+        y: point.amount
+      });
+
+      return true;
+    }, this);    
+
     // make the container smaller and add a second container for the master chart
-    var $container = this.$('.chart')
-        .css('position', 'relative');
+    var $container = this.$('.chart-container').css('position', 'relative');
 
     var $detailContainer = $('<div class="detail">')
+        .css({ height: 700 })
         .appendTo($container);
 
     var $masterContainer = $('<div class="master">')
-        .css({ position: 'absolute', top: 300, height: 100, width: '100%' })
+        .css({ position: 'absolute', top: 600, height: 100, width: '100%' })
         .appendTo($container);
 
-    this.set('$masterChart', this.createMasterChart(points));
+    this.set('$masterChart', this.createMasterChart());
   }
 });

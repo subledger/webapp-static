@@ -1,5 +1,7 @@
-<header>
+<header {{bind-attr class=view.headerClassNames}}>
   {{partial view.headerTemplateName}}
 </header>
 
-{{outlet}}
+<section {{bind-attr class=view.bodyClassNames}}>
+  {{yield}}
+</section>

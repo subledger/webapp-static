@@ -12,8 +12,15 @@
   </thead>
 </table>
 
-<div {{bind-attr class=view.contentClasses}}>
+<div {{bind-attr class=view.bodyContentClassNames}}>
   <table>
+    <col span="1" class="date" />
+    <col span="1" class="description" />
+    <col span="1" class="debit" />
+    <col span="1" class="credit" />
+    <col span="1" class="balance" />
+    <col span="1" class="reference" />
+    <col span="1" class="je" >
     <tbody>
       <tr {{bind-attr class=":loading-older hasOlderPage::hidden"}}>
         <td colspan="7">
