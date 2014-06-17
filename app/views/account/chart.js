@@ -38,11 +38,17 @@ export default Ember.View.extend({
       }, this);
 
       this.get('$masterChart').series[0].setData(this.get('masterData').toArray());
+      this.get('$masterChart').hideLoading();
+
       this.get('$detailChart').series[0].setData(this.get('detailData').toArray());
+      this.get('$detailChart').hideLoading();
     }
   }.observes('controller.@each'),
 
   intervalSelected: function(event) {
+    this.get('$detailChart').showLoading();
+    this.get('$masterChart').showLoading();
+
     var extremesObject = event.xAxis[0];
 
     this.setProperties({
