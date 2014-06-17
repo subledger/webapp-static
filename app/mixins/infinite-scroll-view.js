@@ -1,6 +1,32 @@
 export default Ember.Mixin.create({
+  showLoadingNewer: true,
+  loadNewerPageIfNecessaryHandler: null,
+
+  showLoadingNewerObserver: function() {
+    Ember.run.once(this, function() {
+      if (!this.$loadingNewer()) {
+        this.set('showLoadingNewer', this.get('controller').get('loadingNewerPage'));
+        return;
+      }
+
+      if (this.get('controller').get('loadingOlderPage')) {
+        this.set('showLoadingNewer', false);
+
+      } else if (!this.isScrollable()) {
+        this.set('showLoadingNewer', this.get('controller').get('loadingNewerPage'));
+
+      } else {
+        this.set('showLoadingNewer', true);
+      }
+    });
+  }.observes('controller.pagesLoaded', 'controller.loadingOlderPage', 'controller.loadingNewerPage'),
+
   $scroll: function() {
     return this.$('.infinite-scroll');
+  },
+
+  $noResults: function() {
+    return this.$('.no-results');
   },
 
   $loadingOlder: function() {
@@ -13,19 +39,21 @@ export default Ember.Mixin.create({
 
   autoScroller: function() {
     if (this.get('controller').get('pagesLoaded') === 1) {
+      // always scroll to bottom on first page loaded
       Ember.run.scheduleOnce('afterRender', this, function() {
-        this.scrollToBottom();
+        this.scrollToBottom().then($.proxy(this.loadNewerPageIfNecessary, this));
       });
 
       return;
-    }
 
-    if (this.get('controller').get('loadedPageWas') === 'newer') {
+    } else if (this.get('controller').get('loadedPageWas') === 'newer') {
+      // if not first page and page was newer
       Ember.run.scheduleOnce('afterRender', this, function() {
-        this.scrollToBottom();
+        this.scrollToBottom().then($.proxy(this.loadNewerPageIfNecessary, this));
       });
       
     } else {
+      // if not first page and page was older
       var previousHeight = this.scrollHeight();
 
       Ember.run.scheduleOnce('afterRender', this, function() {
@@ -37,7 +65,7 @@ export default Ember.Mixin.create({
             top -= this.$loadingOlder().outerHeight();
           }
 
-          this.scrollDown(top);
+          this.scrollDown(top).then($.proxy(this.loadNewerPageIfNecessary, this));
         });
       }); 
     }
@@ -59,16 +87,20 @@ export default Ember.Mixin.create({
   }.on('didInsertElement'),
 
   initialAction: function() {
-    if (this.get('controller').toArray().length === 0) {
+    if (this.get('controller').toArray().length === 0 && this.get('controller').get('hasOlderPage')) {
       this.loadOlderPage();
     } else {
-      this.scrollToBottom();
-    }  
+      this.scrollToBottom().then($.proxy(this.loadNewerPageIfNecessary, this));
+    }
   }.on('didInsertElement'),
 
   unbindAutoScroller: function() {
     Ember.removeObserver(this, 'controller.@each', this, this.autoScroller);
-  }.on('willDestroyElement'),  
+  }.on('willDestroyElement'),
+
+  destroyLoadNewerPageIfNecessaryHandler: function() {
+    Ember.run.cancel(this.get('loadNewerPageIfNecessaryHandler'));
+  }.on('willDestroyElement'),
 
   unbindOnScrollHandlers: function() {
     this.$scroll().off('scroll');
@@ -83,25 +115,39 @@ export default Ember.Mixin.create({
   },
 
   scrollTo: function(newTopPosition) {
-    this.$scroll().scrollTop(newTopPosition);
+    return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+      this.$scroll().scrollTop(newTopPosition);
+      resolve();
+
+    }, this));
   },
 
   scrollToTop: function() {
-    this.scrollTo(this.$loadingOlder().outerHeight());
+    return this.scrollTo(this.$loadingOlder().outerHeight());
   },
 
-  scrollToBottom: function() {
-    Ember.run.next(this, function() {
-      this.scrollTo(this.scrollHeight() - this.$scroll().height() - this.$loadingNewer().outerHeight());  
-    });    
+  scrollToBottom: function(callback) {
+    return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+      Ember.run.next(this, function() {
+        this.scrollTo(this.scrollHeight() - this.$scroll().height() - this.$loadingNewer().outerHeight()).then(
+          $.proxy(function() {
+            resolve();
+          }, this)
+        );
+      });
+    }, this));
   },
 
   scrollUp: function(amount) {
-    this.scrollTo(this.scrollCurrent() - amount);
+    return this.scrollTo(this.scrollCurrent() - amount);
   },
 
   scrollDown: function(amount) {
-    this.scrollTo(this.scrollCurrent() + amount);
+    return this.scrollTo(this.scrollCurrent() + amount);
+  },
+
+  isScrollable: function() {
+    return this.scrollHeight() > this.$scroll().height() + 5;
   },
 
   isScrolledToTop: function() {
@@ -118,5 +164,17 @@ export default Ember.Mixin.create({
 
   loadNewerPage: function() {
     this.get('controller').send('loadNewerPage');
+  },
+
+  loadNewerPageIfNecessary: function() {
+    Ember.run.cancel(this.get('loadNewerPageIfNecessaryHandler'));
+
+    var handler = Ember.run.later(this, function() {
+      if (!this.isScrollable()) {
+        this.get('controller').send('loadNewerPage');
+      }
+    }, 5000);
+
+    this.set('loadNewerPageIfNecessaryHandler', handler);
   }
 });

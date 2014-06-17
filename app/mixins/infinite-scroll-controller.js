@@ -5,6 +5,11 @@ export default Ember.Mixin.create({
   loadingNewerPage: false,
   loadedPageWas: null,
 
+  hasResults: function() {
+    if (this.get('pagesLoaded') === 0) return true;
+    return this.toArray().length > 0;
+  }.property('pagesLoaded'),
+
   loadingPage: function() {
     return this.get('loadingOlderPage') || this.get('loadingNewerPage');
   }.property('loadingOlderPage', 'loadingNewerPage'),
@@ -85,6 +90,9 @@ export default Ember.Mixin.create({
   reset: function(otherPropertiesToReset) {
     this.beginPropertyChanges();
 
+    // clear current entries
+    this.clear();    
+
     // reset controller
     this.setProperties({
       pagesLoaded: 0,
@@ -97,9 +105,6 @@ export default Ember.Mixin.create({
     if (otherPropertiesToReset) {
       this.setProperties(otherPropertiesToReset);
     }
-
-    // clear current entries
-    this.clear();
 
     this.endPropertyChanges(); 
   }

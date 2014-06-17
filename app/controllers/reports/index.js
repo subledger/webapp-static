@@ -1,18 +1,20 @@
 export default Ember.ArrayController.extend({
-  itemController: 'reports.Item',
+  itemController: 'reports/item',
 
   description: "",
   hasNextPage: false,
   loadingPage: false,
   searchHandler: null,
+  pagesLoaded: 0,
+
+  hasResults: function() {
+    if (this.get('pagesLoaded') === 0) return true;
+    return this.toArray().length > 0;
+  }.property('pagesLoaded'),
 
   actions: {
     search: function(description) {
-      // cancel preivous search
-      Ember.run.cancel(this.get('searchHandler'));
-
-      this.set('hasNextPage', false);
-      this.clear();
+      this.reset();
 
       if (!Ember.isBlank(this.get('description'))) {
         this.set('hasNextPage', true);
@@ -57,6 +59,9 @@ export default Ember.ArrayController.extend({
 
     return this.store.find('report', query).then(
       $.proxy(function(reports) {
+        this.beginPropertyChanges();
+
+        this.incrementProperty('pagesLoaded', 1);
         this.addObjects(reports.toArray());
 
         if (reports.toArray().length === perPage) {
@@ -67,8 +72,22 @@ export default Ember.ArrayController.extend({
         }
 
         this.set('loadingPage', false);
+        this.endPropertyChanges();
+
         return reports;
       }, this)
     );
-  }  
+  },
+
+  reset: function() {
+    // cancel preivous search
+    Ember.run.cancel(this.get('searchHandler'));
+
+    this.setProperties({
+      'hasNextPage': false,
+      'pagesLoaded': 0
+    });
+
+    this.clear();
+  }
 });

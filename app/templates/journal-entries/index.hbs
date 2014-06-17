@@ -2,10 +2,14 @@
   {{partial "loading"}}
 </div>
 
+<div {{bind-attr class=":alert :alert-warning :no-results hasResults:hidden"}}>
+  No Results Found
+</div>
+
 {{#each journalEntry in controller}}
   {{render "journal-entry/lines/index" journalEntry.lines}}
 {{/each}}
 
-<div {{bind-attr class=":loading-newer loadingOlderPage:hidden"}}>
+<div {{bind-attr class=":loading-newer view.showLoadingNewer::hidden"}}>
   {{partial "loading"}}
 </div>

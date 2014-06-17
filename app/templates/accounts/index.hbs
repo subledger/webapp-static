@@ -1,3 +1,7 @@
+<div {{bind-attr class=":alert :alert-warning :no-results hasResults:hidden"}}>
+  No Results Found
+</div>
+
 <div class="items">
   {{#each account in controller}}
     {{view 'accounts/item'}}
