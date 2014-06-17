@@ -27,7 +27,7 @@ export default DS.Model.extend({
         value = value.replace(",", "");
       }
 
-      var decimalPlaces = this.get('credential').get('decimalPlaces');
+      var decimalPlaces = this.get('container').lookup('credential:current').get('decimalPlaces');
       var zero = new BigNumber(0).toFixed(decimalPlaces);
 
       if (value && value !== zero) {
@@ -55,7 +55,7 @@ export default DS.Model.extend({
         value = value.replace(",", "");
       }
 
-      var decimalPlaces = this.get('credential').get('decimalPlaces');
+      var decimalPlaces = this.get('container').lookup('credential:current').get('decimalPlaces');
       var zero = new BigNumber(0).toFixed(decimalPlaces);
 
       if (value && value !== zero) {
