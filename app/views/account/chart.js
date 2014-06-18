@@ -188,6 +188,8 @@ export default Ember.View.extend({
     this.get('detailData').clear();
     var detailStart = this.get('masterData').objectAt(1).x;
 
+    var decimalPlaces = this.get('credential').get('decimalPlaces');
+
     this.get('masterData').every(function(point) {
       if (point.x >= detailStart) {
         this.get('detailData').addObject({
@@ -245,7 +247,7 @@ export default Ember.View.extend({
           var point = this.points[0];
           return Highcharts.dateFormat('%A, %B %e %Y %H:%M:%S', this.x) + '<br/>' +
           '<b>'+ point.series.name +': </b>' +
-          Highcharts.numberFormat(point.y, 2);
+          Highcharts.numberFormat(point.y, decimalPlaces);
         },
         shared: true
       },
