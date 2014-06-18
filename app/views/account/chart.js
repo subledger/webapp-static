@@ -252,7 +252,7 @@ export default Ember.View.extend({
       }],
 
       exporting: {
-        enabled: false
+        enabled: true
       }
 
     }).highcharts();
