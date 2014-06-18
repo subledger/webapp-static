@@ -243,7 +243,7 @@ export default Ember.View.extend({
       tooltip: {
         formatter: function() {
           var point = this.points[0];
-          return Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
+          return Highcharts.dateFormat('%A, %B %e %Y %H:%M:%S', this.x) + '<br/>' +
           '<b>'+ point.series.name +': </b>' +
           Highcharts.numberFormat(point.y, 2);
         },
@@ -297,7 +297,14 @@ export default Ember.View.extend({
       });
 
       return true;
-    }, this);    
+    }, this);
+
+    // set global HighCharts configuration
+    Highcharts.setOptions({
+      global: {
+        useUTC: false
+      }
+    });
 
     // make the container smaller and add a second container for the master chart
     var $container = this.$('.chart-container').css('position', 'relative');
