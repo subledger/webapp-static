@@ -42,6 +42,9 @@ export default Ember.View.extend({
 
       this.get('$detailChart').series[0].setData(this.get('detailData').toArray());
       this.get('$detailChart').hideLoading();
+
+      // change title
+      this.get('$detailChart').setTitle({text: this.getTitle()});
     }
   }.observes('controller.@each'),
 
@@ -99,6 +102,16 @@ export default Ember.View.extend({
       },
       xAxis: {
         type: 'datetime',
+        dateTimeLabelFormats: {
+          millisecond: '%H:%M:%S.%L',
+          second: '%H:%M:%S',
+          minute: '%H:%M',
+          hour: '%H:%M',
+          day: '%b %e',
+          week: '%b %e',
+          month: '%b \'%y',
+          year: '%Y'
+        },        
         showLastTickLabel: true,
         plotBands: [{
           id: 'mask-before',
@@ -186,11 +199,7 @@ export default Ember.View.extend({
       return true;
     }, this);
 
-    var title = this.get('account').get('description');
-    title += " balances from ";
-    title += Highcharts.dateFormat('%B %e, %Y', this.get('detailData').get('firstObject').x);
-    title += " to ";
-    title += Highcharts.dateFormat('%B %e, %Y', this.get('detailData').get('lastObject').x);
+    var title = this.getTitle();
 
     // create a detail chart referenced by a global variable
     return this.$('.detail').highcharts({
@@ -213,7 +222,17 @@ export default Ember.View.extend({
         text: 'Select an area by dragging across the lower chart'
       },
       xAxis: {
-        type: 'datetime'
+        type: 'datetime',
+        dateTimeLabelFormats: {
+          millisecond: '%H:%M:%S.%L',
+          second: '%H:%M:%S',
+          minute: '%H:%M',
+          hour: '%H:%M',
+          day: '%b %e',
+          week: '%b %e',
+          month: '%b \'%y',
+          year: '%Y'
+        }
       },
       yAxis: {
         title: {
@@ -256,6 +275,16 @@ export default Ember.View.extend({
       }
 
     }).highcharts();
+  },
+
+  getTitle: function() {
+    var title = this.get('account').get('description');
+    title += " balances from ";
+    title += Highcharts.dateFormat('%B %e, %Y', this.get('detailData').get('firstObject').x);
+    title += " to ";
+    title += Highcharts.dateFormat('%B %e, %Y', this.get('detailData').get('lastObject').x);
+
+    return title;
   },
 
   didInsertElement: function() {
