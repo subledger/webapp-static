@@ -195,7 +195,6 @@ export default Ember.View.extend({
     // create a detail chart referenced by a global variable
     return this.$('.detail').highcharts({
       chart: {
-        type: 'spline',
         marginBottom: 150,
         reflow: false,
         marginLeft: 70,
