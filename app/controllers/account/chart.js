@@ -13,14 +13,24 @@ export default Ember.ArrayController.extend({
 
       var createPoint = function(balances) {
         var balance = balances.get('firstObject');
+
         var value = balance.get('value');
+        var amount = parseFloat(value.amount);
+
+        var type = value.type;
+
+        var accountType = this.get('account').get('normalBalance');
+
+        if (type !== 'zero' && type !== accountType) {
+          amount = amount * -1;
+        }
 
         return Ember.Object.create({
           id: null,
           journalEntryId: null,
           accountId: this.get('account').get('id'),
-          type: value.type,
-          amount: parseFloat(value.amount),
+          type: type,
+          amount: amount,
           date: balance.get('at')
         });
       };
