@@ -273,7 +273,30 @@ export default Ember.View.extend({
       }],
 
       exporting: {
-        enabled: true
+        buttons: {
+          contextButton: {
+            menuItems: [{
+              text: 'Print',
+              onclick: function() {
+                  this.print();
+              },
+            }, {
+              separator: true
+            }, {
+              text: 'Save as PNG',
+              onclick: function() {
+                  this.clientSideExportPNG();
+              },
+              separator: false
+            }, {
+              text: 'Save as SVG',
+              onclick: function() {
+                  this.clientSideExportSVG();
+              },
+              separator: false
+            }]
+          }
+        }
       }
 
     }).highcharts();

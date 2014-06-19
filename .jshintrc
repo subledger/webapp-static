@@ -18,7 +18,8 @@
     "BigNumber": true,
     "Bloodhound": true,
     "Highcharts": true,
-    "Subledger": true
+    "Subledger": true,
+    "canvg": true
   },
   "node" : false,
   "browser" : false,
