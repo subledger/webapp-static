@@ -272,15 +272,15 @@ module.exports = function(grunt) {
         upload: [
           {
             src: 'dist/*',
-            dest: ''
+            dest: 'v2/'
           },
           {
             src: 'dist/assets/*',
-            dest: 'assets/'
+            dest: 'v2/assets/'
           },
           {
             src: 'dist/fonts/*',
-            dest: 'fonts/'
+            dest: 'v2/fonts/'
           }
         ]
       }
