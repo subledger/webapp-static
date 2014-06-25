@@ -34,9 +34,9 @@
       {{/each}}  
     </div>
 
-    <p {{bind-attr class=":zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
+    <p {{bind-attr class=":hidden-xs :zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
 
-    <div {{bind-attr class=":btn-group :pull-left :actions view.isRemoving:hidden"}}>
+    <div {{bind-attr class=":hidden-xs :btn-group :pull-left :actions view.isRemoving:hidden"}}>
       <button type="button" class="btn btn-default btn-xs zeroAction" {{action 'toogleZeroLine' target=view}}>
         {{view.zeroToogleButtonText}}
       </button>
@@ -48,7 +48,13 @@
       {{input type="text" value=view.creditAmount class="form-control currency" placeholder="Credit" tabindex=view.tabIndex disabled=view.noAccountSelected}}
     </div>
 
-    <p {{bind-attr class=":zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
+    <p {{bind-attr class=":hidden-xs :zero-line-value view.isZeroLine::hidden"}}>&nbsp;</p>
+
+    <div {{bind-attr class=":visible-xs :btn-group :pull-left :actions view.isRemoving:hidden"}}>
+      <button type="button" class="btn btn-default btn-xs zeroAction" {{action 'toogleZeroLine' target=view}}>
+        {{view.zeroToogleButtonText}}
+      </button>
+    </div>
 
     <div {{bind-attr class=":btn-group :pull-right :actions view.isRemoving:hidden"}}>
       <button type="button" class="btn btn-default btn-xs removeAction" {{bind-attr disabled=view.isLastLine}} {{action 'removeLine' target=view}}>

@@ -12,6 +12,11 @@
 
 <div>
   <table>
+      <col span="1" class="acc" />
+      <col span="1" class="description" />
+      <col span="1" class="debit" />
+      <col span="1" class="credit" />
+      <col span="1" class="reference" />
       <tbody>
         {{#each line in controller}}
           {{view 'journal-entry/lines/line'}}
@@ -27,7 +32,8 @@
       </tobdy>
       <tfoot>
         <tr>
-          <th colspan="2" class="text-right">Total</th>
+          <th class="hidden-xs"></th>
+          <th class="text-right">Total</th>
           <th class="debit">{{format-amount journalEntry.totalDebit}}</th>
           <th class="credit">{{format-amount journalEntry.totalCredit}}</th>
           <th>&nbsp;</th>

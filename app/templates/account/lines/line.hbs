@@ -1,4 +1,7 @@
-<td class="date">{{format-date effectiveAt 'full'}}</td>
+<td class="date">
+  <span class="hidden-xs">{{format-date effectiveAt 'big'}}</span>
+  <span class="visible-xs">{{format-date effectiveAt 'small'}}</span>
+</td>
 <td class="description">{{description}}</td>
 <td class="debit">{{format-value value 'debit'}}</td>
 <td class="credit">{{format-value value 'credit'}}</td>

@@ -34,24 +34,7 @@ var Util = {
     if (decimalPlaces > 0) {
       var decimalStr = number.toFixed(decimalPlaces).split(".")[1];
 
-      // remove non significant decimal zeros
-      decimalStr = decimalStr.replace(/0*$/, "");
-
-      // must have at least one zero
-      if (decimalStr.length === 0) {
-        decimalStr = "0";
-      }
-
-      // fill removed non significant digits with nbsp
-      var fill = "<span style='opacity: 0;'>";
-      for (var i=0; i<decimalPlaces - decimalStr.length; i++) {
-        fill += "0";
-      }
-      fill += "</span>";
-
-      decimalStr = decimalStr + fill;
-
-      return new Ember.Handlebars.SafeString(integerStr + "." + decimalStr);
+      return integerStr + "." + decimalStr;
 
     } else {
       return integerStr;

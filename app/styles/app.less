@@ -105,6 +105,11 @@ body {
       &> img {
         width: 173px;
         height: 21px;
+
+        @media (max-width: @screen-xs-max) {
+          width: 120px;
+          height: initial;
+        }
       }
 
       &> span {
@@ -123,7 +128,7 @@ body {
 
       &> li {
         select.form-control {
-          margin-left: 8px;
+          margin: 15px 8px;
         }
 
         a {
@@ -183,8 +188,8 @@ body {
     height: 100%;  
 
     .app-main-nav {
-      .make-sm-column(4);
-      .make-md-column(3);
+      .make-sm-column(3);
+      .make-md-column(2);
       .make-lg-column(2);
       &:extend(.hidden-xs all);
 
@@ -258,8 +263,8 @@ body {
     }
 
     .app-main-content {
-      .make-sm-column(8);
-      .make-md-column(9);
+      .make-sm-column(9);
+      .make-md-column(10);
       .make-lg-column(10);
 
       height: 100%;
@@ -495,6 +500,8 @@ body {
 
 .manual-journal-entry {
   padding: @default-padding;
+  height: 100%;
+  overflow-y: scroll;
 
   .form-group {
     margin-bottom: 5px;
@@ -712,28 +719,36 @@ body {
     }
 
     .lines {
-      th.date, td.date, col.date {
-        width: 260px;
+      .date {
+        width: 140px;
       }
 
-      th.description, td.description, col.description {
+      .description {
         width: 100%;
       }
 
-      th.reference, col.reference, td.je, col.je {
-        width: 50px;
+      .reference, .je {
+        width: 30px;
         text-align: center;
       }
 
-      th.debit, td.debit, col.debit, th.credit, td.credit, col.credit, th.balance, td.balance, col.balance {
-        width: 175px;
+      .debit, .credit, .balance {
+        width: 100px;
         text-align: right;
       }
 
-      th.je {
-        width: 65px;
-        text-align: center;
-        padding-right: 15px;
+      @media (max-width: @screen-xs-max) {
+        .date {
+          width: 70px;
+        }
+
+        .debit, .credit {
+          width: 70px;
+        }
+
+        .balance {
+          display: none;
+        }
       }
     }
   }
@@ -752,32 +767,27 @@ body {
 
   &.collapsed {
     section.table {
-      th.acc, td.acc  {
-        width: 380px;
+      .acc  {
+        width: 120px;
       }
 
-      th.debit, td.debit, th.credit, td.credit {
-        width: 175px;
+      .debit, .credit {
+        width: 80px;
         text-align: right;
       }
 
-      td.reference {
-        width: 50px;
+      .reference {
+        width: 30px;
         text-align: center;
       }
 
-      th.reference {
-        width: 65px;
-        text-align: center;
-        padding-right: 15px;
-      }
-    }
+      @media (max-width: @screen-xs-max) {
+        .description {
+          display: none;
+        }
 
-    &.list-item {
-      section.table {      
-        th.reference {
-          width: 50px;
-          padding-right: initial;
+        .acc {
+          width: 100%;
         }
       }
     }
