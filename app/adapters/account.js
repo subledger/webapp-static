@@ -1,6 +1,27 @@
 import ApplicationAdapter from "subledger-app/adapters/application";
 
 export default ApplicationAdapter.extend({
+  createRecord: function(store, type, record) {
+    var data = this.serialize(record, { includeId: true });
+
+    return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+      if (record.isValid()) {
+          this.getSelectedBook().account().create(data, function(e, result) {
+            if (e !== null) {
+              Ember.run(null, reject, e);
+              return;
+            }
+
+            Ember.run(null, resolve, result);
+          });
+
+      } else {
+        Ember.run(null, reject, "Record is invalid");
+      }
+    }, this));
+
+  },
+
   find: function(store, type, id) {
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
       this.getSelectedBook().account(id).get(function(e, result) {

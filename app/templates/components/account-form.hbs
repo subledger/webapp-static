@@ -1,0 +1,41 @@
+{{view view.accountMessagesView}}
+
+<form role="form" {{action 'create' on='submit'}} {{bind-attr disabled=view.model.isSaving}}>
+  <div {{bind-attr class=':form-group view.model.errors.description:has-error'}}>
+    <label for="description">Description</label>
+    {{input type="text" id="description" value=view.model.description class="form-control" placeholder="Description"}}
+
+    {{#each error in view.model.errors.description}}
+      <span class="help-block">{{error.message}}</span>
+    {{/each}}
+  </div>
+
+  <div {{bind-attr class=':form-group view.model.errors.reference:has-error'}}>
+    <label for="reference">Reference</label>
+    {{input type="text" id="reference" value=view.model.reference class="form-control" placeholder="Reference"}}
+
+    {{#each error in view.model.errors.reference}}
+      <span class="help-block">{{error.message}}</span>
+    {{/each}}
+  </div>
+
+  <div {{bind-attr class=':form-group view.model.errors.normalBalance:has-error'}}>
+    <label>Normal Balance</label>
+
+    {{#each error in view.model.errors.normalBalance}}
+      <span class="help-block">{{error.message}}</span>
+    {{/each}}
+  </div>
+
+  <label class="checkbox-inline">
+    <input type="radio" name="normalBalance" value="debit" checked> Debit    
+  </label>
+
+  <label class="checkbox-inline">
+    <input type="radio" name="normalBalance" value="credit"> Credit
+  </label>
+
+  <div class="pull-right">
+    <button type="submit" {{bind-attr class=":btn :btn-default view.model.isSaving:hidden"}}>Save</button>
+  </div>
+</form>
