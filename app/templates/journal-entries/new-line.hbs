@@ -6,8 +6,13 @@
       </div>
       {{#each error in view.model.errors.account}}
         <span class="help-block">{{error.message}}</span>
-      {{/each}}        
+      {{/each}}
     </div>
+
+    <div>
+      {{open-modal modal-selector="#create-account-modal" label="Create Account" icon="glyphicon-plus" classNames='btn-link' style='padding-left: 0;'}}
+    </div>
+
    </div>
 
    <div class="col-md-5">

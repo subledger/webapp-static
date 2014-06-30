@@ -22,10 +22,9 @@ export default Ember.View.extend({
   },
 
   click: function(e) {
-    e.preventDefault();
-
     var $el = $(e.target);
     if ($el.hasClass('browse')) {
+      e.preventDefault();
       var query = $el.data('query');
 
       if ($el.data('type') === 'hex') {        

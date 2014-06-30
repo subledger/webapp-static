@@ -1,11 +1,23 @@
-<form role="form">
-  <div class="form-group">
-    <div class="input-group input-group">
-      <span class="input-group-addon">
-        <span class="glyphicon glyphicon-search"></span>
-      </span>
+<div class="row">
+  <div class="col-xs-9 col-sm-10 col-lg-11">
+    <form role="form">
+      <div class="form-group">
+        <div class="input-group input-group">
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-search"></span>
+          </span>
 
-      {{input value=description class="form-control description" placeholder="Search or browse with sidebar" autofocus="autofocus"}}          
-    </div>
+          {{input value=description class="form-control description" placeholder="Search or browse with sidebar" autofocus="autofocus"}}          
+        </div>
+      </div>
+    </form>
   </div>
-</form>
+
+  <div class="col-xs-3 col-sm-2 col-lg-1">
+    {{open-modal modal-selector="#create-account-modal" label="Create" icon="glyphicon-plus" classNames='btn-primary btn-block'}}
+
+    {{#modal-dialog id="create-account-modal" title="Create Account"}}
+      {{account-form}}
+    {{/modal-dialog}}
+  </div>
+</div>
