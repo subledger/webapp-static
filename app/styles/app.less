@@ -273,6 +273,12 @@ body {
       background-image: @background;
       border: 1px solid @default-border-color;
       .box-shadow(@default-box-shadow);
+    }
+
+    .app-clean {
+      height: 100%;
+      padding: 10px;
+      overflow: hidden;
     }  
   }  
 }
@@ -318,8 +324,14 @@ body {
   }
 }
 
+.login-container {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .login {
-  margin-top: 60px;
+  margin-top: 0;
 
   .decimal-places {    
     margin-bottom: @default-margin;
@@ -331,6 +343,10 @@ body {
 
   .example {
     margin: 15px 0 0 0;
+  }
+
+  @media (min-width: @screen-xs-max) {
+    margin-top: 60px;
   }
 }
 

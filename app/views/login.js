@@ -1,4 +1,7 @@
 export default Ember.View.extend({
+  tagName: 'div',
+  classNames: ['login-container'],
+
   decimalPlacesChanged: function() {
     if (this.$(".decimal-places input")) {
       var newDecimalPlaces = this.get('controller').get('decimalPlaces');

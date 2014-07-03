@@ -60,7 +60,7 @@ export default Ember.ArrayProxy.extend(Ember.SortableMixin, {
     if (!localStorage) return;
 
     // clear array first
-    this.clear();
+    this.get('content').clear();
 
     // load from local storage
     var fullJSON = localStorage.getItem("credentials_history");
