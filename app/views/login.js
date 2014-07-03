@@ -1,4 +1,19 @@
 export default Ember.View.extend({
+  decimalPlacesChanged: function() {
+    if (this.$(".decimal-places input")) {
+      var newDecimalPlaces = this.get('controller').get('decimalPlaces');
+      this.$(".decimal-places input").slider('setValue', newDecimalPlaces);
+    }
+  }.observes('controller.decimalPlaces'),
+
+  actions: {
+    removeCredential: function(credential) {
+      if (confirm('Remove Credential from History?')) {
+        this.get('controller').send('removeCredential', credential);
+      }
+    }
+  },
+
   didInsertElement: function() {
     this.$(".decimal-places input").slider({
       min: 0,
@@ -12,7 +27,6 @@ export default Ember.View.extend({
 
     }).on('slide', $.proxy(function(e) {
       this.get('controller').send('setDecimalPlaces', e.value);
-
     }, this));
   }
 });

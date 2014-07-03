@@ -1,3 +1,5 @@
+import LocalCredentials from "subledger-app/utils/LocalCredentials";
+
 export default Ember.Route.extend({
   model: function() {
     return this.get('credential');
@@ -9,5 +11,10 @@ export default Ember.Route.extend({
     controller.set('key', model.get('key'));
     controller.set('secret', model.get('secret'));
     controller.set('org', model.get('org'));
+
+    var localCredentials = LocalCredentials.create();
+    localCredentials.load();
+
+    controller.set('localCredentials', localCredentials);
   }
 });

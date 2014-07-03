@@ -19,7 +19,8 @@
     "Bloodhound": true,
     "Highcharts": true,
     "Subledger": true,
-    "canvg": true
+    "canvg": true,
+    "confirm": true
   },
   "node" : false,
   "browser" : false,

@@ -14,11 +14,13 @@ export default Ember.Object.extend({
   init: function() {
     this._super();
 
-    var record = localStorage.getItem("credential");
+    if (localStorage !== null) {
+      var record = localStorage.getItem("credential");
 
-    if (record !== null) {
-      this.setProperties(JSON.parse(record));
-    }    
+      if (record !== null) {
+        this.setProperties(JSON.parse(record));
+      }      
+    }
   },
 
   selectedBook: function(key, value, previousValue) {
@@ -52,6 +54,8 @@ export default Ember.Object.extend({
   }.property('key', 'secret'),
 
   update: function() {
+    if (!localStorage) return;
+    
     var json = JSON.stringify({
       key: this.get('key'),
       secret: this.get('secret'),
