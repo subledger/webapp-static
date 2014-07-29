@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.View.extend({
   tagName: 'section',
   classNames: 'account-chart',
@@ -184,7 +186,7 @@ export default Ember.View.extend({
     }, this)).highcharts();
   },
 
-  createDetailChart: function(masterChart) {
+  createDetailChart: function() {
     this.get('detailData').clear();
     var detailStart = this.get('masterData').objectAt(1).x;
 
@@ -334,13 +336,13 @@ export default Ember.View.extend({
     // make the container smaller and add a second container for the master chart
     var $container = this.$('.chart-container').css('position', 'relative');
 
-    var $detailContainer = $('<div class="detail">')
-        .css({ height: 700 })
-        .appendTo($container);
+    $('<div class="detail">')
+      .css({ height: 700 })
+      .appendTo($container);
 
-    var $masterContainer = $('<div class="master">')
-        .css({ position: 'absolute', top: 600, height: 100, width: '100%' })
-        .appendTo($container);
+    $('<div class="master">')
+      .css({ position: 'absolute', top: 600, height: 100, width: '100%' })
+      .appendTo($container);
 
     this.set('$masterChart', this.createMasterChart());
   }

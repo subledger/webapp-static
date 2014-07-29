@@ -3,21 +3,21 @@
 # compiled output
 /dist
 /tmp
-/docs
 
 # dependencies
 /node_modules
 /vendor/*
-!/vendor/ember-shim.js
-!/vendor/qunit-shim.js
 
 # misc
 /.sass-cache
 /connect.lock
+/coverage/*
 /libpeerconnection.log
+npm-debug.log
+testem.log
 .DS_Store
 Tumbs.db
-/coverage/*
-*.log
+
+# app specific
 .swp
-aws.json
+s3_website.yml

@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import InfiniteScrollController from "subledger-app/mixins/infinite-scroll-controller";
 
 export default Ember.ArrayController.extend(InfiniteScrollController, {

@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.View.extend({
   tagName: 'div',
   classNames: 'line',
@@ -119,7 +121,7 @@ export default Ember.View.extend({
     return this.get('parentView').get('lastObject') === this;
   }.property('parentView.@each'),
 
-  debitAmount: function(key, value, previousValue) {
+  debitAmount: function(key, value) {
     if (arguments.length > 1) {
       this.get('model').set('debitAmount', value);
     }
@@ -127,7 +129,7 @@ export default Ember.View.extend({
     return this.get('model').get('debitAmount');
   }.property('model.debitAmount'),
 
-  creditAmount: function(key, value, previousValue) {
+  creditAmount: function(key, value) {
     if (arguments.length > 1) {
       this.get('model').set('creditAmount', value);
     }
@@ -136,7 +138,7 @@ export default Ember.View.extend({
   }.property('model.creditAmount'),
 
   addNewLineObserver: function() {
-    if (Ember.isEmpty(this.get('model').get('account'))) return;
+    if (Ember.isEmpty(this.get('model').get('account'))) { return; }
 
     var parentView = this.get('parentView');
 
@@ -155,7 +157,7 @@ export default Ember.View.extend({
     // now handle change events on the input field
     $input.on('keydown', function(e) {
       // discard keystrokes that didn't change the actual input value
-      if (e.keyCode !== 32 && e.keyCode >= 9 && e.keyCode <= 45) return;
+      if (e.keyCode !== 32 && e.keyCode >= 9 && e.keyCode <= 45) { return; }
       self.set('is' + Ember.String.capitalize(field) + 'Synch', false);
 
     }).on('change', function() {
@@ -222,7 +224,7 @@ export default Ember.View.extend({
       displayKey: 'description',
       source: accountsDataset.ttAdapter()
 
-    }).on("blur", $.proxy(function(e) {
+    }).on("blur", $.proxy(function() {
       // clear the fields if no suggestion was found
       if (this.get("accountDescription") !== $typeAhead.typeahead('val')) {
 
@@ -234,10 +236,10 @@ export default Ember.View.extend({
         this.$("input.currency").val("");
       }
       
-    }, this)).on("typeahead:selected", $.proxy(function(e, suggestion, datasetName) {
+    }, this)).on("typeahead:selected", $.proxy(function(e, suggestion) {
       this.accountSelected(suggestion.id, suggestion.description, suggestion.normalBalance);
 
-    }, this)).on("typeahead:autocompleted", $.proxy(function(e, suggestion, datasetName) {
+    }, this)).on("typeahead:autocompleted", $.proxy(function(e, suggestion) {
       this.accountSelected(suggestion.id, suggestion.description, suggestion.normalBalance);
 
     }, this));

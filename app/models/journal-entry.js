@@ -1,3 +1,6 @@
+import Ember from 'ember';
+import DS from 'ember-data';
+
 export default DS.Model.extend({
   state:       DS.attr('string'),
   effectiveAt: DS.attr('iso-date'),
@@ -9,7 +12,7 @@ export default DS.Model.extend({
   totalDebit: function() {
     var total = new BigNumber(0);
 
-    this.get('lines').forEach(function(item, index, enumerable) {
+    this.get('lines').forEach(function(item) {
       if (item.get('debitAmount')) {
         total = total.plus(item.get('debitAmount'));  
       }      
@@ -22,7 +25,7 @@ export default DS.Model.extend({
   totalCredit: function() {
     var total = new BigNumber(0);
 
-    this.get('lines').forEach(function(item, index, enumerable) {
+    this.get('lines').forEach(function(item) {
       if (item.get('creditAmount')) {
         total = total.plus(item.get('creditAmount'));  
       }      
@@ -35,7 +38,7 @@ export default DS.Model.extend({
   totalAmount: function() {
     var total = new BigNumber(0);
 
-    this.get('lines').forEach(function(item, index, enumerable) {
+    this.get('lines').forEach(function(item) {
       if (item.get('amount')) {
         total = total.plus(item.get('amount'));  
       }      
@@ -73,7 +76,7 @@ export default DS.Model.extend({
     var totalDebit = new BigNumber(0);
 
     var hasLineErrors = false;
-    this.get('lines').forEach(function(line, index, enumerable) {
+    this.get('lines').forEach(function(line) {
       if (Ember.isEmpty(line.get('account'))) {
         hasLineErrors = true;
         line.get('errors').add('account', 'Must not be blank');
@@ -123,10 +126,10 @@ export default DS.Model.extend({
 
   // replaces the account id on the line object by the actual account object
   loadLinesAccounts: function(lines) {
-    return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+    return new Ember.RSVP.Promise($.proxy(function(resolve) {
       var promises = [];
 
-      lines.every($.proxy(function(line, index, enumerable) {
+      lines.every($.proxy(function(line) {
         var account = line.get('account');
 
         // the second time this code runs, we will already have the object
@@ -144,7 +147,7 @@ export default DS.Model.extend({
         return true;
       }, this));
 
-      new Ember.RSVP.all(promises).then(function(accounts) {
+      new Ember.RSVP.all(promises).then(function() {
         resolve(lines);
       });
 

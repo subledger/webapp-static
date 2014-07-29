@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import Base64 from "subledger-app/utils/Base64";
 
 export default Ember.Object.extend({
@@ -54,7 +55,7 @@ export default Ember.Object.extend({
   }.property('key', 'secret'),
 
   update: function() {
-    if (!localStorage) return;
+    if (!localStorage) { return; }
     
     var json = JSON.stringify({
       key: this.get('key'),
@@ -79,7 +80,7 @@ export default Ember.Object.extend({
         return;
       }, this),
 
-      $.proxy(function(reason) {
+      $.proxy(function() {
         this.setProperties({
           books: Ember.A(),
           book: null,

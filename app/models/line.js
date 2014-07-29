@@ -1,4 +1,4 @@
-import Balance from 'subledger-app/models/balance';
+import DS from 'ember-data';
 
 export default DS.Model.extend({
   account:      DS.attr(),

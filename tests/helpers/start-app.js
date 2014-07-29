@@ -1,7 +1,10 @@
-import Application from 'subledger-app/app';
-import Router from 'subledger-app/router';
+/* global require */
 
-function startApp(attrs) {
+var Application = require('subledger-app/app')['default'];
+var Router = require('subledger-app/router')['default'];
+import Ember from 'ember';
+
+export default function startApp(attrs) {
   var App;
 
   var attributes = Ember.merge({
@@ -25,5 +28,3 @@ function startApp(attrs) {
 
   return App;
 }
-
-export default startApp;

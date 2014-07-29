@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import NewLineView from 'subledger-app/views/journal-entries/new-line';
 
 export default Ember.ContainerView.extend({

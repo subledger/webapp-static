@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.ArrayController.extend({
   itemController: 'accounts/item',
 
@@ -8,12 +10,12 @@ export default Ember.ArrayController.extend({
   pagesLoaded: 0,
 
   hasResults: function() {
-    if (this.get('pagesLoaded') === 0) return true;
+    if (this.get('pagesLoaded') === 0) { return true; }
     return this.toArray().length > 0;
   }.property('pagesLoaded'),
 
   actions: {
-    search: function(description) {
+    search: function() {
       this.reset();
 
       if (!Ember.isBlank(this.get('description'))) {
@@ -30,7 +32,7 @@ export default Ember.ArrayController.extend({
     },
 
     nextPage: function(defer) {
-      if (this.get('loadingPage') === true) return;
+      if (this.get('loadingPage') === true) { return; }
 
       var object = this.get('lastObject');
       var nextPageId = null;

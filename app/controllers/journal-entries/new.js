@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.Controller.extend({
   hasNextAccountsPage: true,
   loadingAccountPage: false,
@@ -23,7 +25,7 @@ export default Ember.Controller.extend({
       }
     },
 
-    post: function(journalEntryData) {
+    post: function() {
       // journal entry reference
       var journalEntry = this.get('model');
 
@@ -33,7 +35,7 @@ export default Ember.Controller.extend({
       // clear previous error messages
       journalEntry.get('errors').clear();
 
-      lines.forEach(function(item, index, enumerable) {
+      lines.forEach(function(item) {
         item.get('errors').clear();
       }, this);
 
@@ -41,10 +43,11 @@ export default Ember.Controller.extend({
       var line = lines.toArray().length > 1 ? lines.popObject() : null;
 
       journalEntry.save().then(
-        $.proxy(function(savedJournalEntry) {
+        $.proxy(function() {
+          // do nothing
         }, this),
 
-        $.proxy(function(e) {
+        $.proxy(function() {
           if (line) {
             lines.pushObject(line);
           }

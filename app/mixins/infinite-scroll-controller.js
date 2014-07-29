@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.Mixin.create({
   pagesLoaded: 0,
   hasOlderPage: true,
@@ -6,7 +8,7 @@ export default Ember.Mixin.create({
   loadedPageWas: null,
 
   hasResults: function() {
-    if (this.get('pagesLoaded') === 0) return true;
+    if (this.get('pagesLoaded') === 0) { return true; }
     return this.toArray().length > 0;
   }.property('pagesLoaded'),
 
@@ -45,13 +47,13 @@ export default Ember.Mixin.create({
   },
 
   loadPage: function(modelName, pageId, newer, queryExtras) {
-    if (this.get('loadingPage')) return;
+    if (this.get('loadingPage')) { return; }
 
     if (newer) {
       this.set('loadingNewerPage', true);
 
     } else {
-      if (!this.get('hasOlderPage')) return;
+      if (!this.get('hasOlderPage')) { return; }
       this.set('loadingOlderPage', true);
     }
 

@@ -7,124 +7,20 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
+  {{BASE_TAG}}
+
   <!-- Fonts -->
-  <link href='//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'>  
 
-  <!-- build:css(tmp/result) assets/app.min.css -->
-  <link rel="stylesheet" type="text/css" href="/assets/app.css" />
-  <!-- endbuild -->
-
-  <!-- build:js(tmp/result) assets/config.min.js -->
-    <script src="/config/environment.js"></script>
-
-    <!-- @if tests=false -->
-      <!-- @if dist=false -->
-      <script src="/config/environments/development.js"></script>
-      <!-- @endif -->
-
-      <!-- @if dist=true -->
-      <script src="/config/environments/production.js"></script>
-      <!-- @endif -->
-    <!-- @endif -->
-
-    <!-- @if tests=true -->
-    <script src="/config/environments/test.js"></script>
-    <!-- @endif -->
-  <!-- endbuild -->
-
-  <!-- build:js(tmp/result) assets/vendor.min.js -->
-    <script src="/vendor/jquery/jquery.js"></script>
-
-    <!-- @if dist=false -->
-    <script src="/vendor/handlebars/handlebars.js"></script>
-    <script src="/vendor/ember/ember.js"></script>
-    <!-- @endif -->
-
-    <!-- @if dist=true -->
-    <script src="/vendor/handlebars/handlebars.runtime.js"></script>
-    <script src="/vendor/ember/ember.prod.js"></script>
-    <!-- @endif -->
-
-    <script src="/vendor/ember-data/ember-data.js"></script>
-    <script src="/vendor/loader.js/loader.js"></script>
-    <script src="/vendor/ember-resolver/dist/ember-resolver.js"></script>
-    <script src="/vendor/ic-ajax/dist/named-amd/main.js"></script>
-    <script src="/vendor/ember-load-initializers/ember-load-initializers.js"></script>
-
-    <script src="/vendor/bootstrap/js/affix.js"></script>
-    <script src="/vendor/bootstrap/js/alert.js"></script>
-    <script src="/vendor/bootstrap/js/button.js"></script>
-    <script src="/vendor/bootstrap/js/carousel.js"></script>
-    <script src="/vendor/bootstrap/js/collapse.js"></script>
-    <script src="/vendor/bootstrap/js/dropdown.js"></script>
-    <script src="/vendor/bootstrap/js/modal.js"></script>
-    <script src="/vendor/bootstrap/js/scrollspy.js"></script>
-    <script src="/vendor/bootstrap/js/tab.js"></script>
-    <script src="/vendor/bootstrap/js/tooltip.js"></script>
-    <script src="/vendor/bootstrap/js/transition.js"></script>
-    <script src="/vendor/bootstrap/js/popover.js"></script>
-
-    <script src="/vendor/subledger-js-library/src/subledger.js"></script>    
-
-    <script src="/vendor/jquery-visible/jquery.visible.js"></script>
-    <script src="/vendor/moment/moment.js"></script>
-    <script src="/vendor/accounting/accounting.js"></script>
-    <script src="/vendor/bignumber.js/bignumber.js"></script>
-    <script src="/vendor/jquery-maskmoney/dist/jquery.maskMoney.js"></script>
-    <script src="/vendor/typeahead.js/dist/typeahead.bundle.js"></script>    
-    <script src="/vendor/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
-    <script src="/vendor/seiyria-bootstrap-slider/js/bootstrap-slider.js"></script>
-
-    <script src="/vendor/highcharts-release/highcharts.src.js"></script>
-    <script src="/vendor/highcharts-release/modules/exporting.src.js"></script>
-
-    <script src="/vendor/canvg/rgbcolor.js"></script> 
-    <script src="/vendor/canvg/canvg.js"></script> 
-  <!-- endbuild -->
-
-  <!-- build:js(tmp/result) assets/app.min.js -->
-    <script src="/assets/app.js"></script>
-    <script src="/assets/templates.js"></script>
-  <!-- endbuild -->
-
-  <!-- @if dist=false -->
-  <style>
-    @keyframes domChanged { from { background: yellow; } }
-    @-webkit-keyframes domChanged { from { background: yellow; } }
-    .ember-view { animation: domChanged 1s; -webkit-animation: domChanged 1s; }
-  </style>
-  <!-- @endif -->
-
-  <!-- @if tests=true -->
-  <script src="/vendor/ember-shim.js"></script>
-  <link rel="stylesheet" href="/vendor/qunit/qunit/qunit.css">
-  <script src="/vendor/qunit/qunit/qunit.js"></script>
-  <script src="/vendor/qunit-shim.js"></script>
-  <script src="/vendor/ember-qunit/dist/named-amd/main.js"></script>
-
-  <style>
-    #ember-testing-container {
-      position: absolute;
-      background: white;
-      bottom: 0;
-      right: 0;
-      width: 640px;
-      height: 384px;
-      overflow: auto;
-      z-index: 9999;
-      border: 1px solid #ccc;
-    }
-    #ember-testing {
-      zoom: 50%;
-    }
-  </style>
-  <!-- @endif -->
+  <link rel="stylesheet" href="assets/vendor.css">
+  <link rel="stylesheet" href="assets/subledger-app.css">
 
   <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
+
 <body>
   <!--[if lt IE 8]>
     <p class="browsehappy">
@@ -134,19 +30,16 @@
     </p>
   <![endif]-->
 
-  <!-- @if tests=true -->
-  <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
-  <script src="/tests/tests.js"></script>
-  <script src="/tests/test-helper.js"></script>
-  <script src="/tests/test-loader.js"></script>
-  <script src="/testem.js"></script>
-  <!-- @endif -->
-
-  <!-- @if tests=false -->
   <script>
-    window.App = require('subledger-app/app')["default"].create();
+    window.SubledgerAppENV = {{ENV}};
+    window.EmberENV = window.SubledgerAppENV.EmberENV;
   </script>
-  <!-- @endif -->
+
+  <script src="assets/vendor.js"></script>
+  <script src="assets/subledger-app.js"></script>
+
+  <script>
+    window.SubledgerApp = require('subledger-app/app')['default'].create(SubledgerAppENV.APP);
+  </script>
 </body>
 </html>

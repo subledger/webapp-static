@@ -1,4 +1,4 @@
-import Account from "subledger-app/models/account";
+import Ember from 'ember';
 import MessagesView from 'subledger-app/views/messages';
 
 export default Ember.Component.extend({

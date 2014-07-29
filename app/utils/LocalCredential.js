@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.Object.extend({
   desc: null,
 
@@ -13,7 +15,7 @@ export default Ember.Object.extend({
   },
 
   toJSON: function() {
-    if (!window.localStorage) return;
+    if (!window.localStorage) { return; }
 
     return JSON.stringify({
       desc: this.get('desc'),

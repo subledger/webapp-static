@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import ApplicationAdapter from "subledger-app/adapters/application";
 
 export default ApplicationAdapter.extend({

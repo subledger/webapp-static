@@ -1,3 +1,5 @@
+import DS from 'ember-data';
+
 export default DS.RESTAdapter.extend({
   // helper to create api queries
   criteria: function() {

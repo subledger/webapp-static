@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 var Util = {
   timeAgo: function(date) {
     return moment(date).fromNow();

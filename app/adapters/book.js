@@ -1,7 +1,8 @@
+import Ember from 'ember';
 import ApplicationAdapter from "subledger-app/adapters/application";
 
 export default ApplicationAdapter.extend({
-  findAll: function(store, type, id) {
+  findAll: function() {
     var config = this.criteria().after().description();
     var org = this.getOrganization();
 

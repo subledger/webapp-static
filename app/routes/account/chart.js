@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.Route.extend({
   model: function() {
     var account = this.modelFor('account');
@@ -7,7 +9,7 @@ export default Ember.Route.extend({
     return this.store.find('line', { account: account, operation: 'first_and_last_line' }).then(
       $.proxy(function(lines) {
 
-        lines.every(function(item, index, enumerable) {
+        lines.every(function(item) {
           points.addObject(this.lineToPoint(account, item));
           return true;
         }, this);
@@ -19,7 +21,7 @@ export default Ember.Route.extend({
         return this.store.find('line', { account: account, pageId: lastPoint.get('id'), limit: 30 }).then(
           $.proxy(function(lines) {
 
-            lines.toArray().reverse().every(function(item, index, enumerable) {
+            lines.toArray().reverse().every(function(item) {
               points.addObject(this.lineToPoint(account, item));
               return true;
             }, this);

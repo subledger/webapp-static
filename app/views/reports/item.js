@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.View.extend({
   tagName: 'div',
   classNames: 'panel panel-default item hover-highlight',
@@ -46,7 +48,7 @@ export default Ember.View.extend({
     this.$(".modal").modal({
       show: false
       
-    }).on('hidden.bs.modal', $.proxy(function(e) {
+    }).on('hidden.bs.modal', $.proxy(function() {
       if (this.get('controller').get('progress') === 100) {
         this.get('controller').send('show');
       }

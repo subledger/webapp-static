@@ -1,5 +1,7 @@
+import Ember from 'ember';
+
 export default Ember.Route.extend({
-  beforeModel: function(transition) {
+  beforeModel: function() {
     this.get('credential').logout();
     this.get('credential').update();
 

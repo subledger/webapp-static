@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import LocalCredential from "subledger-app/utils/LocalCredential";
 
 export default Ember.ArrayProxy.extend(Ember.SortableMixin, {
@@ -43,7 +44,7 @@ export default Ember.ArrayProxy.extend(Ember.SortableMixin, {
   },
 
   update: function() {
-    if (!localStorage) return;
+    if (!localStorage) { return; }
 
     var parts = [];
 
@@ -57,7 +58,7 @@ export default Ember.ArrayProxy.extend(Ember.SortableMixin, {
   },
 
   load: function() {
-    if (!localStorage) return;
+    if (!localStorage) { return; }
 
     // clear array first
     this.get('content').clear();

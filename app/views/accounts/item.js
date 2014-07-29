@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.View.extend({
   tagName: 'div',
   classNames: 'panel panel-default item hover-highlight',
@@ -17,7 +19,7 @@ export default Ember.View.extend({
     }
   }.observes('controller.model.balance'),
 
-  click: function(e) {
+  click: function() {
     var account = this.get('controller').get('model');
     this.get('controller').transitionToRoute('account.lines.index', account);
   },

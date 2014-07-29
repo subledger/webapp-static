@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.View.extend({
   tagName: 'div',
   classNames: 'index',
@@ -17,7 +19,7 @@ export default Ember.View.extend({
     this.balancesUpdater();
   }.observes('controller.@each'),
 
-  keyUp: function(e) {
+  keyUp: function() {
     this.search();
   },
 
@@ -45,7 +47,7 @@ export default Ember.View.extend({
     // run balance updater
     this.balancesUpdater();
 
-    if (this.get('loadingFirstPage')) return;
+    if (this.get('loadingFirstPage')) { return; }
 
     if (this.isScrolledAtBottom()) {
       this.loadNextPage();
@@ -69,7 +71,7 @@ export default Ember.View.extend({
   },
 
   loadNextPage: function() {
-    if (!this.get('controller').get('hasNextPage')) return;
+    if (!this.get('controller').get('hasNextPage')) { return; }
 
     var defer = Ember.RSVP.defer();
 

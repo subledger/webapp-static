@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import MessagesView from 'subledger-app/views/messages';
 import NewLinesView from 'subledger-app/views/journal-entries/new-lines';
 
@@ -18,14 +19,14 @@ export default Ember.View.extend({
 
   autobalancer: function() {
     Ember.run.next(this, function() {
-      if (this.controller.get('model').get('lines').toArray().length < 2) return;
+      if (this.controller.get('model').get('lines').toArray().length < 2) { return; }
 
       // at this point, debits and credits already consider the last line
       var debits = this.controller.get('model').get('totalDebit');
       var credits = this.controller.get('model').get('totalCredit');
 
       // so if it balances, return
-      if (debits === credits) return;
+      if (debits === credits) { return; }
 
       // get last line
       var lastLineModel = this.controller.get('model').get('lines').get('lastObject');
@@ -55,8 +56,8 @@ export default Ember.View.extend({
   },
 
   removeLine: function(lineView) {
-    if (this.get('linesView').get('childViews').length <= 1) return;
-    if (lineView === this.get('linesView').get('lastObject')) return;
+    if (this.get('linesView').get('childViews').length <= 1) { return; }
+    if (lineView === this.get('linesView').get('lastObject')) { return; }
 
     this.get('linesView').removeObject(lineView);
     this.controller.send('removeLine', lineView.get('model'));

@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import LocalCredentials from "subledger-app/utils/LocalCredentials";
 
 export default Ember.Route.extend({

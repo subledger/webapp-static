@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 export default Ember.Mixin.create({
   showLoadingNewer: true,
   loadNewerPageIfNecessaryHandler: null,
@@ -76,7 +78,7 @@ export default Ember.Mixin.create({
   }.on('didInsertElement'),
 
   bindOnScrollHandlers: function() {
-    this.$scroll().on('scroll', $.proxy(function(e) {
+    this.$scroll().on('scroll', $.proxy(function() {
       if (this.isScrolledToTop()) {
         this.loadOlderPage();
 
@@ -115,7 +117,7 @@ export default Ember.Mixin.create({
   },
 
   scrollTo: function(newTopPosition) {
-    return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+    return new Ember.RSVP.Promise($.proxy(function(resolve) {
       this.$scroll().scrollTop(newTopPosition);
       resolve();
 
@@ -126,8 +128,8 @@ export default Ember.Mixin.create({
     return this.scrollTo(this.$loadingOlder().outerHeight());
   },
 
-  scrollToBottom: function(callback) {
-    return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
+  scrollToBottom: function() {
+    return new Ember.RSVP.Promise($.proxy(function(resolve) {
       Ember.run.next(this, function() {
         this.scrollTo(this.scrollHeight() - this.$scroll().height() - this.$loadingNewer().outerHeight()).then(
           $.proxy(function() {

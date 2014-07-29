@@ -1,35 +1,17 @@
+import Ember from 'ember';
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 
-import Util from "subledger-app/utils/util";
-import Credential from "subledger-app/utils/Credential";
-
 import Base64 from "subledger-app/utils/Base64";
 
+Ember.MODEL_FACTORY_INJECTIONS = true;
+
 var App = Ember.Application.extend({
-  LOG_ACTIVE_GENERATION: false,
-  LOG_MODULE_RESOLVER: false,
-  LOG_TRANSITIONS: false,
-  LOG_TRANSITIONS_INTERNAL: false,
-  LOG_VIEW_LOOKUPS: false,
-  modulePrefix: 'subledger-app',
+  modulePrefix: 'subledger-app', // TODO: loaded via config
   Resolver: Resolver
 });
 
 loadInitializers(App, 'subledger-app');
-
-Ember.Application.initializer({
-  name: "credential",
-
-  initialize: function(container, application) {
-    container.register('credential:current', Credential, { singleton: true });
-
-    container.typeInjection('route', 'credential', 'credential:current');
-    container.typeInjection('controller', 'credential', 'credential:current');
-    container.typeInjection('view', 'credential', 'credential:current');    
-    container.typeInjection('adapter', 'credential', 'credential:current');
-  }
-});
 
 // add support for data attributes on views
 Ember.View.reopen({
@@ -38,7 +20,7 @@ Ember.View.reopen({
     var self = this;
 
     // bind attributes beginning with 'data-'
-    Em.keys(this).forEach(function(key) {
+    Ember.keys(this).forEach(function(key) {
       if (key.substr(0, 5) === 'data-') {
         self.get('attributeBindings').pushObject(key);
       }
@@ -48,7 +30,7 @@ Ember.View.reopen({
 
 // add client side export support to Highchart
 (function (H) {
-  H.Chart.prototype.clientSideExportPNG = function (divId) {
+  H.Chart.prototype.clientSideExportPNG = function () {
     var svg = this.getSVG(),
         width = parseInt(svg.match(/width="([0-9]+)"/)[1]),
         height = parseInt(svg.match(/height="([0-9]+)"/)[1]),
@@ -70,7 +52,7 @@ Ember.View.reopen({
     }
   };
 
-  H.Chart.prototype.clientSideExportSVG = function (divId) {
+  H.Chart.prototype.clientSideExportSVG = function () {
     var svg = this.getSVG();
     var svg_base64 = (new Base64()).encode(svg);
 
