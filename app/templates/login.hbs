@@ -19,11 +19,17 @@
             {{input value=org type="text" class="form-control" placeholder="org"}}
           </div>
 
-          <br/>
-          <div class="decimal-places">
-            {{input value=decimalPlaces type="text"}}
+          <div class="row decimal-places">
+            <div class="col-xs-4">
+              Decimal Places: {{decimalPlaces}}
+            </div>
+
+            <div class="col-xs-8">
+              <div>
+                {{input value=decimalPlaces type="text"}}
+              </div>
+            </div>
           </div>
-          <br/>
 
           {{input type="submit" class="btn btn-primary btn-block" value="Login"}}
         </form>
