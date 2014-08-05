@@ -37,6 +37,9 @@ export default ApplicationAdapter.extend({
 
         } else if (result['posting_journal_entry']) {
           result['posting_journal_entry'].state = 'POSTING';
+
+        } else if (result['active_journal_entry']) {
+          result['active_journal_entry'].state = 'ACTIVE';
         }
 
         resolve(result);
@@ -54,6 +57,10 @@ export default ApplicationAdapter.extend({
       if (query.state === "POSTING") {
         config = config.posting();
         resultKey = "posting_journal_entries";
+
+      } else if (query.state === "ACTIVE") {
+        config = config.active();
+        resultKey = "active_journal_entries";
 
       } else {
         config = config.posted();

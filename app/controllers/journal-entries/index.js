@@ -2,10 +2,8 @@ import Ember from 'ember';
 import InfiniteScrollController from "subledger-app/mixins/infinite-scroll-controller";
 
 export default Ember.ArrayController.extend(InfiniteScrollController, {
-  //itemController: 'journal-entry/lines/index',
-
   selectedState: "POSTED",
-  states: ["POSTED", "POSTING"],
+  states: ["POSTED", "POSTING", "ACTIVE"],
 
   actions: {
     loadOlderPage: function() {
