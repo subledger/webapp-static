@@ -38,7 +38,7 @@ export default ApplicationAdapter.extend({
 
   findQuery: function(store, type, query) {
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
-      var config = this.criteria().limit(query.limit || 25).active();
+      var config = this.criteria().limit(query.limit || 100).active();
 
       if (!Ember.isEmpty(query.pageId)) {
         config = config.following().id(query.pageId);

@@ -18,7 +18,7 @@ export default ApplicationAdapter.extend({
 
   findQueryByJournalEntry: function(store, type, query) {
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
-      var config = this.criteria().limit(query.limit || 25).posted();
+      var config = this.criteria().limit(query.limit || 100).posted();
 
       if (query.pageId) {
         config = config.following().id(query.pageId);
@@ -43,7 +43,7 @@ export default ApplicationAdapter.extend({
   findQueryByAccount: function(store, type, query) {
     return new Ember.RSVP.Promise($.proxy(function(resolve, reject) {
       var date = query.date ? query.date.toISOString() : new Date().toISOString() ;
-      var config = this.criteria().limit(query.limit || 25);
+      var config = this.criteria().limit(query.limit || 100);
 
       if (query.newer) {
         if (query.pageId) {

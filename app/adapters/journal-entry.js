@@ -49,7 +49,7 @@ export default ApplicationAdapter.extend({
       var date = query.date ? query.date.toISOString() : new Date().toISOString();
 
       var resultKey = null;
-      var config = this.criteria().limit(query.limit || 25);
+      var config = this.criteria().limit(query.limit || 100);
       
       if (query.state === "POSTING") {
         config = config.posting();
