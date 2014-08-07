@@ -11,6 +11,11 @@ export default Ember.ArrayProxy.extend(Ember.SortableMixin, {
   },
 
   addCredential: function(org, credential) {
+    // check if it is lemonade stand demo
+    if ("8bDALFFz8q7uvFNskbW9Kq" === credential.get('key') &&
+      "flWncmVODPlEUktLahThhW" === credential.get('secret') &&
+      "Mx88KmjlVja1i4EMXoBjs1" === credential.get('org')) { return; }
+
     // check if it already exists
     var localCredential = this.find(function(localCredential) {
       return localCredential.get('key') === credential.get('key') &&

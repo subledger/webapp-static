@@ -36,18 +36,18 @@
       </div>  
     </div>
 
-    <p class="example">Just want to see it working? <a href="#" {{action 'lemonade'}}>Use our demo application credentials!</a></p>
+    <br/>
+    <p>Credentials:</p>
+    <ul>
+      <li>
+        <a href="#" {{action 'lemonade'}}>Lemonade Stand Demo</a>
+      </li>
 
-    {{#if localCredentials}}
-      <br/>
-      <p>Creds History:</p>
-      <ul>
-        {{#each localCredential in localCredentials}}
+      {{#each localCredential in localCredentials}}
         <li>
           <a href="#" {{action 'useCredential' localCredential}}>{{localCredential.desc}}</a> - Last Used {{format-date localCredential.lastUsed}} (<a href="#" {{action 'removeCredential' localCredential target="view"}}>remove</a>)
         </li>
-        {{/each}}
-      </ul>
-    {{/if}}
+      {{/each}}
+    </ul>
   </div>
 </div>
