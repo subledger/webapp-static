@@ -30,7 +30,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    ENV.baseURL = '/v2/index.html';
+    ENV.baseURL = '/v2/';
   }
 
   return ENV;

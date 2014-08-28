@@ -12,7 +12,6 @@
     "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.2",
     "ember-qunit-notifications": "^0.0.3",
     "ember-cli-test-loader": "rjackson/ember-cli-test-loader#0.0.2",
-    "loader.js": "git://github.com/stefanpenner/loader.js",
     "moment": "~2.5.1",
     "jquery-visible": "https://github.com/teamdf/jquery-visible.git#1.1.0",
     "bootstrap": "~3.1.1",

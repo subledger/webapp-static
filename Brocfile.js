@@ -3,9 +3,14 @@
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var app = new EmberApp({
+  //name: require('./package.json').name,
+
   fingerprint: {
+    enabled: false, // UNTIL THIS IS FIXED https://github.com/rickharrison/broccoli-asset-rev/issues/18
     replaceExtensions: ['html', 'css', 'js', 'less']
-  }
+  },
+
+  //getEnvJSON: require('./config/environment')
 });
 
 // Use `app.import` to add additional libraries to the generated
@@ -49,6 +54,6 @@ app.import("vendor/highcharts-release/highcharts.src.js");
 app.import("vendor/highcharts-release/modules/exporting.src.js");
 
 app.import("vendor/canvg/rgbcolor.js"); 
-app.import("vendor/canvg/canvg.js"); 
+app.import("vendor/canvg/canvg.js");
 
 module.exports = app.toTree();
