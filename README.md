@@ -34,3 +34,18 @@ With those requirements installed, execute the following steps:
 5. Upload to S3: ```s3_website push```
 
 It is also worth noting that the app is currently configured to set a Cache-Control max-age of 60 seconds. So you should wait at least this amount of time beforing seeing the changes on the production environment.
+
+### Cloud Front SSL
+
+In case an update to the SSL certificate is need, you will need to get the new .pem and .key files. In case the .pem files has both a certificate body and a certificate chain, those need to be separated into different files.
+
+You will also need AWS command line tool installed.
+
+With that in place, run the following command:
+```aws iam upload-server-certificate --server-certificate-name AppSubledgerCom2014 --certificate-body file://app-subledger-com-body.pem --certificate-chain file://app-subledger-com-chain.pem  --private-key file://app-subledger-com.key  --path /cloudfront/app/```
+
+Remember to replace the --server-cerficate-name, so you don't override an existing certificate.
+
+Then you need to login into AWS Console, select Cloud Front, edit the Distribution to select the new Certificate. After that, it will take some time to the new configuration to be applied, but after that is completed, you can check the new cert information on your browser. 
+
+Ref: http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS
