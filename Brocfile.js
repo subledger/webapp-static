@@ -6,7 +6,8 @@ var app = new EmberApp({
   //name: require('./package.json').name,
 
   fingerprint: {
-    enabled: false, // UNTIL THIS IS FIXED https://github.com/rickharrison/broccoli-asset-rev/issues/18
+    // enabled: false, // UNTIL THIS IS FIXED https://github.com/rickharrison/broccoli-asset-rev/issues/18
+    enbabled: true,
     replaceExtensions: ['html', 'css', 'js', 'less']
   },
 
@@ -26,34 +27,34 @@ var app = new EmberApp({
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-app.import("vendor/bootstrap/js/affix.js");
-app.import("vendor/bootstrap/js/alert.js");
-app.import("vendor/bootstrap/js/button.js");
-app.import("vendor/bootstrap/js/carousel.js");
-app.import("vendor/bootstrap/js/collapse.js");
-app.import("vendor/bootstrap/js/dropdown.js");
-app.import("vendor/bootstrap/js/modal.js");
-app.import("vendor/bootstrap/js/scrollspy.js");
-app.import("vendor/bootstrap/js/tab.js");
-app.import("vendor/bootstrap/js/tooltip.js");
-app.import("vendor/bootstrap/js/transition.js");
-app.import("vendor/bootstrap/js/popover.js");
+app.import("bower_components/bootstrap/js/affix.js");
+app.import("bower_components/bootstrap/js/alert.js");
+app.import("bower_components/bootstrap/js/button.js");
+app.import("bower_components/bootstrap/js/carousel.js");
+app.import("bower_components/bootstrap/js/collapse.js");
+app.import("bower_components/bootstrap/js/dropdown.js");
+app.import("bower_components/bootstrap/js/modal.js");
+app.import("bower_components/bootstrap/js/scrollspy.js");
+app.import("bower_components/bootstrap/js/tab.js");
+app.import("bower_components/bootstrap/js/tooltip.js");
+app.import("bower_components/bootstrap/js/transition.js");
+app.import("bower_components/bootstrap/js/popover.js");
 
-app.import("vendor/subledger-js-library/src/subledger.js");    
+app.import("bower_components/subledger-js-library/src/subledger.js");
 
-app.import("vendor/jquery-visible/jquery.visible.js");
-app.import("vendor/moment/moment.js");
-app.import("vendor/accounting/accounting.js");
-app.import("vendor/bignumber.js/bignumber.js");
-app.import("vendor/jquery-maskmoney/dist/jquery.maskMoney.js");
-app.import("vendor/typeahead.js/dist/typeahead.bundle.js");    
-app.import("vendor/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js");
-app.import("vendor/seiyria-bootstrap-slider/js/bootstrap-slider.js");
+app.import("bower_components/jquery-visible/jquery.visible.js");
+app.import("bower_components/moment/moment.js");
+app.import("bower_components/accounting/accounting.js");
+app.import("bower_components/bignumber.js/bignumber.js");
+app.import("bower_components/jquery-maskmoney/dist/jquery.maskMoney.js");
+app.import("bower_components/typeahead.js/dist/typeahead.bundle.js");
+app.import("bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js");
+app.import("bower_components/seiyria-bootstrap-slider/js/bootstrap-slider.js");
 
-app.import("vendor/highcharts-release/highcharts.src.js");
-app.import("vendor/highcharts-release/modules/exporting.src.js");
+app.import("bower_components/highcharts-release/highcharts.src.js");
+app.import("bower_components/highcharts-release/modules/exporting.src.js");
 
-app.import("vendor/canvg/rgbcolor.js"); 
-app.import("vendor/canvg/canvg.js");
+app.import("bower_components/canvg/rgbcolor.js");
+app.import("bower_components/canvg/canvg.js");
 
 module.exports = app.toTree();

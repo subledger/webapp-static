@@ -2,6 +2,7 @@
 
 module.exports = function(environment) {
   var ENV = {
+    modulePrefix: 'subledger-app',
     environment: environment,
     baseURL: '/',
     locationType: 'hash',
@@ -15,6 +16,16 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'self' 'unsafe-eval' http://oss.maxcdn.com https://oss.maxcdn.com",
+      'font-src': "'self' http://fonts.gstatic.com https://fonts.gstatic.com",
+      'connect-src': "'self' https://api.subledger.com",
+      'img-src': "'self'",
+      'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com https://fonts.googleapis.com",
+      'media-src': "'self'"
     }
   };
 
@@ -27,6 +38,15 @@ module.exports = function(environment) {
   }
 
   if (environment === 'test') {
+    // Testem prefers this...
+    ENV.baseURL = '/';
+    ENV.locationType = 'auto';
+
+    // keep test console output quieter
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
+
+    ENV.APP.rootElement = '#ember-testing';
   }
 
   if (environment === 'production') {

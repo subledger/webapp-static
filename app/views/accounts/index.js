@@ -93,11 +93,13 @@ export default Ember.View.extend({
     var handler = Ember.run.later(this, function() {
       var childViews = this.get('childViews');
 
-      childViews.forEach(function(childView) {
-        if (childView.updateBalance) {
-          childView.updateBalance();
-        }
-      }, this);
+      if (childViews) {
+        childViews.forEach(function(childView) {
+          if (childView.updateBalance) {
+            childView.updateBalance();
+          }
+        });        
+      }
     }, 2000);
 
     // update handler reference

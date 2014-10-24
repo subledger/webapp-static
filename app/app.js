@@ -1,17 +1,19 @@
 import Ember from 'ember';
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
+import config from './config/environment';
 
 import Base64 from "subledger-app/utils/Base64";
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
 var App = Ember.Application.extend({
-  modulePrefix: 'subledger-app', // TODO: loaded via config
+  modulePrefix: config.modulePrefix,
+  podModulePrefix: config.podModulePrefix,
   Resolver: Resolver
 });
 
-loadInitializers(App, 'subledger-app');
+loadInitializers(App, config.modulePrefix);
 
 // add support for data attributes on views
 Ember.View.reopen({

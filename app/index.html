@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  {{BASE_TAG}}
+  {{content-for 'head'}}
 
   <!-- Fonts -->
   <link href='//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic' rel='stylesheet' type='text/css'>  
@@ -30,16 +30,7 @@
     </p>
   <![endif]-->
 
-  <script>
-    window.SubledgerAppENV = {{ENV}};
-    window.EmberENV = window.SubledgerAppENV.EmberENV;
-  </script>
-
   <script src="assets/vendor.js"></script>
   <script src="assets/subledger-app.js"></script>
-
-  <script>
-    window.SubledgerApp = require('subledger-app/app')['default'].create(SubledgerAppENV.APP);
-  </script>
 </body>
 </html>

@@ -45,11 +45,11 @@ export default Ember.View.extend(InfiniteScrollView, {
   }.property('collapsed'),
 
   timeAgoISO: function() {
-    return this.get('controller').get('journalEntry').get('effectiveAt').toISOString();
+    return this.get('controller.journalEntry.effectiveAt').toISOString();
   }.property('controller.journalEntry.effectiveAt'),
 
   timeAgoFromNow: function() {
-    return moment(this.get('controller').get('journalEntry').get('effectiveAt')).fromNow();
+    return moment(this.get('controller.journalEntry.effectiveAt')).fromNow();
   }.property('controller.journalEntry.effectiveAt', 'timeAgoFromNowLastUpdated'),
 
   collpasedObserver: function() {
@@ -64,21 +64,25 @@ export default Ember.View.extend(InfiniteScrollView, {
 
   timeAgoPopup: function() {
     if (this.get('collapsed')) {
-      this.$('.time-ago').popover('destroy');
+      if (this.$(".time-ago") !== undefined) {
+        this.$('.time-ago').popover('destroy');
+      }
 
     } else {
       Ember.run.scheduleOnce('afterRender', this, function() {
-        this.$(".time-ago").popover({
-          trigger: 'click',
-          placement: 'right',
-          content: this.get('timeAgoISO'),
-          container: this.$()
-        });
+        if (this.$(".time-ago") !== undefined) {
+          this.$(".time-ago").popover({
+            trigger: 'click',
+            placement: 'right',
+            content: this.get('timeAgoISO'),
+            container: this.$()
+          });
 
-        this.$(".time-ago").on('click', $.proxy(function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }, this));
+          this.$(".time-ago").on('click', $.proxy(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }, this));
+        }
       });      
     }
   },
