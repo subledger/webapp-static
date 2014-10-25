@@ -4,7 +4,7 @@
 {{else}}
   <div class="row">
     <div class="col-xs-3 col-md-2">
-      <span class="time-ago">{{view.timeAgoFromNow}}</span>
+      {{sl-relative-date date=journalEntry.effectiveAt dismissOnScroll=".infinite-scroll"}}
     </div>
     <div class="col-xs-6 col-md-9">
       {{journalEntry.description}}

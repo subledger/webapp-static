@@ -6,10 +6,21 @@ export default Ember.ArrayController.extend(InfiniteScrollController, {
 
   collapsed: false,
   collapsive: true,
+  journalEntry: null,
 
-  journalEntry: function() {
-    this.set('journalEntry', this.get('content').relationship.record);
-  }.property('content'),
+  init: function() {
+    this._super();
+
+    if (!this.get('journalEntry') && this.get('content') && this.get('content').relationship) {
+      this.set('journalEntry', this.get('content').relationship.record);
+    }
+  },
+
+  setJournalEntry: function() {
+    if (!this.get('journalEntry') && this.get('content') && this.get('content').relationship) {
+      this.set('journalEntry', this.get('content').relationship.record);
+    }
+  }.observes('content'),
 
   // overwrite addOlderOjects
   addOlderObjects: function(result) {

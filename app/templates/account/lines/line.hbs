@@ -1,6 +1,5 @@
 <td class="date">
-  <span class="hidden-xs">{{format-date effectiveAt 'big'}}</span>
-  <span class="visible-xs">{{format-date effectiveAt 'small'}}</span>
+  {{sl-relative-date date=effectiveAt dismissOnScroll=".infinite-scroll"}}
 </td>
 <td class="description">{{description}}</td>
 <td class="debit">{{format-value value 'debit'}}</td>
