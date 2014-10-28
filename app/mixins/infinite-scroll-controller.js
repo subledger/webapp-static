@@ -60,7 +60,8 @@ export default Ember.Mixin.create({
     // default query
     var query = {
       pageId: pageId,
-      newer: newer
+      newer: newer,
+      limit: 100
     };
 
     // extend it with user provided criterions
