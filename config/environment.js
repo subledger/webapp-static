@@ -18,15 +18,15 @@ module.exports = function(environment) {
       // when it is created
     },
 
-    contentSecurityPolicy: {
-      'default-src': "'none'",
-      'script-src': "'self' 'unsafe-eval' http://oss.maxcdn.com https://oss.maxcdn.com",
-      'font-src': "'self' http://fonts.gstatic.com https://fonts.gstatic.com",
-      'connect-src': "'self' https://api.subledger.com",
-      'img-src': "'self'",
-      'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com https://fonts.googleapis.com",
-      'media-src': "'self'"
-    }
+    // contentSecurityPolicy: {
+    //   'default-src': "'none'",
+    //   'script-src': "'self' 'unsafe-eval' http://oss.maxcdn.com https://oss.maxcdn.com",
+    //   'font-src': "'self' http://fonts.gstatic.com https://fonts.gstatic.com",
+    //   'connect-src': "'self' https://api.subledger.com",
+    //   'img-src': "'self'",
+    //   'style-src': "'self' 'unsafe-inline' http://fonts.googleapis.com https://fonts.googleapis.com",
+    //   'media-src': "'self'"
+    // }
   };
 
   if (environment === 'development') {
