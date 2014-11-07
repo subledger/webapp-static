@@ -29,13 +29,23 @@ export default Ember.Component.extend({
     // save setInterval handler
     this.set('_updateIntervalHandler', handler);
 
+    var content = "<span href=''>";
+    content += this.get('isoDate');
+    content += "</span>";
+
     // create popover to display iso date
     this.$().popover({
       trigger: 'click',
       placement: 'right',
-      content: this.get('isoDate'),
-      container: this.$()
+      content: content,
+      html: true,
+      container: this.$(),
     }).on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    this.$().on('click', 'span', function(e) {
       e.preventDefault();
       e.stopPropagation();
     });
