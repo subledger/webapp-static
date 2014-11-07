@@ -27,8 +27,6 @@ export default Ember.Component.extend({
 
   actions: {
     create: function() {
-      console.log('creating');
-
       // clear previous error messages
       this.get('model').get('errors').clear();
 

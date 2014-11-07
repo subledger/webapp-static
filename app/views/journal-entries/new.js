@@ -168,7 +168,7 @@ export default Ember.View.extend({
           return $.map(response.active_accounts, function(account) {
             return {
               id: account.id,
-              description: account.description,
+              description: Handlebars.Utils.escapeExpression(account.description),
               normalBalance: account.normal_balance
             };
           });
