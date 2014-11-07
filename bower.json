@@ -24,7 +24,7 @@
     "jquery-visible": "https://github.com/teamdf/jquery-visible.git#1.1.0",
     "jquery-maskmoney": "~3.0.2",
 
-    "bootstrap": "~3.2.0",
+    "bootstrap": "~3.3.0",
     "seiyria-bootstrap-slider": "~4.0.8",
     "typeahead.js-bootstrap3.less": "~0.2.3",
 
