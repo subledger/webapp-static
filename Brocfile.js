@@ -6,8 +6,7 @@ var app = new EmberApp({
   //name: require('./package.json').name,
 
   fingerprint: {
-    // enabled: false, // UNTIL THIS IS FIXED https://github.com/rickharrison/broccoli-asset-rev/issues/18
-    enbabled: true,
+    enabled: false, // UNTIL THIS IS FIXED https://github.com/rickharrison/broccoli-asset-rev/issues/18
     replaceExtensions: ['html', 'css', 'js', 'less']
   },
 
