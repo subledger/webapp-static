@@ -20,7 +20,7 @@
       <ul class="nav navbar-nav">
         {{#if credential.authenticated}}
           <li class="visible-xs">
-            {{view Ember.Select content=credential.books optionValuePath="content.id" optionLabelPath="content.description" value=credential.selectedBook class="form-control"}}
+            {{view "select" content=credential.books optionValuePath="content.id" optionLabelPath="content.description" value=credential.selectedBook class="form-control"}}
           </li>
 
           <li class="visible-xs">

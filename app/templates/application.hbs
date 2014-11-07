@@ -5,7 +5,7 @@
     <div {{bind-attr class="credential.authenticated:app-main-nav:hidden"}}>
       <ul>
         <li>
-          {{view Ember.Select content=credential.books optionValuePath="content.id" optionLabelPath="content.description" value=credential.selectedBook class="form-control"}}
+          {{view "select" content=credential.books optionValuePath="content.id" optionLabelPath="content.description" value=credential.selectedBook class="form-control"}}
         </li>
 
         {{#link-to 'journal-entries.index' tagName="li" class="nav-link"}}
