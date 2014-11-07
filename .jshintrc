@@ -11,6 +11,7 @@
     "$",
     "moment",
     "accounting",
+    "Handlebars",
     "BigNumber",
     "Bloodhound",
     "Highcharts",
